@@ -1,0 +1,80 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Process</title>
+    <link rel="stylesheet" href="{% static 'css/nav.css' %}">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/adminProcess.css' %}">
+
+</head>
+<body>
+        
+        <div class="sidebar" id="sidebar">
+            <div class="logo">TukTukGo</div>
+            <nav>
+                <ul>
+                    <li><a href="/tuktukAllot/">TukTuk Allot</a></li>
+                    <li><a href="/tuktukForDriver/">TukTuk - Driver </a></li>
+                    <li><a href="/driverForTuktuk/">Driver - TukTuk</a></li>
+                    <li><a href="/userFeedbackReply/">User FeedBacks</a></li>
+                    <li><a href="/feedReply/">Driver FeedBacks</a></li>
+                    <li><a href="/tuktukDetails/">Services</a></li>
+                    <li><a href="/userList/">About User's</a></li>
+                    <li><a href="/changePass/">Change Password</a></li>
+                </ul>
+            </nav>
+        </div>
+        <div class="main-content">
+            <header>
+                <button id="toggle-button">&#9776; Menu</button>
+                <h1>Admin Dashboard</h1>
+            </header>
+            <div class="summary-cards">
+                <div class="card">
+                    <h2>Total Trips</h2>
+                    <p>{{ total_bookings }}</p>
+                </div>
+                <div class="card">
+                    <h2>Total Earnings</h2>
+                    <p>₹{{ total_money }}</p>
+                </div>
+            </div>
+            {% comment %} <div class="charts">
+                <div class="chart">
+                    <h2>Trips Overview</h2>
+                    <!-- Placeholder for chart -->
+                    <div class="chart-placeholder"><img height="240px" width="270px" src="data:image/png;base64,{{ chart }}" alt="Number of Drivers and TukTuks Chart"></div>
+                </div>
+            </div> {% endcomment %}
+            <div class="activity-feed">
+                <h2>Recent Activity</h2>
+                <ul>
+                    <li>Trip to downtown completed</li>
+                    <li>New booking from John Doe</li>
+                    <li>Feedback received from Jane Smith</li>
+                </ul>
+            </div>
+        </div>
+        <script> 
+            document.addEventListener('DOMContentLoaded', function() {
+                const toggleButton = document.getElementById('toggle-button');
+                const sidebar = document.getElementById('sidebar');
+            
+                toggleButton.addEventListener('click', function() {
+                    sidebar.classList.toggle('show');
+                });
+            
+                // Close the sidebar if the user clicks outside of it
+                document.addEventListener('click', function(event) {
+                    if (!sidebar.contains(event.target) && !toggleButton.contains(event.target)) {
+                        sidebar.classList.remove('show');
+                    }
+                });
+            });
+        </script>
+    <script src="{% static 'js/app.js' %}"></script>
+</body>
+</html>

@@ -1,0 +1,77 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    margin-top: 20px;
+}
+
+.tuktukTable, .driverTable {
+    background-color: #000; /* Keep the existing background color */
+    margin: 10px;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.veh-head, .drive-head {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.details, .driverDetails {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.details th, .details td, .driverDetails th, .driverDetails td {
+    border: 1px solid #FAF9F6; /* Keep the existing border color */
+    padding: 8px;
+    text-align: left;
+}
+
+.details th, .driverDetails th {
+    background-color: #000; /* Keep the existing background color */
+}
+
+.details img, .driverDetails img {
+    max-width: 50px;
+    max-height: 50px;
+    border-radius: 5px;
+}
+
+.allot-btn {
+    background-color: var(--font-color); /* Keep the existing background color variable */
+    color: var(--bg-color); /* Keep the existing text color variable */
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in;
+}
+
+.allot-btn:hover {
+    background-color: var(--bg-color); /* Keep the existing hover background color variable */
+    color: var(--font-color); /* Keep the existing hover text color variable */
+    border: 1px solid var(--font-color);
+}
+
+.message {
+    text-align: center;
+    text-transform: uppercase;
+    margin-top: 10px;
+}
+
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+        align-items: center;
+    }
+}

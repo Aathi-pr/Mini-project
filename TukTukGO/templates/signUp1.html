@@ -1,0 +1,47 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign UP</title>
+    <link rel="stylesheet" href="{% static 'css/nav.css' %}">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/signup.css' %}">
+</head>
+<body>
+        <!-- navigation bar -->
+        <nav class="navbar">
+            <div class="mainHead"><img class="tuktuk" height="30px" width="30px" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEIAAABCCAYAAADjVADoAAAACXBIWXMAAAsTAAALEwEAmpwYAAAKaElEQVR4nO2bDVRT5xnHr7jNbfUs3I8khI+CNlhEcu9NQgjfJpAAAjqsWj5UEKxWZil22tohtmrb02lbxambp1ptda1uth7Xjdl1zuo5tXLc6keLSCtMgQpjO54eiygmuffZeW8SDCSEBCJf5Tnnfw6Bm3uf53ef93mf970XDBu3cRu3cRuYTcDGThwDjsUvUiyePBPDfoA+qDHsh7HBwT/BRqHJMWySWib7qR2GXC6fFIlhP/L8BHL5JBT8AgybiKB49eWRZRMQCHQzUQy0VPoQisnrk2BW88NGt00Y6DDxQxQRQUQyNDT0x750yn7eoahD6O7bswBlue26AxpXfuhEXp2gD0M1hxGJ/BUiEY6kxnGRvQ49KENxIADCz2h4iMWTB5Phfr4YHihwBNWeogJgHBdhQ2i2+jB8M+ICDJuIssARqKvffR/MDwXtOBRQqtpAjJWexTND4xMNBVQshTqEfraO2e+dTUB1ARVMJMdGZ9xGqfkpKEqlIIj5DEmuZHB87UgWjeOlPp2VFCLRVJogdqskklsMQcBoEk0Qv/YFAz+GINYxJMklhIXxWyoq4NMTJ6Dtm2+g6+5dGKlmuncP1q9cCWqp1EzjeKIvIBxmSRLeWL8ebnd0OF3QYrFAV1cX3LlzBzo7O0eE2tvaoDgri9cGBX3HEETMoFOBIYjXlBQFHx092iN4nueho6MD2traoLm5ecSooaEBDr31FhgiI03RAQENjEgUNmgIrL8/w5Ikv3/79h4Q0N1vbW11cuL69euwp6oKCvR6izEiwvygZIiIMKdGTHeSbto0E0tRvJKiTJrAwB22Nn7wphKL//RzrZa3mM3dEFD6t7S0OEFoamqCVYsXC4WpOCsLXq+shKqNG/uVccYMKMnOhn1VVR4JnRdd45nV62D9y1t7SBscwtME8QdbX+Ibo6XSh1QSifnI/v33i4/J5BIC0qF9+wQHD+za5VVBK8zIgK0vvODx8Y319cJ1/lhTD6fbzT307PMbQS0NuOXT7QIaxzNQgWxvbe12wl09WJmXB1ksK9SO4QJRfaUNogNkKCtKfAaCwfFliVOm8I5Dwl2RKkhNhacLCryC4AsQf2s1wftN9+CITUuWlqHpst53IAiico5G0w3i5s2bbkHkp6TAqkWLhhzE2433YPfXXd3a8P6nwt8V/v7JjvGgfdfeK16P1jcMjm9akJzcDaK9vX1EgtjXcB+CXboolqNxfKdjPGiVa1vhTkBQHDaGvAPR6mK6HKkgip95EVRi8X97B2rPCNtOvGebQEwvEH3NFiMRxPpDJ4VjlAQx3RGCbTYRNo09gjDaQey6/B2oA2Q86+//C8cHVWh42PdCPJ5imVEMAik9XsczOL7XHk+vXfKJNihjH0T+kqeApcT/8ijY0Qxiy+7fw55j/4CN7/0dKt91Vl5xGSglkltjHgTjmfhBt9sMjm+axbL8x8eOARJa2rpTtkoldJcnq6vhyqVLHrfaAwVxVq+H5lmz+lR1QoIdRtCgQShJEhICAzmkeJnM0p/QcWjvAjlgDA/nD+/dC5zF0i+IihUr4PLFiy7V1tLiEsQlgwG+nT27T53R6awdpkg0ddAgjGFhls6dO8EbdezYAXUbNsDWnBzQSCT8U/PmCfsX7kD0l+J5ej3858YNJxDvaDSQJJGAPiAAzqem9gBRo9cLx7EUFT4sIDoddKmyEnTBwZbKZcv6BLE4PR02lpdDy7Vr0NTY6KQLNTWQExsLz5aUOIGoMxrhgEYD72m10JaV1QPEqeRk3w0NoysQVVXQuW2bxzqzZg2g5fz5s2f7BIFqBNpn7KsQV23aBBkM49XQOG6vEdbHDcsFiUSsT0DcKix0e/G+VCKXmyr6yAoE4tXnnoMbLS1QV1vrpM9OnxYyYmVurlcgDmo0roYZ5zUMpjeILVsGBAFpb3S0UDxdgVhoNPZbI7JUKmGYeAPiNZqGtBAK/rd6CnSstcoQQnUxOP7koEDc3rx5wCA+TEgANJtwHOcEIj81FfQ0Dbk5OU6an51tnSo/+cTrWaMsXA5Pq6TdEJBmPUx2oadewwbiL7bx6rgJ7AgiIzYWli1f7qSSkpIBg0gLCoBd6YG+BXF7xw44t2oVvKlWwytRUbCZpuGwVgtfpaX5FERefj6kpaeDwWgUlJqSMiAQjRkZwBIEfJwf7DsQJ8rLYfa0aRZ0ca1MzC1OfNS8MH6aKSFYyqGGq1Qu52qNRp+AMBgMMFOn61aybQr0FsTBmBjhmFgZBTnTZVCRIIOTi0JAF0h2eb2xy6DO0tYlrshk+At/Xgrmf/8K+OZ1gizXK+Dc0WIoTIqwxFAUh4IdLAh9SopPQJSGy7m50XLu9LuL4Mi2ubAmV8OrJRQvFF8cz/IWxIFoCcUd35PbHTzftBb4q4XAXckGri4NuPo5YPl6CWz7ZQqoKYpHbe1wg2jPygKNhOL2bph13+/mddD2z3Ioy1Fyagl5jyGINI8gKAgiliUJ/sPfLbABqACu/jHgLkQAd/4RZ12MgpeKad4gk1mQI8MJAi22WJKA5s/KgL9aBNwXWuBqZwo3jb9WBq+X6yFaSt1RisXyfkHEBFAfLUtXWKwQngeuNtE1AAfdqXkEdCFi88tRUXAiKamHtrOs4PyXn3/utKiaGxcHKUolFDz+OCTFxUGCVntftqYIPXutOXVK0NGDB92CKA2XW/ISH+WQ79xFhZOfllodlGYruIRQ6Rn3EAjiZyxFWk4eWChkA3fZ2C8Eu35bHjQkL32oKEqYGXpDuGw0AirgH2x/DPjGJ/v0s/l4BCgpknf7ugBDkjp0sW+/XA1843KPISCde/thwVHkpLu9gsGq9wLLrlcUCkgMk3F3rz4PXF2GW19LM2QWtYTY4q4+zGcpkkczBHdZ7xWIpuowK4j09AE3XwNVa2YmxMkklqrVqdbhfGG6W1/fXBMEiSHEuT5BKP39QzVSyqQNFHNxQaRZG0hZPJA5Log0aQNJMwIRQ1HmOLHYNJSKoShrrxMo4eJDJFxcMGlxqSBS8FVJEVy0BH/VbZ1gRKIwhiCKWZK8mhwRwecYDOBOKvSOEkFUdy93h1g0QbwoLM6Sk936mW5rtGiCKKP9/bM9frdTLZV+kZmUJExtS594AvILCiA/P99J2tBQNDe/gQ2ToaInvKCyZInga2FRkUs/czIzB7ZZoxSL/2pQqXh08szMzB5zvKNYsfgejeOrsWEyBUEEowAX5uZCUVER6PR6l37GKZUoGziPH+7YjcbxFUqp1FxSXAwpqakuT54QHS1sm6P3rbBhNJaiGtJiYji0cOvrhkWHhXEMSbrvH1yZHMMmsWLxjZkzZnBpaWlOJ06OjwdGIjExJPkBNsxGE8Q8hiT5OUajSwixCoXL9yZcGmP9r5qpjmJxPJMhiK7ooCBTHE1DYmwsJGq1oI2MBIaiEIRmtP3V+3vDIhx/B2VnjFxuQZmKOtV4tdqaCdYF12/UkydTrmJFn++DwPGvhqIzHE7RON6J/lGGwfH6Xr+v6wahJMlABUWpx7LsL6D2jhV9fkCjdtzGbdywsWP/B/7orM30+0uJAAAAAElFTkSuQmCC">
+                TukTukGo</div>
+            <a class="toggle-button" href="#">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </a>
+            <div class="nvLinks">
+                <ul>
+                    <li><a href="#Ride">Ride</a></li>
+                    <li><a href="/tuktukDriverRegistration/">Driver</a></li>
+                    <li><a href="/tuktukRegistration/">Tuktuk's</a></li>
+                    <li><a href="#About">About</a></li>
+    
+                </ul>
+                </div>
+        </nav>
+    <div class="container">
+        <h1>Sign Up to start to your 'ride' Today....</h1>
+    </div>
+    <img src="{% static 'img/Designer (2).jpeg' %}" alt="log-img" class="login-img">
+    <form class="data-fill" action="/signUp.html/" method="post">
+         <input class="userid-box" type="text" id="UserID" name="userID" placeholder="UserID">
+        <input class="email-box" type="email" id="EMail" name="Email" placeholder="E-mail">
+        <input class="passwd-box" type="password" id="password" name="password" placeholder="Password">
+        <input class="btn" type="submit" value="submit">{{ msg }}
+    </form>
+    
+    <footer>
+        <p>TukTukGo</p>
+    </footer>
+</body>
+</html>

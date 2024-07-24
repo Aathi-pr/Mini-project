@@ -1,0 +1,83 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <link rel="stylesheet" href="{% static 'css/nav.css' %}">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/driverForTuktukDetails.css' %}">
+</head>
+<body>
+    <div class="tuktukTable">
+        <h1 class="veh-head">Vehicle Details</h1>
+        <table class="details">
+            <tr>
+                <th>Vehicle Number</th>
+                <td>{{ VehicleRegNo }}</td>
+            </tr>
+            <tr>
+                <th>Vehicle Type</th>
+                <td>{{ vehicleType }}</td>
+            </tr>
+            <tr>
+                <th>Fuel type</th>
+                <td>{{ vehicleFuelType }}</td>
+            </tr>
+            <tr>
+                <th>Company</th>
+                <td>{{ manufacturedCompany }}</td>
+            </tr>
+            <tr>
+                <th>Vehicle CC</th>
+                <td>{{ Vcc }}</td>
+            </tr>
+            <tr>
+                <th>Manufacture Year</th>
+                <td>{{ manufactureYear }}</td>
+            </tr>
+            <tr>
+                <th>RC</th>
+                <td><img src="/static/data/tuktukProof/dataProof/{{RC}}/" width="50px" height="50px"></td>
+            </tr>
+            <tr>
+                <th>Vehicle Photo</th>
+                <td><img src="/static/data/tuktukProof/dataProof/{{vPhoto}}/" width="50px" height="50px"></td>
+            </tr>
+            <tr>
+                <th>Reg Date</th>
+                <td>{{ regDate }}</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="tuktukDriverTable">
+        <h1 class="drive-head">Driver Details</h1>
+            <table class="driverDetails">
+                <tr>
+                    <th>Driver ID</th>
+                    <td>{{ driverID }}</td>
+                </tr>
+                <tr>
+                    <th>Driver Name</th>
+                    <td>{{ driverName }}</td>
+                </tr>
+                <tr>
+                    <th>Phone number</th>
+                    <td>{{ phoneNumber }}</td>
+                </tr>
+                <tr>
+                    <th>License</th>
+                    <td>{{ license }}</td>
+                </tr>
+                <tr>
+                    <th>Driver Photo</th>
+                    <td><img src="/static/data/tuktukProof/dataProof/{{driverPhoto}}/" width="50px" height="50px"></td>
+                </tr>
+            </table>
+    </div>
+    <p class="status-message"> {{ message }} </p>
+    
+</body>
+</html>

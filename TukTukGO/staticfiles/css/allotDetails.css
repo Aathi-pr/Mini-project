@@ -1,0 +1,69 @@
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #000; /* Background color for the container */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+.veh-head, .drive-head {
+    font-size: 24px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.details, .driverDetails {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    border-radius: 10px;
+}
+
+.details th, .details td, .driverDetails th, .driverDetails td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+.details th, .driverDetails th {
+    background-color: #000;
+}
+
+.details img, .driverDetails img {
+    max-width: 50px;
+    max-height: 50px;
+    border-radius: 5px;
+}
+
+.allot-btn {
+    background-color: #000;
+    color: #ff9800;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: 1px solid #ff9800;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in;
+}
+
+.allot-btn:hover {
+    background-color: #ff9800;
+    color: #000;
+    border: 1px solid #000;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+}

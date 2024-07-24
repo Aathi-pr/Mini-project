@@ -1,0 +1,53 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Change Password</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    
+</head>
+
+<script>
+            function passValidate() {
+            var password1 = document.getElementById("t1").value.trim();
+            var password2 = document.getElementById("t2").value.trim();
+            var password3 = document.getElementById("t3").value.trim();
+
+            if (password1 === "" || password2 === "" || password3 === "") {
+                alert("Please Fill All The Password Boxes")
+                return false;
+            }
+
+
+            if (password2 !== password3) {
+                alert("Passwords do not match");
+                return false;
+            }
+            return true;
+        }
+</script>
+
+<body>
+    <div class="con-pass">
+        <form id="form-1" class="passchange" action="/changePass1/" method="post" onsubmit="return passValidate()"> {% csrf_token %}
+            <div class="box1">
+                Existing Password
+                <input class="pass-btn1" type="password" placeholder="old Password" name="t1" id="t1">
+            </div>
+            <div class="box2">
+                New Password <input class="pass-btn2" type="password" placeholder="New Password" name="t2" id="t2">
+            </div>
+            <div class="box3">
+                ReType Password <input class="pass-btn3" type="password" placeholder="ReType new Password" name="t3" id="t3">
+            </div>
+            <div class="pass-sub">
+                <input class="pass-btn" type="submit" value="submit" onsubmit="passValidate()"> {{ msg }}
+            </div>
+            
+        </form>
+    </div>
+<script type="js/app.js" src="{% static 'js/app.js' %}"></script>
+</body>
+</html>

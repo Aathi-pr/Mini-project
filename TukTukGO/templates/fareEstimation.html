@@ -1,0 +1,36 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fare Estimation</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/nav.css' %}">
+    <link rel="stylesheet" href="{% static 'css/fareEstimation.css' %}">
+</head>
+<body>
+    <h1 class="fareHead"> Fare Estimation </h1>
+    <div class="fare">
+        <form id="form1" class="minRate" action="/fareEstimationRequets/" method="post"> {% csrf_token %}
+            <div class="box1">
+                Minimum Fare <input class="minFare" type="number" placeholder="Minimum Fare" name="minFare" id="t1">
+            </div>
+            <div class="box2">
+                Fare per KM <input class="farePerKm" type="number" placeholder="Per KM" name="farePerKm" id="t2">
+            </div>
+            <div class="box3">
+                Waiting Fare <input class="WaitingCharges" type="number" placeholder="Extra Charges" name="WaitingCharges" id="t3">
+            </div>
+            <div class="box4">
+                Minimum KM <input class="MinimumKM" type="number" placeholder="Minimum KM" name="MinimumKM" id="t3">
+            </div>
+            <div class="fareSub">
+                <input class="fare-btn" type="submit" value="submit">
+            </div>
+        </form>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,92 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vehicle Registration</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/nav.css' %}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="mainHead">TukTukGo</div>
+        <a class="toggle-button" href="#" onclick="toggleMenu()">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </a>
+        <div class="nvLinks">
+            <ul>
+                <li><a href="#Ride">Ride</a></li>
+                <li><a href="/tuktukDriverRegistration/">Driver</a></li>
+                <li><a href="/tuktukRegistration/">Tuktuk's</a></li>
+                <li><a href="#About">About</a></li>
+
+            </ul>
+            </div>
+    </nav>
+    <h1 class="vehicle-head">TukTuk Registration</h1>
+    <img class="regBack" src="{% static 'img/Designer (3).jpeg' %}" alt="reg-back" height="800px" width="600px">
+    <div class="form-container">
+    <form id="vehicleRegistration" class="vehicle-reg" action="/tuktukRegistration1/" method="post" enctype="multipart/form-data">{% csrf_token %}
+        Vehicle Number : <input class="vehicleNumber" name="VehicleNumber" id="VehicleNumber" type="text" placeholder="vehicle Number">
+
+        <h3 class="2">Vehicle Type : </h3> 
+        <div class="three">
+        <input class="VehicleType" name="vehicleType" checked="checked" type="radio" id="3wheel" value="3wheel">
+        <label class="rad1" for="3wheel">3 Wheeler</label><br>
+        </div>
+
+        <div class="four">
+        <input name="vehicleType" type="radio" id="4wheel" value="4wheel">
+        <label class="rad2" for="4wheel">4 Wheeler</label><br>
+        </div>
+
+        <label for="Vehicle Fuel Type">Vehicle Fuel Type : </label>
+        <select id="fuelType" name="fuelType">
+          <option value="Petrol">Petrol</option>
+          <option value="diesel">diesel</option>
+          <option value="CNG">CNG</option>
+          <option value="Electric">Electric</option>
+        </select>
+
+        Manufactured Company : <input class="ManufacturedCompany" type="text" name="manufacturedCompany" placeholder="Bajaj, etc..">
+
+        Vehicle CC : <input type="text" name="vehicleCc" class="vehicleCc" placeholder="90cc">
+
+        <label for="Year Of Manufacture">Year Of Manufacture : </label>
+        <select id="year" name="year">
+            <option value="2021">2021</option>
+            <option value="2022">2022</option>
+            <option value="2023">2023</option>
+            <option value="2024">2024</option>
+        </select>
+
+
+          Upload RC : <input class="rcUpload" type="file" id="rcUpload" name="RCUpload">
+
+          Upload Vehicle Photo : <input class="vehiclePhoto" type="file" id="vehiclePhoto" name="vehiclePhoto">
+
+          Date Of Registration : <input type="date" class="DateOfRegistration" name="DateOfRegistration">
+
+          <input class="tukReg-btn" type="submit" value="submit"> {{ msg }}
+
+
+    </form>
+    </div>
+<script src="{% static 'js/app.js' %}"></script>
+    <script>
+        function toggleMenu() {
+            const toggleButton = document.querySelector('.toggle-button');
+            const navLinks = document.querySelector('.nvLinks ul');
+
+            toggleButton.classList.toggle('active');
+            navLinks.classList.toggle('active');
+        }
+    </script>
+<footer>
+    <p>TukTukGo</p>
+</footer>
+</body>
+</html>

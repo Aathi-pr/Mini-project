@@ -1,0 +1,70 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Details</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/nav.css' %}">
+    <link rel="stylesheet" href="{% static 'css/feedbackDetails.css' %}">
+</head>
+<body>
+    <div class="feedTable">
+    <table class="details" border="2px">
+        <h1 class="feed-head">FeedBack Details</h1>
+        <tr>
+          <th> FeedBack ID </th>
+          <th> FeedBack </th>
+          <th> Date </th> 
+          <th> driverID </th> 
+          
+        </tr>
+        {% comment %} {% for row in records %} {% endcomment %}
+        <tr>
+          <td> {{ feedbackID }} </td>
+          <td> {{ feedback }} </td>
+          <td> {{ feedbackDate }} </td>
+          <td> {{ driverID }} </td>
+        </tr>
+        {% comment %} {% endfor %} {% endcomment %}
+      </table>
+    </div>
+<div class="driverTable">
+    <table class="driverDetails">
+        <h1 class="drive-head">Driver Details</h1>
+            <tr>
+                <th>Driver ID</th>
+                <th>Driver Name</th>
+                <th>Phone No</th>
+                <th>License</th>
+                <th>Photo</th>
+            </tr>
+    {% comment %} {% for row in driverRecords %} {% endcomment %}
+        <tr>
+          <td> {{ driverID }} </td>
+          <td> {{ driverName }} </td>
+          <td> {{ phoneNumber }} </td>
+          <td> {{ license }} </td>
+          <td> <img src="/static/data/tuktukProof/dataProof/{{driverPhoto}}/" width="50px" height="50px"> </td>
+        </tr>
+    {% comment %} {% endfor %} {% endcomment %}
+    </table>
+</div>
+<div class="replyTable">
+    <table class="replyDetails">
+        <h1 class="reply-head">Reply</h1>
+            <tr>
+                <form action="/feedbackDetailsPost/" method="post"> {% csrf_token %}
+                <textarea name="textarea" rows="5" cols="40"></textarea>
+                <input type="hidden" name="feedbackID" value="{{ feedbackID }}">
+                <input type="hidden" name="driverID" value="{{ driverID }}">
+                <input class="allot-btn" type="submit" name="submit" value="Reply">
+                </form>
+            </tr>
+    </table>
+</div>
+</body>
+
+</html>

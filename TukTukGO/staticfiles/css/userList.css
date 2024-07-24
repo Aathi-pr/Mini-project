@@ -1,0 +1,26 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+.details {
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    top: 40px;
+    left: 440px;
+    border-radius: 20px;
+
+}
+.user-head {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    top: 20px;
+}
+table, th, td, tr {
+    border: 1px solid #FAF9F6;
+    border-collapse: collapse;
+    padding: 4px 4px 4px 4px;
+  }

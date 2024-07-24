@@ -1,0 +1,83 @@
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+.details {
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  top: 40px;
+  left: 620px;
+  border-radius: 20px;
+}
+.feed-head {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+}
+table,
+th,
+td,
+tr {
+  border: 1px solid #faf9f6;
+  border-collapse: collapse;
+  padding: 4px 4px 4px 4px;
+}
+.userDetails {
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  top: 150px;
+  left: 630px;
+  border-radius: 20px;
+}
+.user-head {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  top: 100px;
+}
+.reply-head {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    right: 640px;
+    top: -80px;
+}
+textarea {
+    border-radius: 20px;
+    position: relative;
+    top: -50px;
+}
+.replyTable {
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    top: 300px;
+    left: 630px;
+    border-radius: 20px;
+  }
+.allot-btn {
+  background-color: var(--font-color);
+  color: var(--bg-color);
+  padding: 16px 20px;
+  font-size: 16px;
+  margin: 15px;
+  border: none;
+  opacity: 0.9;
+  border-radius: 15px;
+  border: 2px solid var(--font-color);
+
+  position: relative;
+  top: -40px;
+  left: 120px;
+}
+.allot-btn:hover {
+  background-color: var(--bg-color);
+  color: var(--font-color);
+  transition: 0.2s ease-in;
+}

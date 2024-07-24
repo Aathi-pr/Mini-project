@@ -1,0 +1,49 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration</title>
+</head>
+<link rel="stylesheet" href="{% static 'css/styles.css' %}">
+<link rel="stylesheet" href="{% static 'css/nav.css' %}">
+<link rel="stylesheet" href="{% static 'css/tuktukUserLogin.css' %}">
+<body>
+    <nav class="navbar">
+        <div class="mainHead">TukTukGo</div>
+        <a class="toggle-button" href="#" onclick="toggleMenu()">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </a>
+        <div class="nvLinks">
+            <ul>
+                <li><a href="#">Ride</a></li>
+                <li><a href="/tuktukDriverRegistration/">Driver</a></li>
+                <li><a href="/tuktukRegistration/">Tuktuk's</a></li>
+                <li><a href="#">About</a></li>
+
+            </ul>
+            </div>
+    </nav>
+    <h1 class="user-head">User Registration</h1>
+    <img class="userRegBack" src="{% static 'img/Designer (4).jpeg' %}" alt="reg-back" height="800px" width="600px">
+    <div class="form-driverContainer">
+    <form id="UserRegistration" class="user-reg" action="/tuktukUserLoginRequests/" method="post" enctype="multipart/form-data">{% csrf_token %}
+        <h3 class="d1">User Name</h3><input class="userName" name="userName" type="text" placeholder="Name">
+        
+        <h3 class="d12">E-mail</h3><input class="email" name="email" type="email" placeholder="example@gmail.com">
+        
+        <h3> New Password </h3><input class="pass-btn2" type="password" placeholder="New Password" name="passBox1" id="t2">
+        <h3> ReType Password </h3><input class="pass-btn3" type="password" placeholder="ReType new Password" name="passBox2" id="t3">
+
+          <input class="userReg-btn" type="submit" value="submit">{{ msg }}
+    </form>
+    </div>
+<script src="{% static 'js/app.js' %}"></script>
+<footer>
+    <p>TukTukGo</p>
+</footer>
+</body>
+</html> 

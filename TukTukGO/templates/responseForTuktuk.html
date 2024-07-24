@@ -1,0 +1,59 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Response</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/nav.css' %}">
+    <link rel="stylesheet" href="{% static 'css/responseForTuktuk.css' %}">
+</head>
+<body>
+    <div class="driverResponse">
+        <form class="responseForm" action="/responseForTuktukRequests/" method="post"> 
+            {% csrf_token %}
+            <h1 class="response-head">TukTuk Requests</h1>
+            <table class="responseTable" border="2px">
+                <tr> 
+                    <th>Request ID:</th>
+                    <td>{{ requestID }}</td>
+                </tr>
+                <tr>
+                    <th>User Name:</th>
+                    <td>{{ userName }}</td>
+                </tr>
+                <tr>
+                    <th>User Latitude:</th>
+                    <td>{{ userLat }}</td>
+                </tr>
+                <tr> 
+                    <th>User Longitude:</th>
+                    <td>{{ userLon }}</td>
+                </tr>
+                <tr>
+                    <th>Destination:</th>
+                    <td>{{ destination }}</td>
+                </tr>
+                <tr>
+                    <th>Response:</th>
+                    <td>
+                        <div class="radio-group">
+                            <label><input type="radio" id="option1" name="response" checked value="On My Way!.."> On My Way!..</label>
+                            <label><input type="radio" id="option2" name="response" value="Please wait for 5 min..."> Please wait for 5 min...</label>
+                            <label><input type="radio" id="option3" name="response" value="Please wait for 10 min..."> Please wait for 10 min...</label>
+                            <label><input type="radio" id="option4" name="response" value="Please wait for 15 min..."> Please wait for 15 min...</label>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <input type="hidden" name="requestID" value="{{ requestID }}">
+            <input type="submit" value="Start Ride" class="rideButton">
+            <div class="message">{{ message }}</div>
+        </form>
+        <a href="/mapView/" class="mapViewA"><button>View Map</button></a>
+    </div>
+</body>
+
+</html>

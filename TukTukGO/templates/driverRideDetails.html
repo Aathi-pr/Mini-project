@@ -1,0 +1,73 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Response</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/nav.css' %}">
+    <link rel="stylesheet" href="{% static 'css/responseForTuktuk.css' %}">
+</head>
+<body>
+    <div class="driverResponse">
+        <form class="responseForm" action="/receiptRequests/" method="post">
+            {% csrf_token %}
+            <h1 class="response-head">Fare Details</h1>
+            <table class="responseTable" border="2px">
+                <tr>
+                    <th>Request ID</th>
+                    <td>{{ requestID }}</td>
+                </tr>
+                <tr>
+                    <th>Total Distance</th>
+                    <td>{{ totalDistance }} KM</td>
+                </tr>
+                {% comment %} <tr>
+                    <th>Total Ride Fare</th>
+                    <td>{{ totalRideRate }}</td>
+                </tr> {% endcomment %}
+                <tr>
+                    <th>Waiting Time</th>
+                    <td>{{ waitingCharge }} min.</td>
+                </tr>
+                {% comment %} <tr>
+                    <th>Date</th>
+                    <td>{{ endOfRideDate }}</td>
+                </tr>
+                <tr>
+                    <th>Time</th>
+                    <td>{{ endOfRideTime }}</td>
+                </tr> {% endcomment %}
+            </table>
+            <div class="emotions">
+                <input type="radio" name="emotionFeedback" id="happy" checked value="Happy" class="input-hidden"/>
+                <label for="happy">
+                     <img src="{% static 'img/icons8-grinning-face-with-big-eyes-48.png' %}" alt="I'm happy" />
+                </label>
+
+                <input type="radio" name="emotionFeedback" id="disappointed" value="Disappointed" class="input-hidden" />
+                <label for="disappointed">
+                    <img src="{% static 'img/icons8-disappointed-face-48.png'%}" alt="I'm disappointed" />
+                </label>
+
+                <input type="radio" name="emotionFeedback" id="poor" value="Poor" class="input-hidden" />
+                <label for="good">
+                    <img src="{% static 'img/icons8-slightly-frowning-face-48.png' %}" alt="I'm good" />
+                </label>
+
+                <input type="radio" name="emotionFeedback" id="awful" value="Awful" class="input-hidden" />
+                <label for="poor">
+                    <img src="{% static 'img/icons8-woozy-face-48.png' %}" alt="I'm poor" />
+                </label>
+            </div>
+            <input type="text" name="totalDistance" value="{{ totalDistance }}">
+            <input type="text" name="waitingCharge" value="{{ waitingCharge }}">
+            <input type="submit" value="Fare Details" class="rideButton">
+            <div class="message">{{ message }}</div>
+        </form>
+    </div>
+</body>
+
+</html>

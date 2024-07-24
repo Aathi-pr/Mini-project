@@ -1,0 +1,18 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.responseHead {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.responseMessage {
+    display: flex;
+    position: relative;
+    align-items: center;
+    justify-content: center;
+    top: 350px;
+}

@@ -1,0 +1,95 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alloting Page</title>
+    <link rel="stylesheet" href="{% static 'css/nav.css' %}">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/allotingPage.css' %}">
+</head>
+<body>
+    <div class="container">
+        <div class="tuktukTable">
+            <h1 class="veh-head">Vehicle Details</h1>
+            <table class="details" border="2">
+                <tr>
+                    <th>Vehicle Number</th>
+                    <td>{{ VehicleNumber }}</td>
+                </tr>
+                <tr>
+                    <th>Vehicle Type</th>
+                    <td>{{ vehicleType }}</td>
+                </tr>
+                <tr>
+                    <th>Fuel Type</th>
+                    <td>{{ vehicleFuelType }}</td>
+                </tr>
+                <tr>
+                    <th>Company</th>
+                    <td>{{ manufacturedCompany }}</td>
+                </tr>
+                <tr>
+                    <th>Vehicle CC</th>
+                    <td>{{ Vcc }}</td>
+                </tr>
+                <tr>
+                    <th>Manufacture Year</th>
+                    <td>{{ year }}</td>
+                </tr>
+                <tr>
+                    <th>RC</th>
+                    <td><img src="/static/data/tuktukProof/dataProof/{{ RC }}/" width="50px" height="50px"></td>
+                </tr>
+                <tr>
+                    <th>Vehicle Photo</th>
+                    <td><img src="/static/data/tuktukProof/dataProof/{{ vPhoto }}/" width="50px" height="50px"></td>
+                </tr>
+                <tr>
+                    <th>Reg Date</th>
+                    <td>{{ regDate }}</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="tuktukDriverTable">
+            <h1 class="drive-head">Driver Details</h1>
+            <table class="driverDetails" border="2">
+                <tr>
+                    <th>Driver ID</th>
+                    <td>{{ driverID }}</td>
+                </tr>
+                <tr>
+                    <th>Driver Name</th>
+                    <td>{{ driverName }}</td>
+                </tr>
+                <tr>
+                    <th>Phone Number</th>
+                    <td>{{ phoneNumber }}</td>
+                </tr>
+                <tr>
+                    <th>License</th>
+                    <td>{{ license }}</td>
+                </tr>
+                <tr>
+                    <th>Driver Photo</th>
+                    <td><img src="/static/data/tuktukProof/dataProof/{{ driverPhoto }}/" width="50px" height="50px"></td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <form action="/tuktukAllot3/" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <input type="hidden" name="VehicleNumber" value="{{ VehicleNumber }}">
+                            <input type="hidden" name="driverID" value="{{ driverID }}">
+                            <input class="allot-btn" type="submit" name="status" value="Allot">
+                        </form>
+                        <h4 class="message">{{ msg }}</h4>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    
+</body>
+</html>

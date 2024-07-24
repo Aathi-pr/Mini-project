@@ -1,0 +1,102 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+.fareHead {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    top: 20px;
+}
+.fare {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
+.minRate, .comment {
+    align-items: center;
+    justify-content: space-around;
+}
+.box1 {
+    position: relative;
+    align-items: center;
+    top: 100px;
+}
+.box2 {
+    position: relative;
+    align-items: center;
+    top: 100px;
+    margin-top: 20px;
+}
+.box3 {
+    position: relative;
+    top: 100px;
+    margin-top: 20px;
+}
+.box4 {
+    position: relative;
+    top: 100px;
+    margin-top: 20px;
+}
+.minFare {
+    display: flex;
+    padding: 10px 30px 10px;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+    border-radius: 10px;
+    font-size: 16px;
+}
+.farePerKm {
+    display: flex;
+    padding: 10px 30px 10px;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+    border-radius: 10px;
+    font-size: 16px;
+}
+.WaitingCharges {
+    display: flex;
+    padding: 10px 30px 10px;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+    border-radius: 10px;
+    font-size: 16px;
+}
+.MinimumKM {
+    display: flex;
+    padding: 10px 30px 10px;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+    border-radius: 10px;
+    font-size: 16px;
+}
+.fareSub {
+    position: relative;
+    align-items: center;
+    top: 150px;
+    left: 80px;
+}
+.fare-btn {
+    background-color: var(--font-color);
+    color: var(--bg-color);
+    padding: 12px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    border-radius: 15%;
+    border: 2px solid var(--bg-color);
+    padding-right: 10px;
+}
+.fare-btn:hover {
+    background-color: var(--bg-color);
+    color: var(--font-color);
+    transition: 0.2s ease-in;
+    border: 1px solid var(--font-color);
+}

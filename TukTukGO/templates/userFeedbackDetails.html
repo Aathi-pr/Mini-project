@@ -1,0 +1,71 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Details</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/nav.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/userFeedbackDetails.css' %}" />
+  </head>
+  <body>
+    <div class="feedTable">
+      <table class="details" border="2px">
+        <h1 class="feed-head">FeedBack Details</h1>
+        <tr>
+          <th>FeedBack ID</th>
+          <th>FeedBack</th>
+          <th>Date</th>
+          <th>userID</th>
+        </tr>
+{% comment %} {% for row in records %} {% endcomment %}
+        <tr>
+          <td>{{ feedbackID }}</td>
+          <td>{{ feedback }}</td>
+          <td>{{ feedbackDate }}</td>
+          <td>{{ userID }}</td>
+        </tr>
+        {% comment %} {% endfor%} {% endcomment %}
+      </table>
+    </div>
+    <div class="userTable">
+      <table class="userDetails">
+        <h1 class="user-head">User Details</h1>
+        <tr>
+          <th>User ID</th>
+          <th>User Name</th>
+          <th>Place</th>
+          <th>Phone Number</th>
+        </tr>
+      {% comment %} {% for row in userRecords %} {% endcomment %}
+        <tr>
+          <td>{{ userID }}</td>
+          <td>{{ userName }}</td>
+          <td>{{ place }}</td>
+          <td>{{ phoneNumber }}</td>
+        </tr>
+        {% comment %} {% endfor %} {% endcomment %}
+      </table>
+    </div>
+    <div class="replyTable">
+      <table class="replyDetails">
+        <h1 class="reply-head">Reply</h1>
+        <tr>
+          <form action="/userFeedbackDetailsPost/" method="post">
+            {% csrf_token %}
+            <textarea name="textarea" rows="5" cols="40"></textarea>
+            <input type="hidden" name="feedbackID" value="{{ feedbackID }}" />
+            <input type="hidden" name="userID" value="{{ userID }}" />
+            <input
+              class="allot-btn"
+              type="submit"
+              name="submit"
+              value="Reply"
+            />
+          </form>
+        </tr>
+      </table>
+    </div>
+  </body>
+</html>

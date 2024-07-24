@@ -1,0 +1,32 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback Page</title>
+    <link rel="stylesheet" href="{% static 'css/feedback.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>Feedback</h1>
+        <form action="/userFeedback1/" method="post" class="feedback-form">{% csrf_token %}
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="feedback">Your Feedback</label>
+                <textarea id="feedback" name="feedArea" rows="4" required></textarea>
+            </div>
+            <input class="button" type="submit" value="submit">
+        </form>
+    </div>
+    <script type="js/app.js" src="{% static 'js/app.js' %}"></script>
+</body>
+</html>
+

@@ -1,0 +1,35 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Details</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/nav.css' %}">
+    <link rel="stylesheet" href="{% static 'css/onGoingRide.css' %}">
+</head>
+<body>
+    <h1 class="fareHead"> Fare </h1>
+    <div class="fare">
+        <form id="form1" class="minRate" action="/onGoingRideRequests/" method="post"> {% csrf_token %}
+            <div class="box1">
+                Fare <input class="minFare" type="number" placeholder="Minimum Fare" name="minFare" id="Fare">
+            </div>
+            <div class="box2">
+                Waiting Fare <input class="WaitingCharges" type="number" placeholder="Extra Charges" name="WaitingCharges" id="Fare">
+            </div>
+            <div class="box3">
+                Review <textarea class="comment" name="comment" id="comment" placeholder="How Was Your Ride..."></textarea>
+            </div>
+            <div class="fareSub">
+                <input class="fare-btn" type="submit" value="submit">
+            </div>
+        </form>
+    </div>
+    <div class="message">{{ message }}</div>
+
+</body>
+
+</html>

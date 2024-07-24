@@ -1,0 +1,120 @@
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+.driver-head {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 50px;
+}
+.driverRegBack {
+    display: flex;
+    margin-left: 900px;
+    margin-top: 100px;
+    border-radius: 50px;
+}
+.form-driverContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 100px;
+}
+.driver-reg {
+    position: relative;
+    z-index: 1;
+    width: 300px; /* Adjust the width as needed */
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    background-color: rgba(0, 0, 0, 0.6);
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.15);
+    backdrop-filter: blur(4px);
+    top: -900px;
+    left: -300px;
+
+}
+.m ,.f ,.o {
+    display: flex;
+}
+.rad1, .rad2, .rad3 {
+    position: relative;
+    left: 10px;
+}
+.driverName, .houseName, .placeName, .pincode, .email, .phoneNumber, .aadhar, .license {
+    display: flex;
+    padding: 10px 20px 10px;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+    border-radius: 10px;
+    font-size: 16px;
+}
+.driverReg-btn {
+    background-color: var(--bg-color);
+    color: var(--primary-color);
+    padding: 16px 20px;
+    font-size: 16px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    opacity: 0.9;
+    border-radius: 15px;
+    border: 2px solid var(--primary-color);
+}
+.driverReg-btn:hover {
+    background-color: var(--primary-color);
+    color: var(--bg-color);
+    transition: 0.2s ease-in;
+}
+
+@media  screen and (max-width: 1024px) {
+    .driver-reg {
+        position: relative;
+        left: 335px;
+        top: -715px;
+
+    }
+    .driverRegBack {
+        position: relative;
+        width: 600px;
+        height: 600px;
+        right: 900px;
+        top: 10px;
+        left: -820px;
+    }
+}
+@media  screen and (max-width: 672px) {
+    .driver-reg {
+        position: relative;
+        left: 5px;
+        top: -290px;
+        border-radius: 50px;
+    }
+    .driverRegBack {
+        position: relative;
+        width: 300px;
+        height: 300px;
+        right: 900px;
+        top: 10px;
+        left: -795px;
+    }
+}
+@media  screen and (max-width: 400px) {
+    .driver-reg {
+        position: relative;
+        left: 5px;
+        top: -290px;
+        border-radius: 50px;
+    }
+    .driverRegBack {
+        position: relative;
+        width: 300px;
+        height: 300px;
+        right: 900px;
+        top: 10px;
+        left: -845px;
+    }
+}

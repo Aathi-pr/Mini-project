@@ -1,0 +1,50 @@
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+.allotHead {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  top: 20px;
+}
+.h3 {
+  font-size: 30px;
+}
+form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  top: 60px;
+}
+.allot-btn {
+  position: relative;
+  left: 20px;
+}
+#feedbackID {
+  text-transform: uppercase;
+  padding: 10px 30px 10px;
+}
+.allot-btn {
+  background-color: var(--font-color);
+  color: var(--bg-color);
+  padding: 16px 20px;
+  font-size: 16px;
+  margin: 15px;
+  border: none;
+  opacity: 0.9;
+  border-radius: 15px;
+  border: 2px solid var(--font-color);
+}
+.allot-btn:hover {
+  background-color: var(--bg-color);
+  color: var(--font-color);
+  transition: 0.2s ease-in;
+}
+.msgarea {
+  position: relative;
+  left: 300px;
+}

@@ -1,0 +1,49 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Details</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/nav.css' %}">
+    <link rel="stylesheet" href="{% static 'css/driverForTuktuk.css' %}">
+</head>
+<body>
+    <div class="driverTable">
+        <h1 class="drive-head">Driver Details</h1>
+        <table class="driverDetails">
+            <thead>
+                <tr>
+                    <th>Driver ID</th>
+                    <th>Driver Name</th>
+                    <th>Phone No</th>
+                    <th>License</th>
+                    <th>Photo</th>
+                    <th>Allot</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for driverID, driverName, phoneNumber, license, driverPhoto in driverRecords %}
+                <tr>
+                    <td>{{ driverID }}</td>
+                    <td>{{ driverName }}</td>
+                    <td>{{ phoneNumber }}</td>
+                    <td>{{ license }}</td>
+                    <td><img src="/static/data/tuktukProof/dataProof/{{driverPhoto}}/" width="50px" height="50px"></td>
+                    <td>
+                        <form action="/driverForTuktukDetails/" method="post">{% csrf_token %}
+                            <input type="hidden" name="driverID" value="{{ driverID }}">
+                            <input class="allot-btn" type="submit" name="submit" value="Details">
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+</body>
+
+</html>

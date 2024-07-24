@@ -1,0 +1,83 @@
+/* @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+
+:root {
+    --font-family: "poppins";
+} */
+
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+/* body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #000; 
+} */
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #000;
+    text-align: center;
+    padding: 20px;
+    background-color: #000; /* Background color for the container */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+.allotHead {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.allotForm {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#VehicleNumber {
+    text-transform: uppercase;
+    padding: 10px;
+    margin-bottom: 15px;
+    font-size: 16px;
+}
+
+.allot-btn {
+    background-color: #333; /* Replace with --font-color variable */
+    color: #fff; /* Replace with --bg-color variable */
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in;
+}
+
+.allot-btn:hover {
+    background-color: #555; /* Adjust hover color as needed */
+    color: #fff; /* Adjust hover text color as needed */
+}
+
+.no-vehicles {
+    font-size: 18px;
+    color: #ff0000; /* Red color for the no vehicles message */
+}

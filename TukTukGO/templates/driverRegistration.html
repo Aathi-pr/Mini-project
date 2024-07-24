@@ -1,0 +1,81 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Driver Registration</title>
+</head>
+<link rel="stylesheet" href="{% static 'css/styles.css' %}">
+<link rel="stylesheet" href="{% static 'css/nav.css' %}">
+<link rel="stylesheet" href="{% static 'css/driverRegistration.css' %}">
+<body>
+    {% comment %} <nav class="navbar">
+        <div class="mainHead">TukTukGo</div>
+        <a class="toggle-button" href="#">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </a>
+        <div class="nvLinks">
+            <ul>
+                <li><a href="#">Ride</a></li>
+                <li><a href="/tuktukDriverRegistration/">Driver</a></li>
+                <li><a href="/tuktukRegistration/">Tuktuk's</a></li>
+                <li><a href="#">About</a></li>
+
+            </ul>
+            </div>
+    </nav> {% endcomment %}
+    <h1 class="driver-head">Driver Registration</h1>
+    <img class="driverRegBack" src="{% static 'img/Designer (4).jpeg' %}" alt="reg-back" height="800px" width="600px">
+    <div class="form-driverContainer">
+    <form id="DriverRegistration" class="driver-reg" action="/tuktukDriverRegistration1/" method="post" enctype="multipart/form-data">{% csrf_token %}
+        <h3 class="d1">Driver Name</h3><input class="driverName" name="driverName" type="text" placeholder="Name in License">
+
+        <h3 class="d2">House Name</h3><input class="houseName" name="houseName" type="text" placeholder="House Name">
+
+        <h3 class="d3">Place</h3><input class="placeName" name="placeName" type="text" placeholder="Kochi..">
+
+        <h3 class="d4">PIN Code</h3><input class="pincode" type="text" id="pincode" name="pincode" maxlength="6" pattern="[0-9]{6}"  placeholder="691523..">
+        
+        <h3 class="d12">E-mail</h3><input class="email" name="email" type="email" placeholder="example@gmail.com">
+        
+        <h3 class="d5">Phone Number</h3><input class="phoneNumber" name="phoneNumber" type="text" maxlength="10" pattern="[0-9]{10}" placeholder="Phone Number">
+
+            <h3 class="d6">Gender : </h3>
+            <div class="m">
+                <input class="driverGender" name="driverGender" checked="checked" type="radio" id="Male" value="Male">
+                <label class="rad1" for="Male">Male</label><br>
+            </div>
+
+            <div class="f">
+                <input name="driverGender" type="radio" id="Female" value="Female">
+                <label class="rad2" for="Female">Female</label><br>
+            </div>
+
+            <div class="o">
+                <input name="driverGender" type="radio" id="Other" value="Other">
+                <label class="rad3" for="Other">Other</label><br>
+            </div>
+
+
+        <h3 class="d7">Date Of Birth</h3><input class="dob" type="date" name="dob" placeholder="">
+
+        <h3 class="d8">Aadhar Number</h3><input class="aadhar" name="aadhar" type="text" maxlength="12" pattern="[0-9]{12}" placeholder="**** **** **** ">
+
+        <h3 class="d9">License Number</h3><input class="license" name="license" type="text" maxlength="13" pattern="[0-9]{13}" placeholder="**** **** **** ">
+
+        <h3 class="d10">Upload Driver Photo : </h3> <input class="driverPhoto" type="file" id="driverPhoto" name="driverPhoto">
+
+         <h3 class="d11">Date Of Registration : </h3> <input type="date" class="DateOfRegistration" name="DateOfRegistration">
+
+          <input class="driverReg-btn" type="submit" value="submit">{{ msg }}
+    </form>
+    </div>
+<script src="{% static 'js/app.js' %}"></script>
+<footer>
+    <p>TukTukGo</p>
+</footer>
+</body>
+</html>
