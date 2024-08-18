@@ -21,8 +21,8 @@ Follow these instructions to set up the project on your local machine.
 
 Ensure you have the following installed:
 
-- [Django](https://nodejs.org/) (v14.x or higher)
-- [MySQL](https://www.mongodb.com/) (v4.x or higher)
+- [Django]((https://www.djangoproject.com) 
+- [MySQL](https://www.mysql.com)
 - [Git](https://git-scm.com/)
 
 ### Installation
@@ -34,5 +34,16 @@ Ensure you have the following installed:
 2. **Navigate to the Project Directory:**
  ```bash
    cd Mini-project
+
+3. **Create virtual env:**
+```bash
+pip3 install pipenv
+
+4. **Installing Django:**
+```bash
+pipenv install django
+
+**Process updating soon...**
+
 
 
