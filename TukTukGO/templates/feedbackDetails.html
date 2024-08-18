@@ -56,7 +56,7 @@
     <table class="replyDetails">
         <h1 class="reply-head">Reply</h1>
             <tr>
-                <form action="/feedbackDetailsPost/" method="post"> {% csrf_token %}
+                <form action="/feedback_details_post/" method="post"> {% csrf_token %}
                 <textarea name="textarea" rows="5" cols="40"></textarea>
                 <input type="hidden" name="feedbackID" value="{{ feedbackID }}">
                 <input type="hidden" name="driverID" value="{{ driverID }}">

@@ -11,7 +11,7 @@
     <h1 class="head">FeedBack Reply</h1>
     <div class="container">
       {% if recentFeedbackList %}
-      <form action="/feedbackViewRequests/" method="post">
+      <form action="/feedback_view_requests/" method="post">
         {% csrf_token %}
         <h3 class="h3">Select a FeedBack</h3>
         <div class="vertical-card-list">

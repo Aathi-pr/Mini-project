@@ -17,20 +17,12 @@
         <tr>
           <th> User ID </th>
           <th> User Name </th>
-          <th> Place </th>
-          <th> Phone Number </th>
-          <th> Gender </th>
-          <th> Date Of Birth </th>
-          <th> Date Of Registration </th>
+          <th> Date of Registration </th>
         </tr>
-        {% for userID, userName, place, phoneNumber, gender, dateOfBirth, dateOfRegistration in records %}
+        {% for userID, userName, dateOfRegistration in records %}
         <tr>
           <td> {{ userID }} </td>
           <td> {{ userName }} </td>
-          <td> {{ place }} </td>
-          <td> {{ phoneNumber }} </td>
-          <td> {{ gender }} </td>
-          <td> {{ dateOfBirth }} </td>
           <td> {{ dateOfRegistration }} </td>
         </tr>
         {% endfor %}

@@ -21,8 +21,8 @@
         <div class="nvLinks">
             <ul>
                 <li><a href="#Ride">Ride</a></li>
-                <li><a href="/tuktukDriverRegistration/">Driver</a></li>
-                <li><a href="/tuktukRegistration/">Tuktuk's</a></li>
+                <li><a href="/tuktuk_driver_registration/">Driver</a></li>
+                <li><a href="/tuktuk_registration/">Tuktuk's</a></li>
                 <li><a href="#About">About</a></li>
 
             </ul>
@@ -33,7 +33,7 @@
     </h1>
     <div class="feedReplyForm">
         {% if feedbacks %}
-        <form action="/feedReplyRequests/" method="post">{% csrf_token %}
+        <form action="/feed_reply_requests/" method="post">{% csrf_token %}
             <label for="FeedBack"> <h3 class="h3"> Select FeedBack ID : </h3> </label>
             <select id="feedbacks" name="feedbackID">
                 {% for feedbackID in feedbacks %}

@@ -21,8 +21,8 @@
             <div class="nvLinks">
                 <ul>
                     <li><a href="#Ride">Ride</a></li>
-                    <li><a href="/tuktukDriverRegistration/">Driver</a></li>
-                    <li><a href="/tuktukRegistration/">Tuktuk's</a></li>
+                    <li><a href="/tuktuk_driver_registration/">Driver</a></li>
+                    <li><a href="/tuktuk_registration/">Tuktuk's</a></li>
                     <li><a href="#About">About</a></li>
                 </ul>
             </div>
@@ -31,7 +31,7 @@
             <h1 class="allotHead">Allot TukTuk's To Drivers</h1>
             <div class="allotForm">
                 {% if vehicleList %}
-                <form action="/tuktukAllot1/" method="post">
+                <form action="/tuktuk_allot_1/" method="post">
                     {% csrf_token %}
                     <label for="VehicleNumber">
                         <h3 class="h3">Select TukTuk Number:</h3>

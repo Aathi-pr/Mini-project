@@ -81,7 +81,7 @@
             </table>
         </div>
 
-        <form action="/rideDetails/" method="post">
+        <form action="/ride_details/" method="post">
             {% csrf_token %}
             <button type="submit">Refresh</button>
         </form>
@@ -110,7 +110,7 @@
                     .then(data => {
                         if (data.response) {
                             // Response received, redirect to ride details
-                            window.location.href = '/rideDetails/';
+                            window.location.href = '/ride_details/';
                         } else {
                             // Response not received yet, continue to refresh
                             setTimeout(refreshPage, 2000);  // Refresh every 2 seconds

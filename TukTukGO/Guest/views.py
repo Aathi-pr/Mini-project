@@ -14,15 +14,15 @@ from TukTukGO import connectdb, currentDate
 
 
 # Create your views here.
-def homePage(request):  # Home page of TukTukGo
+def home_page(request):  # Home page of TukTukGo
     return render(request, "index.html")
 
 
-def signUpPage(request):  # Common SignUp page for Admin, Drivers, and Users
+def sign_up_page(request):  # Common SignUp page for Admin, Drivers, and Users
     return render(request, "signUp.html")
 
 
-def validateLogin(
+def validate_login(
     request,
 ):  # This function validates the login credentials and redirects to their page
 
@@ -99,7 +99,7 @@ def validateLogin(
         return HttpResponse("User Not Found!")
 
 
-def adminProcess(request):
+def admin_process(request):
 
     databaseCon = connectdb()
     cursor = databaseCon.cursor()
@@ -129,19 +129,19 @@ def adminProcess(request):
     )
 
 
-def driverProcess(request):
+def driver_process(request):
     return render(request, "driverProcess.html")
 
 
-def userProcess(request):
+def user_process(request):
     return render(request, "userProcess.html")
 
 
-def changePass(request):
+def change_pass(request):
     return render(request, "changePass.html")
 
 
-def changePass1(request):
+def change_pass_1(request):
 
     databaseCon = connectdb()
     cursor = databaseCon.cursor()
@@ -175,11 +175,11 @@ def changePass1(request):
     return render(request, "changePass.html", {"msg": msg})
 
 
-def tuktukRegistration(request):
+def tuktuk_registration(request):
     return render(request, "tuktukRegistration.html")
 
 
-def tuktukRegistration1(request):
+def tuktuk_registration_1(request):
 
     databaseCon = connectdb()
     cursor = databaseCon.cursor()
@@ -244,11 +244,11 @@ def tuktukRegistration1(request):
     return render(request, "tuktukRegistration.html", {"msg": msg})
 
 
-def tuktukDriverRegistration(request):
+def tuktuk_driver_registration(request):
     return render(request, "driverRegistration.html")
 
 
-def tuktukDriverRegistration1(request):
+def tuktuk_driver_registration_1(request):
 
     databaseCon = connectdb()
     cursor = databaseCon.cursor()
@@ -346,7 +346,7 @@ def tuktukDriverRegistration1(request):
     return render(request, "driverRegistration.html", {"msg": msg})
 
 
-def tuktukAllot(request):
+def tuktuk_allot(request):
 
     databaseCon = connectdb()
     cursor = databaseCon.cursor()
@@ -364,7 +364,7 @@ def tuktukAllot(request):
     return render(request, "tuktukAllot.html", {"vehicleList": vehicleList})
 
 
-def tuktukAllot1(request):
+def tuktuk_allot_1(request):
 
     databaseCon = connectdb()
     cursor = databaseCon.cursor()
@@ -396,7 +396,7 @@ def tuktukAllot1(request):
     )
 
 
-def tuktukAllot2(request):
+def tuktuk_allot_2(request):
 
     databaseCon = connectdb()
     cursor = databaseCon.cursor()
@@ -456,7 +456,7 @@ def tuktukAllot2(request):
     )
 
 
-def tuktukAllot3(request):
+def tuktuk_allot_3(request):
 
     databaseCon = connectdb()
     cursor = databaseCon.cursor()
@@ -592,11 +592,11 @@ def tuktukAllot3(request):
     )
 
 
-def tuktukUserLogin(request):
+def tuktuk_user_login(request):
     return render(request, "tuktukUserLogin.html")
 
 
-def tuktukUserLoginRequests(request):
+def tuktuk_user_login_requests(request):
 
     databaseCon = connectdb()
     cursor = databaseCon.cursor()
@@ -652,11 +652,11 @@ def tuktukUserLoginRequests(request):
     return render(request, "tuktukUserLogin.html", {"msg": msg})
 
 
-def userChangePass(request):
+def user_change_pass(request):
     return render(request, "userChangePass.html")
 
 
-def userChangePass1(request):
+def user_change_pass_1(request):
 
     databaseCon = connectdb()
     cursor = databaseCon.cursor()
@@ -701,11 +701,11 @@ def userChangePass1(request):
     return render(request, "userChangePass.html", {"msg": msg})
 
 
-def driverChangePass(request):
+def driver_change_pass(request):
     return render(request, "driverChangePass.html")
 
 
-def driverChangePass1(request):
+def driver_change_pass_1(request):
 
     databaseCon = connectdb()
     cursor = databaseCon.cursor()
@@ -750,7 +750,7 @@ def driverChangePass1(request):
     return render(request, "driverChangePass.html", {"msg": msg})
 
 
-def tuktukDetails(request):
+def tuktuk_details(request):
 
     databaseCon = connectdb()
     cursor = databaseCon.cursor()
@@ -776,11 +776,11 @@ def feedback(request):
     return render(request, "feedback.html")
 
 
-def userFeedback(request):
+def user_feedback(request):
     return render(request, "userfeedback.html")
 
 
-def feedback1(request):
+def feedback_1(request):
 
     databaseCon = connectdb()
     cursor = databaseCon.cursor()
@@ -847,7 +847,7 @@ def feedback1(request):
     )
 
 
-def userFeedback1(request):
+def user_feedback_1(request):
 
     databaseCon = connectdb()
     cursor = databaseCon.cursor()
@@ -914,7 +914,7 @@ def userFeedback1(request):
     )
 
 
-def feedReply(request):
+def feed_reply(request):
 
     databaseCon = connectdb()
     cursor = databaseCon.cursor()
@@ -933,7 +933,7 @@ def feedReply(request):
     return render(request, "feedReply.html", {"feedbacks": feedbacks})
 
 
-def userFeedbackReply(request):
+def user_feedback_reply(request):
 
     databaseCon = connectdb()
     cursor = databaseCon.cursor()
@@ -951,7 +951,7 @@ def userFeedbackReply(request):
     return render(request, "userFeedbackReply.html", {"userFeedbacks": userFeedbacks})
 
 
-def feedReplyRequests(request):
+def feed_reply_requests(request):
 
     databaseCon = connectdb()
     cursor = databaseCon.cursor()
@@ -998,7 +998,7 @@ def feedReplyRequests(request):
     )
 
 
-def userFeedbackReplyRequests(request):
+def user_feedback_reply_requests(request):
 
     databaseCon = connectdb()
     cursor = databaseCon.cursor()
@@ -1037,7 +1037,7 @@ def userFeedbackReplyRequests(request):
     )
 
 
-def feedbackDetailsPost(request):
+def feedback_details_post(request):
 
     databaseCon = connectdb()
     cursor = databaseCon.cursor()
@@ -1102,7 +1102,7 @@ def feedbackDetailsPost(request):
     )
 
 
-def userFeedbackDetailsPost(request):
+def user_feedback_details_post(request):
 
     databaseCon = connectdb()
     cursor = databaseCon.cursor()
@@ -1162,7 +1162,7 @@ def userFeedbackDetailsPost(request):
 # List of auto locations
 
 
-def bookingPage(request):
+def booking_page(request):
     return render(request, "bookingPage.html")
 
 
@@ -1343,7 +1343,7 @@ def haversine(lat1, lon1, lat2, lon2):
     return distance
 
 
-def mapView(request):
+def map_view(request):
 
     databaseCon = connectdb()
     cursor = databaseCon.cursor()
@@ -1356,7 +1356,6 @@ def mapView(request):
 
     for row in records:
         vehicleRegNo = row[0]
-        break
 
     driver_query = "SELECT dl.VehicleRegNo, dl.tuktukLatitude, dl.tuktukLongitude FROM driverLocation dl INNER JOIN tuktukRequest tr ON dl.VehicleRegNo = tr.vehicleRegNo ORDER BY tr.requestID"
     cursor.execute(driver_query)
@@ -1377,14 +1376,13 @@ def mapView(request):
         vehicleRegNo = record[0]
         tuktukLatitude = float(record[1])
         tuktukLongitude = float(record[2])
-        break
-        driver_data.append(
-            {
-                "vehicleRegNo": vehicleRegNo,
-                "latitude": tuktukLatitude,
-                "longitude": tuktukLongitude,
-            }
-        )
+    driver_data.append(
+        {
+            "vehicleRegNo": vehicleRegNo,
+            "latitude": tuktukLatitude,
+            "longitude": tuktukLongitude,
+        }
+    )
 
     user_data = []
     for record in user_records:
@@ -1392,15 +1390,15 @@ def mapView(request):
         userLat = float(record[1])
         userLon = float(record[2])
         destination = record[3]
-        break
-        user_data.append(
-            {
-                "userID": userID,
-                "latitude": userLat,
-                "longitude": userLon,
-                "destination": destination,
-            }
-        )
+
+    user_data.append(
+        {
+            "userID": userID,
+            "latitude": userLat,
+            "longitude": userLon,
+            "destination": destination,
+        }
+    )
 
     return render(
         request,
@@ -1409,7 +1407,7 @@ def mapView(request):
     )
 
 
-def driverRideDetails(request):
+def driver_ride_details(request):
 
     databaseCon = connectdb()
     cursor = databaseCon.cursor()
@@ -1465,7 +1463,7 @@ def driverRideDetails(request):
     )
 
 
-def requetTuktukAndTuktukDriver(request):
+def request_tuktuk_and_tuktuk_driver(request):
 
     databaseCon = connectdb()
     cursor = databaseCon.cursor()
@@ -1545,14 +1543,14 @@ def requetTuktukAndTuktukDriver(request):
 
     databaseCon.commit()
 
-    return redirect("rideDetails")
+    return redirect("ride_details")
 
 
 def loading(request):
     return render(request, "loading.html")
 
 
-def checkDriverResponse(request):
+def check_driver_response(request):
     databaseCon = connectdb()
     cursor = databaseCon.cursor()
 
@@ -1572,7 +1570,7 @@ def checkDriverResponse(request):
         return JsonResponse({"response": False})
 
 
-def responseForTuktuk(request):
+def response_for_tuktuk(request):
 
     databaseCon = connectdb()
     cursor = databaseCon.cursor()
@@ -1638,7 +1636,7 @@ def responseForTuktuk(request):
         )
 
 
-def responseForTuktukRequests(request):
+def response_for_tuktuk_requests(request):
 
     databaseCon = connectdb()
     cursor = databaseCon.cursor()
@@ -1722,11 +1720,11 @@ def responseForTuktukRequests(request):
     )
 
 
-def fareEstimation(request):
+def fare_estimation(request):
     return render(request, "fareEstimation.html")
 
 
-def fareEstimationRequets(request):
+def fare_estimation_requests(request):
 
     databaseCon = connectdb()
     cursor = databaseCon.cursor()
@@ -1776,7 +1774,7 @@ def fareEstimationRequets(request):
     return render(request, "fareEstimation.html", {"message": message})
 
 
-def rideDetails(request):
+def ride_details(request):
     databaseCon = connectdb()
     cursor = databaseCon.cursor()
 
@@ -1979,7 +1977,7 @@ def rideDetails(request):
         )
 
 
-def checkDriverResponse(request):
+def check_driver_response(request):
     databaseCon = connectdb()
     cursor = databaseCon.cursor()
 
@@ -2006,11 +2004,11 @@ def checkDriverResponse(request):
 #     return render(request, "mapView.html")
 
 
-def onGoingRide(request):
+def on_going_ride(request):
     return render(request, "onGoingRide.html")
 
 
-def onGoingRideRequests(request):
+def on_going_ride_requests(request):
 
     databaseCon = connectdb()
     cursor = databaseCon.cursor()
@@ -2063,7 +2061,7 @@ def onGoingRideRequests(request):
     return render(request, "onGoingRide.html", {"message": message})
 
 
-def userList(request):
+def user_list(request):
 
     databaseCon = connectdb()
     cursor = databaseCon.cursor()
@@ -2076,7 +2074,7 @@ def userList(request):
     return render(request, "userList.html", {"records": records})
 
 
-def tuktukForDriver(request):
+def tuktuk_for_driver(request):
 
     databaseCon = connectdb()
     cursor = databaseCon.cursor()
@@ -2100,7 +2098,7 @@ def tuktukForDriver(request):
     return render(request, "tuktukForDriver.html", {"vehicleList": vehicleList})
 
 
-def tuktukForDriverDetails(request):
+def tuktuk_for_driver_details(request):
 
     databaseCon = connectdb()
     cursor = databaseCon.cursor()
@@ -2184,7 +2182,7 @@ def tuktukForDriverDetails(request):
     )
 
 
-def driverForTuktuk(request):
+def driver_for_tuktuk(request):
 
     databaseCon = connectdb()
     cursor = databaseCon.cursor()
@@ -2197,7 +2195,7 @@ def driverForTuktuk(request):
     return render(request, "driverForTuktuk.html", {"driverRecords": driverRecords})
 
 
-def driverForTuktukDetails(request):
+def driver_for_tuktuk_details(request):
 
     databaseCon = connectdb()
     cursor = databaseCon.cursor()
@@ -2274,7 +2272,7 @@ def driverForTuktukDetails(request):
     )
 
 
-def starFeedback(request):
+def star_feedback(request):
     return render(request, "starFeedback.html")
 
 
@@ -2282,7 +2280,7 @@ def receipt(request):
     return render(request, "receipt.html")
 
 
-def receiptRequests(request):
+def receipt_requests(request):
 
     databaseCon = connectdb()
     cursor = databaseCon.cursor()
@@ -2368,7 +2366,7 @@ def receiptRequests(request):
     )
 
 
-def receiptRequestsConfirm(request):
+def receipt_requests_confirm(request):
 
     databaseCon = connectdb()
     cursor = databaseCon.cursor()
@@ -2412,7 +2410,7 @@ def receiptRequestsConfirm(request):
     )
 
 
-def paymentHistory(request):
+def payment_history(request):
 
     databaseCon = connectdb()
     cursor = databaseCon.cursor()
@@ -2448,7 +2446,7 @@ def paymentHistory(request):
     )
 
 
-def feedbackView(request):
+def feedback_view(request):
 
     databaseCon = connectdb()
     cursor = databaseCon.cursor()
@@ -2473,7 +2471,7 @@ def feedbackView(request):
     )
 
 
-def feedbackViewRequests(request):
+def feedback_view_requests(request):
 
     databaseCon = connectdb()
     cursor = databaseCon.cursor()
@@ -2530,7 +2528,7 @@ def feedbackViewRequests(request):
     )
 
 
-def driverFeedbackView(request):
+def driver_feedback_view(request):
 
     databaseCon = connectdb()
     cursor = databaseCon.cursor()

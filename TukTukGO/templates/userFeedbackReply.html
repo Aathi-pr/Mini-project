@@ -26,19 +26,19 @@
         <span class="bar"></span>
       </a>
       <div class="nvLinks">
-        <ul>
+        <!--<ul>
           <li><a href="#Ride">Ride</a></li>
           <li><a href="/tuktukDriverRegistration/">Driver</a></li>
           <li><a href="/tuktukRegistration/">Tuktuk's</a></li>
           <li><a href="#About">About</a></li>
-        </ul>
+        </ul>-->
       </div>
     </nav>
     <h1 class="allotHead">FeedBack Reply To User's</h1>
     <div class="container">
     <div class="feedReplyForm">
       {% if userFeedbacks %}
-      <form action="/userFeedbackReplyRequests/" method="post">
+      <form action="/user_feedback_reply_requests/" method="post">
         {% csrf_token %}
         <label for="FeedBack"> <h3 class="h3">Select FeedBack ID :</h3> </label>
         <select id="feedbacks" name="feedbackID">

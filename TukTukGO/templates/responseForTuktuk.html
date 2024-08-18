@@ -12,7 +12,7 @@
 </head>
 <body>
     <div class="driverResponse">
-        <form class="responseForm" action="/responseForTuktukRequests/" method="post"> 
+        <form class="responseForm" action="/response_for_tuktuk_requests/" method="post"> 
             {% csrf_token %}
             <h1 class="response-head">TukTuk Requests</h1>
             <table class="responseTable" border="2px">
@@ -52,7 +52,7 @@
             <input type="submit" value="Start Ride" class="rideButton">
             <div class="message">{{ message }}</div>
         </form>
-        <a href="/mapView/" class="mapViewA"><button>View Map</button></a>
+        <a href="/map_view/" class="mapViewA"><button>View Map</button></a>
     </div>
 </body>
 
