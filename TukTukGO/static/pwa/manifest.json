@@ -1,0 +1,25 @@
+{
+  "name": "TukTukGo",
+  "short_name": "TukTukGo",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000",
+  "theme_color": "#ff9800",
+  "icons": [
+    {
+      "src": "/static/img/pwapitch-modified.png",
+      "sizes": "1024x1024",
+      "type": "image/png"
+    },
+    {
+      "src": "/static/img/Screenshot_2024-08-14-13-25-55-716_com.android.chrome.png",
+      "sizes": "1064x2106",
+      "type": "image/png"
+    },
+    {
+      "src": "/static/img/Screenshot_2024-08-14-13-26-38-876_com.android.chrome.png",
+      "sizes": "1066x2100",
+      "type": "image/png"
+    }
+  ]
+}

@@ -36,6 +36,7 @@
     <div class="container">
     <div id="map"></div>
     <form class="form-group" action="/driverRideDetails/" method="post"> {% csrf_token %}
+        <input type="hidden" name="requestID" value="{{ requestID }}">
         <input class="charges" type="text" name="totalDistance" placeholder="Total Distance" />
         <input class="charges" type="text" name="waitingCharge" placeholder="Waiting Time in min" />
         <input class="button" type="submit" value="Calculate" />

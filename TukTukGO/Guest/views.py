@@ -14,40 +14,50 @@ from TukTukGO import connectdb, currentDate
 
 
 # Create your views here.
-def homePage(request): #Home page of TukTukGo
+def homePage(request):  # Home page of TukTukGo
     return render(request, "index.html")
 
-def signUpPage(request): # Common SignUp page for Admin, Drivers, and Users
+
+def signUpPage(request):  # Common SignUp page for Admin, Drivers, and Users
     return render(request, "signUp.html")
 
-def validateLogin(request): # This function validates the login credentials and redirects to their page
+
+def validateLogin(
+    request,
+):  # This function validates the login credentials and redirects to their page
 
     databaseCon = connectdb()
     cursor = databaseCon.cursor()
 
-    userID = request.POST['userID']
-    EMail = request.POST['EMail']
-    password = request.POST['password']
+    userID = request.POST["userID"]
+    EMail = request.POST["EMail"]
+    password = request.POST["password"]
 
-    query = "SELECT * FROM loginCredentials WHERE UserID = '" + userID + "' and EMail = '" + EMail + "' and password = '" + password + "'"
+    query = (
+        "SELECT * FROM loginCredentials WHERE UserID = '"
+        + userID
+        + "' and EMail = '"
+        + EMail
+        + "' and password = '"
+        + password
+        + "'"
+    )
     cursor.execute(query)
 
     if cursor.rowcount == 0:
 
         msg = "Invalid E-Mail or Password \n Please Try Again"
 
-        return render(request, "signUp1.html", {
-            'msg': msg
-            })
+        return render(request, "signUp1.html", {"msg": msg})
 
     elif userID == "Admin":
 
-        query = ("DELETE FROM loginSession WHERE userType = '" + 'Admin' + "'")
+        query = "DELETE FROM loginSession WHERE userType = '" + "Admin" + "'"
         cursor.execute(query)
 
         databaseCon.commit()
 
-        query = ("INSERT INTO loginSession VALUES ('" + userID +"', '" + 'Admin' + "')")
+        query = "INSERT INTO loginSession VALUES ('" + userID + "', '" + "Admin" + "')"
         cursor.execute(query)
 
         databaseCon.commit()
@@ -60,12 +70,12 @@ def validateLogin(request): # This function validates the login credentials and 
 
         if x == "D" or x == "d":
 
-            query = ("DELETE FROM loginSession WHERE userType = '" + 'D' + "'")
+            query = "DELETE FROM loginSession WHERE userType = '" + "D" + "'"
             cursor.execute(query)
 
             databaseCon.commit()
 
-            query = ("INSERT INTO loginSession VALUES ('" + userID + "', '" + 'D' + "')")
+            query = "INSERT INTO loginSession VALUES ('" + userID + "', '" + "D" + "')"
             cursor.execute(query)
 
             databaseCon.commit()
@@ -74,12 +84,12 @@ def validateLogin(request): # This function validates the login credentials and 
 
         elif x == "U" or x == "u":
 
-            query = ("DELETE FROM loginSession WHERE userType = '" + 'U' + "'")
+            query = "DELETE FROM loginSession WHERE userType = '" + "U" + "'"
             cursor.execute(query)
 
             databaseCon.commit()
 
-            query = ("INSERT INTO loginSession VALUES ('" + userID + "', '" + 'U' + "')")
+            query = "INSERT INTO loginSession VALUES ('" + userID + "', '" + "U" + "')"
             cursor.execute(query)
 
             databaseCon.commit()
@@ -87,6 +97,7 @@ def validateLogin(request): # This function validates the login credentials and 
             return render(request, "userIndex.html")
 
         return HttpResponse("User Not Found!")
+
 
 def adminProcess(request):
 
@@ -108,19 +119,27 @@ def adminProcess(request):
         databaseCon.close()
 
     # Render the HTML template with data and pie chart image
-    return render(request, "adminProcess.html", {
-        'total_bookings': total_bookings,
-        'total_money': total_money,
-    })
+    return render(
+        request,
+        "adminProcess.html",
+        {
+            "total_bookings": total_bookings,
+            "total_money": total_money,
+        },
+    )
+
 
 def driverProcess(request):
     return render(request, "driverProcess.html")
 
+
 def userProcess(request):
     return render(request, "userProcess.html")
 
+
 def changePass(request):
     return render(request, "changePass.html")
+
 
 def changePass1(request):
 
@@ -130,7 +149,11 @@ def changePass1(request):
     s1 = request.POST["t1"]
     s2 = request.POST["t2"]
 
-    query = "SELECT * FROM loginCredentials WHERE UserID = 'Admin' and password = '" + s1 + "'"
+    query = (
+        "SELECT * FROM loginCredentials WHERE UserID = 'Admin' and password = '"
+        + s1
+        + "'"
+    )
     cursor.execute(query)
 
     if cursor.rowcount == 0:
@@ -138,20 +161,23 @@ def changePass1(request):
         msg = "Incorrect Existing Password"
     else:
 
-        query = "UPDATE loginCredentials SET password = '" + s2 + "' where UserID = 'Admin' "
+        query = (
+            "UPDATE loginCredentials SET password = '"
+            + s2
+            + "' where UserID = 'Admin' "
+        )
         cursor.execute(query)
 
         databaseCon.commit()
 
         msg = "Password Updated Successfully"
 
-    return render(request, "changePass.html", {
-        'msg': msg
-        })
+    return render(request, "changePass.html", {"msg": msg})
 
 
 def tuktukRegistration(request):
     return render(request, "tuktukRegistration.html")
+
 
 def tuktukRegistration1(request):
 
@@ -167,15 +193,19 @@ def tuktukRegistration1(request):
     RCUpload = request.FILES["RCUpload"]
     vehiclePhoto = request.FILES["vehiclePhoto"]
     DateOfRegistration = request.POST["DateOfRegistration"]
-    #print(request.FILES)
+    # print(request.FILES)
 
     fs = FileSystemStorage()
-    RCUploadName = fs.save("static/data/tuktukProof/dataProof/" + RCUpload.name, RCUpload)
+    RCUploadName = fs.save(
+        "static/data/tuktukProof/dataProof/" + RCUpload.name, RCUpload
+    )
     RCUploadName = RCUploadName[34:]
-    vehiclePhotoName = fs.save("static/data/tuktukProof/dataProof/" + vehiclePhoto.name, vehiclePhoto)
+    vehiclePhotoName = fs.save(
+        "static/data/tuktukProof/dataProof/" + vehiclePhoto.name, vehiclePhoto
+    )
     vehiclePhotoName = vehiclePhotoName[34:]
 
-    query = ("SELECT * FROM tuktukData WHERE VehicleRegNo = '" + VehicleNumber + "'")
+    query = "SELECT * FROM tuktukData WHERE VehicleRegNo = '" + VehicleNumber + "'"
     cursor.execute(query)
 
     if cursor.rowcount > 0:
@@ -184,19 +214,39 @@ def tuktukRegistration1(request):
 
     else:
 
-        query = "INSERT INTO tuktukData VALUES ('" + VehicleNumber + "', '" + vehicleType + "', '"+ fuelType + "', '" + manufacturedCompany + "', '" + vehicleCc + "', '" + year + "', '" + RCUploadName + "', '" + vehiclePhotoName + "', '" + DateOfRegistration + "')"
+        query = (
+            "INSERT INTO tuktukData VALUES ('"
+            + VehicleNumber
+            + "', '"
+            + vehicleType
+            + "', '"
+            + fuelType
+            + "', '"
+            + manufacturedCompany
+            + "', '"
+            + vehicleCc
+            + "', '"
+            + year
+            + "', '"
+            + RCUploadName
+            + "', '"
+            + vehiclePhotoName
+            + "', '"
+            + DateOfRegistration
+            + "')"
+        )
 
         cursor.execute(query)
         databaseCon.commit()
 
         msg = "Tuktuk Registration Successful"
 
-    return render(request, "tuktukRegistration.html", {
-        'msg': msg
-        })
+    return render(request, "tuktukRegistration.html", {"msg": msg})
+
 
 def tuktukDriverRegistration(request):
     return render(request, "driverRegistration.html")
+
 
 def tuktukDriverRegistration1(request):
 
@@ -218,7 +268,9 @@ def tuktukDriverRegistration1(request):
     DateOfRegistration = request.POST["DateOfRegistration"]
 
     fs = FileSystemStorage()
-    driverPhotoProof = fs.save("static/data/tuktukProof/dataProof/" + driverPhoto.name, driverPhoto)
+    driverPhotoProof = fs.save(
+        "static/data/tuktukProof/dataProof/" + driverPhoto.name, driverPhoto
+    )
     driverPhotoProof = driverPhotoProof[34:]
 
     driverID = "D1000"
@@ -237,33 +289,69 @@ def tuktukDriverRegistration1(request):
     y = y + 1
     driverID = "D" + str(y)
 
-    query = ("SELECT * FROM tuktukDriverData WHERE driverId = '" + driverID + "'")
+    query = "SELECT * FROM tuktukDriverData WHERE driverId = '" + driverID + "'"
     cursor.execute(query)
 
-    msg =""
+    msg = ""
 
-    query = "INSERT INTO tuktukDriverData VALUES ('" + driverID + "', '" + driverName + "', '" + houseName + "', '" + placeName + "', '" + pincode + "', '" + phoneNumber + "', '" + driverGender + "', '" + dob + "', '" + aadhar + "', '" + license +"', '" + driverPhotoProof + "', '" + DateOfRegistration + "')"
+    query = (
+        "INSERT INTO tuktukDriverData VALUES ('"
+        + driverID
+        + "', '"
+        + driverName
+        + "', '"
+        + houseName
+        + "', '"
+        + placeName
+        + "', '"
+        + pincode
+        + "', '"
+        + phoneNumber
+        + "', '"
+        + driverGender
+        + "', '"
+        + dob
+        + "', '"
+        + aadhar
+        + "', '"
+        + license
+        + "', '"
+        + driverPhotoProof
+        + "', '"
+        + DateOfRegistration
+        + "')"
+    )
     cursor.execute(query)
 
     databaseCon.commit()
 
-    query = "INSERT INTO loginCredentials values ('" + driverID + "', '" + email + "' ,'" + driverID + "')"
+    query = (
+        "INSERT INTO loginCredentials values ('"
+        + driverID
+        + "', '"
+        + email
+        + "' ,'"
+        + driverID
+        + "')"
+    )
     cursor.execute(query)
 
     databaseCon.commit()
 
-    msg = "Driver Registration Successfully Finished\n Default Password is your DriverID is " + driverID
+    msg = (
+        "Driver Registration Successfully Finished\n Default Password is your DriverID is "
+        + driverID
+    )
 
-    return render(request, "driverRegistration.html", {
-        'msg': msg
-        })
+    return render(request, "driverRegistration.html", {"msg": msg})
+
 
 def tuktukAllot(request):
 
     databaseCon = connectdb()
     cursor = databaseCon.cursor()
 
-    query = ("SELECT VehicleRegNo FROM tuktukData")
+    query = "SELECT VehicleRegNo FROM tuktukData"
     cursor.execute(query)
 
     records = cursor.fetchall()
@@ -273,9 +361,8 @@ def tuktukAllot(request):
     for row in records:
         vehicleList.append(row[0])
 
-    return render(request, "tuktukAllot.html", {
-        'vehicleList': vehicleList
-        })
+    return render(request, "tuktukAllot.html", {"vehicleList": vehicleList})
+
 
 def tuktukAllot1(request):
 
@@ -284,21 +371,29 @@ def tuktukAllot1(request):
 
     VehicleNumber = request.POST["VehicleNumber"]
 
-    query = ("SELECT VehicleRegNo, vehicleType, vehicleFuelType, manufacturedCompany, Vcc, manufactureYear, RC, vPhoto, regDate FROM tuktukData WHERE VehicleRegNo = '" + VehicleNumber + "'")
+    query = (
+        "SELECT VehicleRegNo, vehicleType, vehicleFuelType, manufacturedCompany, Vcc, manufactureYear, RC, vPhoto, regDate FROM tuktukData WHERE VehicleRegNo = '"
+        + VehicleNumber
+        + "'"
+    )
     cursor.execute(query)
 
     records = cursor.fetchall()
 
-    query = ("SELECT driverID, driverName, phoneNumber, license, driverPhoto FROM tuktukDriverData")
+    query = "SELECT driverID, driverName, phoneNumber, license, driverPhoto FROM tuktukDriverData"
     cursor.execute(query)
 
     driverRecords = cursor.fetchall()
 
-    return render(request, "allotDetails.html", {
-        'VehicleNumber': VehicleNumber,
-        'records': records,
-        'driverRecords': driverRecords
-        })
+    return render(
+        request,
+        "allotDetails.html",
+        {
+            "VehicleNumber": VehicleNumber,
+            "records": records,
+            "driverRecords": driverRecords,
+        },
+    )
 
 
 def tuktukAllot2(request):
@@ -309,7 +404,7 @@ def tuktukAllot2(request):
     VehicleNumber = request.POST["VehicleNumber"]
     driverID = request.POST["driverID"]
 
-    query = ("SELECT * FROM tuktukData WHERE VehicleRegNo = '" + VehicleNumber + "'")
+    query = "SELECT * FROM tuktukData WHERE VehicleRegNo = '" + VehicleNumber + "'"
     cursor.execute(query)
 
     records = cursor.fetchall()
@@ -324,7 +419,11 @@ def tuktukAllot2(request):
         vPhoto = row[7]
         regDate = row[8]
 
-    query = ("SELECT driverID, driverName, phoneNumber, license, driverPhoto FROM tuktukDriverData WHERE driverID = '" + driverID + "'")
+    query = (
+        "SELECT driverID, driverName, phoneNumber, license, driverPhoto FROM tuktukDriverData WHERE driverID = '"
+        + driverID
+        + "'"
+    )
     cursor.execute(query)
 
     driverRecords = cursor.fetchall()
@@ -335,22 +434,27 @@ def tuktukAllot2(request):
         license = row[3]
         driverPhoto = row[4]
 
-    return render(request, "allotingPage.html",{
-        'VehicleNumber': VehicleNumber,
-        'vehicleType': vehicleType,
-        'vehicleFuelType': vehicleFuelType,
-        'manufacturedCompany': manufacturedCompany,
-        'Vcc': Vcc,
-        'year': year,
-        ' RC': RC,
-        'vPhoto': vPhoto,
-        'regDate': regDate,
-        'driverID': driverID,
-        'driverName': driverName,
-        'phoneNumber': phoneNumber,
-        'license': license,
-        'driverPhoto': driverPhoto
-        })
+    return render(
+        request,
+        "allotingPage.html",
+        {
+            "VehicleNumber": VehicleNumber,
+            "vehicleType": vehicleType,
+            "vehicleFuelType": vehicleFuelType,
+            "manufacturedCompany": manufacturedCompany,
+            "Vcc": Vcc,
+            "year": year,
+            " RC": RC,
+            "vPhoto": vPhoto,
+            "regDate": regDate,
+            "driverID": driverID,
+            "driverName": driverName,
+            "phoneNumber": phoneNumber,
+            "license": license,
+            "driverPhoto": driverPhoto,
+        },
+    )
+
 
 def tuktukAllot3(request):
 
@@ -362,7 +466,7 @@ def tuktukAllot3(request):
     status = request.POST["status"]
     allotDate = currentDate()
 
-    query = ("SELECT * FROM tuktukData WHERE VehicleRegNo = '" + VehicleNumber + "'")
+    query = "SELECT * FROM tuktukData WHERE VehicleRegNo = '" + VehicleNumber + "'"
     cursor.execute(query)
 
     records = cursor.fetchall()
@@ -377,7 +481,11 @@ def tuktukAllot3(request):
         vPhoto = row[7]
         regDate = row[8]
 
-    query = ("SELECT driverID, driverName, phoneNumber, license, driverPhoto FROM tuktukDriverData WHERE driverID = '" + driverID + "'")
+    query = (
+        "SELECT driverID, driverName, phoneNumber, license, driverPhoto FROM tuktukDriverData WHERE driverID = '"
+        + driverID
+        + "'"
+    )
     cursor.execute(query)
 
     driverRecords = cursor.fetchall()
@@ -388,23 +496,37 @@ def tuktukAllot3(request):
         license = row[3]
         driverPhoto = row[4]
 
-    query = ("UPDATE tuktukDriverAllot SET status = 'NO' WHERE VehicleRegNo = '" + VehicleNumber + "'")
+    query = (
+        "UPDATE tuktukDriverAllot SET status = 'NO' WHERE VehicleRegNo = '"
+        + VehicleNumber
+        + "'"
+    )
     cursor.execute(query)
 
     databaseCon.commit()
 
-    query = ("UPDATE tuktukDriverAllot SET status = 'NO' WHERE driverID = '" + driverID + "'")
+    query = (
+        "UPDATE tuktukDriverAllot SET status = 'NO' WHERE driverID = '" + driverID + "'"
+    )
     cursor.execute(query)
 
     databaseCon.commit()
 
-    query = ("SELECT * FROM tuktukDriverAllot WHERE VehicleRegNo = '" + VehicleNumber + "' AND driverID = '" + driverID + "'")
+    query = (
+        "SELECT * FROM tuktukDriverAllot WHERE VehicleRegNo = '"
+        + VehicleNumber
+        + "' AND driverID = '"
+        + driverID
+        + "'"
+    )
     cursor.execute(query)
 
     existing_record = cursor.fetchone()
 
     if existing_record:
-        msg = "Allotment for " + driverID + " with " + VehicleNumber + " is set to 'NO'."
+        msg = (
+            "Allotment for " + driverID + " with " + VehicleNumber + " is set to 'NO'."
+        )
 
     else:
         AllotID = "AID1000"
@@ -424,37 +546,55 @@ def tuktukAllot3(request):
 
         status = "YES"
 
-        query = ("INSERT INTO tuktukDriverAllot VALUES ('" + AllotID + "', '" + VehicleNumber + "', '" + driverID + "', '" + allotDate + "', '" + status + "')")
+        query = (
+            "INSERT INTO tuktukDriverAllot VALUES ('"
+            + AllotID
+            + "', '"
+            + VehicleNumber
+            + "', '"
+            + driverID
+            + "', '"
+            + allotDate
+            + "', '"
+            + status
+            + "')"
+        )
         cursor.execute(query)
 
         databaseCon.commit()
 
         msg = driverID + " Alloted To " + VehicleNumber + " Tuktuk"
 
-    return render(request, "allotingPage.html", {
-        'VehicleNumber': VehicleNumber,
-        'vehicleType': vehicleType,
-        'vehicleFuelType': vehicleFuelType,
-        'manufacturedCompany': manufacturedCompany,
-        'Vcc': Vcc,
-        'year': year,
-        ' RC': RC,
-        'vPhoto': vPhoto,
-        'regDate': regDate,
-        'driverID': driverID,
-        'driverName': driverName,
-        'phoneNumber': phoneNumber,
-        'license': license,
-        'driverPhoto': driverPhoto,
-        'VehicleNumber': VehicleNumber,
-        'driverID': driverID,
-        'allotDate': allotDate,
-        'status': status,
-        'msg': msg
-        })
+    return render(
+        request,
+        "allotingPage.html",
+        {
+            "VehicleNumber": VehicleNumber,
+            "vehicleType": vehicleType,
+            "vehicleFuelType": vehicleFuelType,
+            "manufacturedCompany": manufacturedCompany,
+            "Vcc": Vcc,
+            "year": year,
+            " RC": RC,
+            "vPhoto": vPhoto,
+            "regDate": regDate,
+            "driverID": driverID,
+            "driverName": driverName,
+            "phoneNumber": phoneNumber,
+            "license": license,
+            "driverPhoto": driverPhoto,
+            "VehicleNumber": VehicleNumber,
+            "driverID": driverID,
+            "allotDate": allotDate,
+            "status": status,
+            "msg": msg,
+        },
+    )
+
 
 def tuktukUserLogin(request):
     return render(request, "tuktukUserLogin.html")
+
 
 def tuktukUserLoginRequests(request):
 
@@ -481,24 +621,40 @@ def tuktukUserLoginRequests(request):
     y = y + 1
     userID = "U" + str(y)
 
-    query = "INSERT INTO tuktukUserData VALUES('" + userID + "', '" + userName + "', '" + DateOfRegistration + "') "
+    query = (
+        "INSERT INTO tuktukUserData VALUES('"
+        + userID
+        + "', '"
+        + userName
+        + "', '"
+        + DateOfRegistration
+        + "') "
+    )
     cursor.execute(query)
 
     databaseCon.commit()
 
-    query = "INSERT INTO loginCredentials VALUES('" + userID + "', '" + email + "', '" + passBox1 + "')"
+    query = (
+        "INSERT INTO loginCredentials VALUES('"
+        + userID
+        + "', '"
+        + email
+        + "', '"
+        + passBox1
+        + "')"
+    )
     cursor.execute(query)
 
     databaseCon.commit()
 
     msg = " User Login Successful \n your userID is " + userID
 
-    return render(request, "tuktukUserLogin.html", {
-        'msg': msg
-        })
+    return render(request, "tuktukUserLogin.html", {"msg": msg})
+
 
 def userChangePass(request):
     return render(request, "userChangePass.html")
+
 
 def userChangePass1(request):
 
@@ -508,7 +664,7 @@ def userChangePass1(request):
     oldPassword = request.POST["t1"]
     newPassword = request.POST["t2"]
 
-    query = ("SELECT * FROM loginSession WHERE userType = 'U' ")
+    query = "SELECT * FROM loginSession WHERE userType = 'U' "
     cursor.execute(query)
 
     records = cursor.fetchall()
@@ -516,26 +672,38 @@ def userChangePass1(request):
     for row in records:
         userID = row[0]
 
-    query = ("SELECT * FROM loginCredentials WHERE UserID = '" + userID + "' AND password = '" + oldPassword + "'")
+    query = (
+        "SELECT * FROM loginCredentials WHERE UserID = '"
+        + userID
+        + "' AND password = '"
+        + oldPassword
+        + "'"
+    )
     cursor.execute(query)
 
     if cursor.rowcount == 0:
         msg = "Invalid Existing Password"
 
     else:
-        query = ("UPDATE loginCredentials SET password = '" + newPassword +"' WHERE UserID = '" + userID + "'")
+        query = (
+            "UPDATE loginCredentials SET password = '"
+            + newPassword
+            + "' WHERE UserID = '"
+            + userID
+            + "'"
+        )
         cursor.execute(query)
 
         databaseCon.commit()
 
         msg = "Password Updated Successfully"
 
-    return render(request, "userChangePass.html", {
-        'msg': msg
-        })
+    return render(request, "userChangePass.html", {"msg": msg})
+
 
 def driverChangePass(request):
     return render(request, "driverChangePass.html")
+
 
 def driverChangePass1(request):
 
@@ -545,7 +713,7 @@ def driverChangePass1(request):
     oldPassword = request.POST["t1"]
     newPassword = request.POST["t2"]
 
-    query = ("SELECT * FROM loginSession WHERE userType = 'D' ")
+    query = "SELECT * FROM loginSession WHERE userType = 'D' "
     cursor.execute(query)
 
     records = cursor.fetchall()
@@ -553,49 +721,64 @@ def driverChangePass1(request):
     for row in records:
         driverID = row[0]
 
-    query = ("SELECT * FROM loginCredentials WHERE UserID = '" + driverID + "' AND password = '" + oldPassword + "'")
+    query = (
+        "SELECT * FROM loginCredentials WHERE UserID = '"
+        + driverID
+        + "' AND password = '"
+        + oldPassword
+        + "'"
+    )
     cursor.execute(query)
 
     if cursor.rowcount == 0:
         msg = "Invalid Existing Password"
 
     else:
-        query = ("UPDATE loginCredentials SET password = '" + newPassword +"' WHERE UserID = '" + driverID + "'")
+        query = (
+            "UPDATE loginCredentials SET password = '"
+            + newPassword
+            + "' WHERE UserID = '"
+            + driverID
+            + "'"
+        )
         cursor.execute(query)
 
         databaseCon.commit()
 
         msg = "Password Updated Successfully"
 
-    return render(request, "driverChangePass.html", {
-        'msg': msg
-        })
+    return render(request, "driverChangePass.html", {"msg": msg})
+
 
 def tuktukDetails(request):
 
     databaseCon = connectdb()
     cursor = databaseCon.cursor()
 
-    query = ("SELECT VehicleRegNo, vehicleType, vehicleFuelType, manufacturedCompany, Vcc, manufactureYear, RC, vPhoto, regDate FROM tuktukData")
+    query = "SELECT VehicleRegNo, vehicleType, vehicleFuelType, manufacturedCompany, Vcc, manufactureYear, RC, vPhoto, regDate FROM tuktukData"
     cursor.execute(query)
 
     records = cursor.fetchall()
 
-    query = ("SELECT driverID, driverName, phoneNumber, license, driverPhoto FROM tuktukDriverData")
+    query = "SELECT driverID, driverName, phoneNumber, license, driverPhoto FROM tuktukDriverData"
     cursor.execute(query)
 
     driverRecords = cursor.fetchall()
 
-    return render(request, "tuktukDetails.html", {
-        'records': records,
-        'driverRecords': driverRecords
-        })
+    return render(
+        request,
+        "tuktukDetails.html",
+        {"records": records, "driverRecords": driverRecords},
+    )
+
 
 def feedback(request):
     return render(request, "feedback.html")
 
+
 def userFeedback(request):
     return render(request, "userfeedback.html")
+
 
 def feedback1(request):
 
@@ -630,19 +813,39 @@ def feedback1(request):
     for row in records:
         driverID = row[0]
 
-    query = ("INSERT INTO feedback (feedbackID, feedback, feedbackDate, driverID, name, email) VALUES ('" + str(feedbackID) + "', '" + feedArea + "', '" + feedbackDate + "', '" + driverID + "', '" + name + "', '" + email + "')")
-    #print(query)
+    query = (
+        "INSERT INTO feedback (feedbackID, feedback, feedbackDate, driverID, name, email) VALUES ('"
+        + str(feedbackID)
+        + "', '"
+        + feedArea
+        + "', '"
+        + feedbackDate
+        + "', '"
+        + driverID
+        + "', '"
+        + name
+        + "', '"
+        + email
+        + "')"
+    )
+    # print(query)
     cursor.execute(query)
 
     databaseCon.commit()
 
-    return render(request, "feedback.html", {
-        'feedbackID': feedbackID,
-        'feedArea': feedArea,
-        'feedbackDate': feedbackDate,
-        'driverID': driverID,
-        'name': name,
-        'email': email})
+    return render(
+        request,
+        "feedback.html",
+        {
+            "feedbackID": feedbackID,
+            "feedArea": feedArea,
+            "feedbackDate": feedbackDate,
+            "driverID": driverID,
+            "name": name,
+            "email": email,
+        },
+    )
+
 
 def userFeedback1(request):
 
@@ -678,25 +881,47 @@ def userFeedback1(request):
         userID = row[0]
     # print(records)
 
-    query = ("INSERT INTO feedback (feedbackID, feedback, feedbackDate, userID, name, email) VALUES ('" + str(feedbackID) + "', '" + feedArea + "', '" + feedbackDate + "', '" + userID + "', '" + name + "', '" + email + "')")
+    query = (
+        "INSERT INTO feedback (feedbackID, feedback, feedbackDate, userID, name, email) VALUES ('"
+        + str(feedbackID)
+        + "', '"
+        + feedArea
+        + "', '"
+        + feedbackDate
+        + "', '"
+        + userID
+        + "', '"
+        + name
+        + "', '"
+        + email
+        + "')"
+    )
     cursor.execute(query)
 
     databaseCon.commit()
 
-    return render(request, "userFeedback.html", {
-        'feedbackID': feedbackID,
-        'feedArea': feedArea,
-        'feedbackDate': feedbackDate,
-        'userID': userID,
-        'name': name,
-        'email': email})
+    return render(
+        request,
+        "userFeedback.html",
+        {
+            "feedbackID": feedbackID,
+            "feedArea": feedArea,
+            "feedbackDate": feedbackDate,
+            "userID": userID,
+            "name": name,
+            "email": email,
+        },
+    )
+
 
 def feedReply(request):
 
     databaseCon = connectdb()
     cursor = databaseCon.cursor()
 
-    query = ("SELECT feedbackID FROM feedback WHERE driverID IS NOT NULL AND reply IS NULL")
+    query = (
+        "SELECT feedbackID FROM feedback WHERE driverID IS NOT NULL AND reply IS NULL"
+    )
     cursor.execute(query)
 
     records = cursor.fetchall()
@@ -705,16 +930,15 @@ def feedReply(request):
     for row in records:
         feedbacks.append(row[0])
 
-    return render(request, "feedReply.html", {
-        "feedbacks": feedbacks
-        })
+    return render(request, "feedReply.html", {"feedbacks": feedbacks})
+
 
 def userFeedbackReply(request):
 
     databaseCon = connectdb()
     cursor = databaseCon.cursor()
 
-    query = ("SELECT feedbackID FROM feedback WHERE userID IS NOT NULL AND reply IS NULL")
+    query = "SELECT feedbackID FROM feedback WHERE userID IS NOT NULL AND reply IS NULL"
     cursor.execute(query)
 
     records = cursor.fetchall()
@@ -724,9 +948,8 @@ def userFeedbackReply(request):
     for row in records:
         userFeedbacks.append(row[0])
 
-    return render(request, "userFeedbackReply.html", {
-        "userFeedbacks": userFeedbacks
-        })
+    return render(request, "userFeedbackReply.html", {"userFeedbacks": userFeedbacks})
+
 
 def feedReplyRequests(request):
 
@@ -735,8 +958,8 @@ def feedReplyRequests(request):
 
     feedbackID = request.POST["feedbackID"]
 
-    query = ("SELECT * FROM feedback WHERE  feedbackID = '" + feedbackID + "'")
-    # print(query)
+    query = "SELECT * FROM feedback WHERE  feedbackID = '" + feedbackID + "'"
+    # print(query̦
     cursor.execute(query)
 
     records = cursor.fetchall()
@@ -746,8 +969,8 @@ def feedReplyRequests(request):
         feedbackDate = row[2]
         driverID = row[4]
 
-    query = ("SELECT * FROM tuktukDriverData WHERE driverID = '" + driverID + "'")
-    #print(query)
+    query = "SELECT * FROM tuktukDriverData WHERE driverID = '" + driverID + "'"
+    # print(query)
     cursor.execute(query)
 
     driverRecords = cursor.fetchall()
@@ -759,15 +982,21 @@ def feedReplyRequests(request):
         license = row[9]
         driverPhoto = row[10]
 
-    return render(request, "feedbackDetails.html", {
-        'feedbackID': feedbackID,
-        'feedback': feedback,
-        'feedbackDate': feedbackDate,
-        'driverID': driverID,
-        'driverName': driverName,
-        'phoneNumber': phoneNumber,
-        'license': license,
-        'driverPhoto': driverPhoto})
+    return render(
+        request,
+        "feedbackDetails.html",
+        {
+            "feedbackID": feedbackID,
+            "feedback": feedback,
+            "feedbackDate": feedbackDate,
+            "driverID": driverID,
+            "driverName": driverName,
+            "phoneNumber": phoneNumber,
+            "license": license,
+            "driverPhoto": driverPhoto,
+        },
+    )
+
 
 def userFeedbackReplyRequests(request):
 
@@ -775,96 +1004,6 @@ def userFeedbackReplyRequests(request):
     cursor = databaseCon.cursor()
 
     feedbackID = request.POST["feedbackID"]
-
-    query = ("SELECT * FROM feedback WHERE feedbackID = '" + feedbackID + "'")
-    cursor.execute(query)
-
-    records = cursor.fetchall()
-
-    for row in records:
-        feedback = row[1]
-        feedbackDate = row[2]
-        userID = row[3]
-
-    query = ("SELECT * FROM tuktukUserData WHERE userID = '" + userID + "'")
-    cursor.execute(query)
-
-    userRecords = cursor.fetchall()
-
-    for row in userRecords:
-        userID = row[0]
-        userName = row[1]
-        place = row[2]
-        phoneNumber = row[3]
-
-    return render(request, "userFeedbackDetails.html", {
-        "feedbackID": feedbackID,
-        "feedback": feedback,
-        "feedbackDate": feedbackDate,
-        "userID": userID,
-        "userName": userName,
-        "place": place,
-        "phoneNumber": phoneNumber})
-
-def feedbackDetailsPost(request):
-
-    databaseCon = connectdb()
-    cursor = databaseCon.cursor()
-
-    feedbackID = request.POST["feedbackID"]
-    textarea = request.POST["textarea"]
-    replyDate = currentDate()
-
-    query = ("SELECT * FROM feedback WHERE  feedbackID = '" + feedbackID + "'")
-    #print(query)
-    cursor.execute(query)
-
-    records = cursor.fetchall()
-
-    for row in records:
-        feedback = row[1]
-        feedbackDate = row[2]
-        driverID = row[4]
-
-    query = ("SELECT * FROM tuktukDriverData WHERE driverID = '" + driverID + "'")
-    #print(query)
-    cursor.execute(query)
-
-    driverRecords = cursor.fetchall()
-
-    for row in driverRecords:
-        driverID = row[0]
-        driverName = row[1]
-        phoneNumber = row[5]
-        license = row[9]
-        driverPhoto = row[10]
-
-    query = ("UPDATE feedback SET reply = '" + textarea + "', replyDate = '" + replyDate + "' WHERE feedbackID = '" + feedbackID + "'")
-    cursor.execute(query)
-
-    databaseCon.commit()
-
-    msg = "Replied.."
-
-    return render(request, "feedbackDetails.html", {
-        'feedbackID': feedbackID,
-        'feedback': feedback,
-        'feedbackDate': feedbackDate,
-        'driverID': driverID,
-        'driverName': driverName,
-        'phoneNumber': phoneNumber,
-        'license': license,
-        'driverPhoto': driverPhoto,
-        'msg': msg})
-
-def userFeedbackDetailsPost(request):
-
-    databaseCon = connectdb()
-    cursor = databaseCon.cursor()
-
-    feedbackID = request.POST["feedbackID"]
-    textarea = request.POST["textarea"]
-    replyDate= currentDate()
 
     query = "SELECT * FROM feedback WHERE feedbackID = '" + feedbackID + "'"
     cursor.execute(query)
@@ -884,54 +1023,175 @@ def userFeedbackDetailsPost(request):
     for row in userRecords:
         userID = row[0]
         userName = row[1]
-        place = row[3]
-        phoneNumber = row[4]
 
-    query = "UPDATE feedback SET reply = '" + textarea + "', replyDate = '" + replyDate + "' WHERE feedbackID = '" + feedbackID + "'"
+    return render(
+        request,
+        "userFeedbackDetails.html",
+        {
+            "feedbackID": feedbackID,
+            "feedback": feedback,
+            "feedbackDate": feedbackDate,
+            "userID": userID,
+            "userName": userName,
+        },
+    )
+
+
+def feedbackDetailsPost(request):
+
+    databaseCon = connectdb()
+    cursor = databaseCon.cursor()
+
+    feedbackID = request.POST["feedbackID"]
+    textarea = request.POST["textarea"]
+    replyDate = currentDate()
+
+    query = "SELECT * FROM feedback WHERE  feedbackID = '" + feedbackID + "'"
+    # print(query)
+    cursor.execute(query)
+
+    records = cursor.fetchall()
+
+    for row in records:
+        feedback = row[1]
+        feedbackDate = row[2]
+        driverID = row[4]
+
+    query = "SELECT * FROM tuktukDriverData WHERE driverID = '" + driverID + "'"
+    # print(query)
+    cursor.execute(query)
+
+    driverRecords = cursor.fetchall()
+
+    for row in driverRecords:
+        driverID = row[0]
+        driverName = row[1]
+        phoneNumber = row[5]
+        license = row[9]
+        driverPhoto = row[10]
+
+    query = (
+        "UPDATE feedback SET reply = '"
+        + textarea
+        + "', replyDate = '"
+        + replyDate
+        + "' WHERE feedbackID = '"
+        + feedbackID
+        + "'"
+    )
     cursor.execute(query)
 
     databaseCon.commit()
 
     msg = "Replied.."
 
-    return render(request, "userFeedbackDetails.html", {
-        "feedbackID": feedbackID,
-        "feedback": feedback,
-        "userID": userID,
-        "userName": userName,
-        "place": place,
-        "phoneNumber": phoneNumber,
-        "msg": msg})
+    return render(
+        request,
+        "feedbackDetails.html",
+        {
+            "feedbackID": feedbackID,
+            "feedback": feedback,
+            "feedbackDate": feedbackDate,
+            "driverID": driverID,
+            "driverName": driverName,
+            "phoneNumber": phoneNumber,
+            "license": license,
+            "driverPhoto": driverPhoto,
+            "msg": msg,
+        },
+    )
+
+
+def userFeedbackDetailsPost(request):
+
+    databaseCon = connectdb()
+    cursor = databaseCon.cursor()
+
+    feedbackID = request.POST["feedbackID"]
+    textarea = request.POST["textarea"]
+    replyDate = currentDate()
+
+    query = "SELECT * FROM feedback WHERE feedbackID = '" + feedbackID + "'"
+    cursor.execute(query)
+
+    records = cursor.fetchall()
+
+    for row in records:
+        feedback = row[1]
+        feedbackDate = row[2]
+        userID = row[3]
+
+    query = "SELECT * FROM tuktukUserData WHERE userID = '" + userID + "'"
+    cursor.execute(query)
+
+    userRecords = cursor.fetchall()
+
+    for row in userRecords:
+        userID = row[0]
+        userName = row[1]
+
+    query = (
+        "UPDATE feedback SET reply = '"
+        + textarea
+        + "', replyDate = '"
+        + replyDate
+        + "' WHERE feedbackID = '"
+        + feedbackID
+        + "'"
+    )
+    cursor.execute(query)
+
+    databaseCon.commit()
+
+    message = "Replied.."
+
+    return render(
+        request,
+        "userFeedbackDetails.html",
+        {
+            "feedbackID": feedbackID,
+            "feedback": feedback,
+            "feedbackDate": feedbackDate,
+            "userID": userID,
+            "userName": userName,
+            "message": message,
+        },
+    )
+
 
 # List of auto locations
 
+
 def bookingPage(request):
-    return render(request, 'bookingPage.html')
+    return render(request, "bookingPage.html")
+
 
 auto_locations = [
-    {'id': "KL01B4346", 'lat': 9.152091, 'lon': 76.738282},
-    {'id': "KL05L6452", 'lat': 9.154538, 'lon': 76.732662},
-    {'id': "KL23A6767", 'lat': 9.132163, 'lon': 76.768493},
-    {'id': "KL65J9284", 'lat': 9.149356, 'lon': 76.755677}
+    {"id": "KL01B4346", "lat": 9.152091, "lon": 76.738282},
+    {"id": "KL05L6452", "lat": 9.154538, "lon": 76.732662},
+    {"id": "KL23A6767", "lat": 9.132163, "lon": 76.768493},
+    {"id": "KL65J9284", "lat": 9.149356, "lon": 76.755677},
 ]
 
-ids = [auto['id'] for auto in auto_locations]
+ids = [auto["id"] for auto in auto_locations]
 first_id = ids[0]
 
 # print(first_id)
 
 logger = logging.getLogger(__name__)
 
+
 def reverse_geocode(lat, lon):
     url = f"https://nominatim.openstreetmap.org/reverse?lat={lat}&lon={lon}&format=json"
 
     headers = {
-        'User-Agent': 'mapping (adithyanprdev@gmail.com)'  # Replace with your application name and contact information
+        "User-Agent": "mapping (adithyanprdev@gmail.com)"  # Replace with your application name and contact information
     }
 
     response = requests.get(url, headers=headers)
     response.raise_for_status()
-    return response.json().get('display_name')
+    return response.json().get("display_name")
+
 
 # Function to connect to the MySQL database and fetch fare estimation parameters
 def get_fare_parameters():
@@ -941,14 +1201,16 @@ def get_fare_parameters():
 
         query = "SELECT minimumFare, farePerKm, waitingFare, minimumKM FROM fareEstimation ORDER BY fareNO DESC"
         cursor.execute(query)
-        result = cursor.fetchone()  # Fetch one row as we only need the latest fare parameters
+        result = (
+            cursor.fetchone()
+        )  # Fetch one row as we only need the latest fare parameters
 
         if result:
             fare_params = {
-                'minimumFare': float(result[0]),
-                'farePerKm': float(result[1]),
-                'waitingFare': float(result[2]),
-                'minimumKM': float(result[3])
+                "minimumFare": float(result[0]),
+                "farePerKm": float(result[1]),
+                "waitingFare": float(result[2]),
+                "minimumKM": float(result[3]),
             }
             print("Fare Parameters: ", fare_params)  # Debug statement
             return fare_params
@@ -957,26 +1219,31 @@ def get_fare_parameters():
     finally:
         databaseCon.close()
 
+
 def calculate_fare(distance, fare_params):
-    if distance <= fare_params['minimumKM']:
-        return fare_params['minimumFare']
+    if distance <= fare_params["minimumKM"]:
+        return fare_params["minimumFare"]
     else:
-        return fare_params['minimumFare'] + (distance - fare_params['minimumKM']) * fare_params['farePerKm']
+        return (
+            fare_params["minimumFare"]
+            + (distance - fare_params["minimumKM"]) * fare_params["farePerKm"]
+        )
+
 
 @csrf_exempt
 def calculate_distance_and_allot_auto(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         try:
             data = json.loads(request.body)
-            user_lat = float(data.get('user_lat'))
-            user_lon = float(data.get('user_lon'))
-            dest_name = data.get('dest_name')
+            user_lat = float(data.get("user_lat"))
+            user_lon = float(data.get("user_lon"))
+            dest_name = data.get("dest_name")
         except (json.JSONDecodeError, TypeError, ValueError) as e:
             logger.error("Invalid JSON or missing data: %s", e)
-            return JsonResponse({'error': 'Invalid JSON or missing data'}, status=400)
+            return JsonResponse({"error": "Invalid JSON or missing data"}, status=400)
 
-        api_key = '5b3ce3597851110001cf6248d0882d4d8035451eb97f11ef667f07b1'
-        geocode_url = f'https://api.openrouteservice.org/geocode/search?api_key={api_key}&text={dest_name}'
+        api_key = "5b3ce3597851110001cf6248d0882d4d8035451eb97f11ef667f07b1"
+        geocode_url = f"https://api.openrouteservice.org/geocode/search?api_key={api_key}&text={dest_name}"
 
         try:
             geocode_response = requests.get(geocode_url)
@@ -984,79 +1251,100 @@ def calculate_distance_and_allot_auto(request):
             geocode_data = geocode_response.json()
         except requests.RequestException as e:
             logger.error("Error fetching geocode data: %s", e)
-            return JsonResponse({'error': 'Error fetching geocode data', 'details': str(e)}, status=500)
+            return JsonResponse(
+                {"error": "Error fetching geocode data", "details": str(e)}, status=500
+            )
 
-        if 'features' not in geocode_data or not geocode_data['features']:
+        if "features" not in geocode_data or not geocode_data["features"]:
             logger.error("Destination not found for: %s", dest_name)
-            return JsonResponse({'error': 'Destination not found'}, status=404)
+            return JsonResponse({"error": "Destination not found"}, status=404)
 
-        destination = geocode_data['features'][0]['geometry']['coordinates']
+        destination = geocode_data["features"][0]["geometry"]["coordinates"]
         dest_lon, dest_lat = destination
 
         # Calculate the distance between user and destination using OpenRouteService
-        route_url = f'https://api.openrouteservice.org/v2/directions/driving-car?api_key={api_key}&start={user_lon},{user_lat}&end={dest_lon},{dest_lat}'
+        route_url = f"https://api.openrouteservice.org/v2/directions/driving-car?api_key={api_key}&start={user_lon},{user_lat}&end={dest_lon},{dest_lat}"
         try:
             route_response = requests.get(route_url)
             route_response.raise_for_status()
             route_data = route_response.json()
-            distance_to_destination = route_data['features'][0]['properties']['segments'][0]['distance'] / 1000  # convert to km
+            distance_to_destination = (
+                route_data["features"][0]["properties"]["segments"][0]["distance"]
+                / 1000
+            )  # convert to km
         except requests.RequestException as e:
             logger.error("Error fetching route data: %s", e)
-            return JsonResponse({'error': 'Error fetching route data', 'details': str(e)}, status=500)
+            return JsonResponse(
+                {"error": "Error fetching route data", "details": str(e)}, status=500
+            )
 
-        min_distance = float('inf')
+        min_distance = float("inf")
         nearest_auto = None
 
         # Finding the nearest auto
         for auto in auto_locations:
-            auto_lat = auto['lat']
-            auto_lon = auto['lon']
+            auto_lat = auto["lat"]
+            auto_lon = auto["lon"]
             distance = haversine(user_lat, user_lon, auto_lat, auto_lon)
 
             if distance < min_distance:
                 min_distance = distance
-                nearest_auto = auto.copy()  # Make a copy to avoid modifying the original dict
+                nearest_auto = (
+                    auto.copy()
+                )  # Make a copy to avoid modifying the original dict
 
         if nearest_auto:
-            nearest_auto['location'] = reverse_geocode(nearest_auto['lat'], nearest_auto['lon'])
+            nearest_auto["location"] = reverse_geocode(
+                nearest_auto["lat"], nearest_auto["lon"]
+            )
 
             # Fetch fare parameters
             try:
                 fare_params = get_fare_parameters()
             except Exception as e:
                 logger.error("Error fetching fare parameters: %s", e)
-                return JsonResponse({'error': 'Error fetching fare parameters', 'details': str(e)}, status=500)
+                return JsonResponse(
+                    {"error": "Error fetching fare parameters", "details": str(e)},
+                    status=500,
+                )
 
             # Calculate fare based on distance to destination
             fare = calculate_fare(distance_to_destination, fare_params)
 
-            return JsonResponse({
-                'distance': min_distance,
-                'nearest_auto': nearest_auto,
-                'destination_lat': dest_lat,
-                'destination_lon': dest_lon,
-                'fare_estimation': fare
-            }, status=200)
+            return JsonResponse(
+                {
+                    "distance": min_distance,
+                    "nearest_auto": nearest_auto,
+                    "destination_lat": dest_lat,
+                    "destination_lon": dest_lon,
+                    "fare_estimation": fare,
+                },
+                status=200,
+            )
         else:
             logger.error("No autos available")
-            return JsonResponse({'error': 'No autos available'}, status=404)
+            return JsonResponse({"error": "No autos available"}, status=404)
     else:
         logger.error("Method not allowed")
-        return JsonResponse({'error': 'Method not allowed'}, status=405)
+        return JsonResponse({"error": "Method not allowed"}, status=405)
+
 
 def haversine(lat1, lon1, lat2, lon2):
     import math
+
     R = 6371.0  # Earth radius in kilometers
     dlat = math.radians(lat2 - lat1)
     dlon = math.radians(lon2 - lon1)
-    a = math.sin(dlat / 2) * math.sin(dlat / 2) + math.cos(math.radians(lat1)) * math.cos(math.radians(lat2)) * math.sin(dlon / 2) * math.sin(dlon / 2)
+    a = math.sin(dlat / 2) * math.sin(dlat / 2) + math.cos(
+        math.radians(lat1)
+    ) * math.cos(math.radians(lat2)) * math.sin(dlon / 2) * math.sin(dlon / 2)
     c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
     distance = R * c
     return distance
 
 
-
 def mapView(request):
+
     databaseCon = connectdb()
     cursor = databaseCon.cursor()
 
@@ -1068,6 +1356,7 @@ def mapView(request):
 
     for row in records:
         vehicleRegNo = row[0]
+        break
 
     driver_query = "SELECT dl.VehicleRegNo, dl.tuktukLatitude, dl.tuktukLongitude FROM driverLocation dl INNER JOIN tuktukRequest tr ON dl.VehicleRegNo = tr.vehicleRegNo ORDER BY tr.requestID"
     cursor.execute(driver_query)
@@ -1088,7 +1377,14 @@ def mapView(request):
         vehicleRegNo = record[0]
         tuktukLatitude = float(record[1])
         tuktukLongitude = float(record[2])
-        driver_data.append({'vehicleRegNo': vehicleRegNo, 'latitude': tuktukLatitude, 'longitude': tuktukLongitude})
+        break
+        driver_data.append(
+            {
+                "vehicleRegNo": vehicleRegNo,
+                "latitude": tuktukLatitude,
+                "longitude": tuktukLongitude,
+            }
+        )
 
     user_data = []
     for record in user_records:
@@ -1096,9 +1392,22 @@ def mapView(request):
         userLat = float(record[1])
         userLon = float(record[2])
         destination = record[3]
-        user_data.append({'userID': userID, 'latitude': userLat, 'longitude': userLon, 'destination': destination})
+        break
+        user_data.append(
+            {
+                "userID": userID,
+                "latitude": userLat,
+                "longitude": userLon,
+                "destination": destination,
+            }
+        )
 
-    return render(request, "mapView.html", {'driver_data': driver_data, 'user_data': user_data})
+    return render(
+        request,
+        "mapView.html",
+        {"driver_data": driver_data, "user_data": user_data},
+    )
+
 
 def driverRideDetails(request):
 
@@ -1106,17 +1415,8 @@ def driverRideDetails(request):
     cursor = databaseCon.cursor()
 
     requestID = request.POST["requestID"]
-
     totalDistance = request.POST["totalDistance"]
     waitingCharge = request.POST["waitingCharge"]
-
-    query = "SELECT requestID FROM tuktukResponse ORDER BY requestID DESC"
-    cursor.execute(query)
-
-    records = cursor.fetchall()
-
-    for row in records:
-        requestID = row[0]
 
     query = "SELECT * FROM fareEstimation ORDER BY fareNO desc"
     cursor.execute(query)
@@ -1129,27 +1429,41 @@ def driverRideDetails(request):
         waitingFare = row[3]
         minimumKM = row[5]
 
-    if int(totalDistance) <= minimumKM:
+    if float(totalDistance) <= minimumKM:
         fare = minimumFare
     else:
-        fareMinKM = int(totalDistance) - minimumKM
+        fareMinKM = float(totalDistance) - minimumKM
         fareMinKMperKm = fareMinKM * farePerKm
         fare = minimumFare + fareMinKMperKm
 
     wcmin = waitingFare / 60
 
     if int(waitingCharge) >= 10:
-       wcCharge =  wcmin * int(waitingCharge)
+        wcCharge = wcmin * int(waitingCharge)
     else:
         wcCharge = 0
 
     totalRideRate = fare + wcCharge
 
-    return render(request, "driverRideDetails.html", {
-        'requestID': requestID,
-        'waitingCharge': waitingCharge,
-        'totalDistance': totalDistance
-        })
+    query = "SELECT requestID FROM tuktukResponse ORDER BY requestID DESC"
+    cursor.execute(query)
+
+    records = cursor.fetchall()
+
+    for row in records:
+        requestID = row[0]
+        break
+
+    return render(
+        request,
+        "driverRideDetails.html",
+        {
+            "requestID": requestID,
+            "waitingCharge": waitingCharge,
+            "totalDistance": totalDistance,
+        },
+    )
+
 
 def requetTuktukAndTuktukDriver(request):
 
@@ -1164,7 +1478,7 @@ def requetTuktukAndTuktukDriver(request):
     destCoordinates = request.POST["destCoordinates"]
 
     requestDate = currentDate()
-    requestTime = time.strftime('%H:%M:%S')
+    requestTime = time.strftime("%H:%M:%S")
 
     distance = request.POST["distance"]
 
@@ -1183,7 +1497,11 @@ def requetTuktukAndTuktukDriver(request):
     y = y + 1
     requestID = "R" + str(y)
 
-    query = "SELECT * FROM tuktukDriverAllot WHERE VehicleRegNo = '" + nearestAutoID + "' AND status = 'YES'"
+    query = (
+        "SELECT * FROM tuktukDriverAllot WHERE VehicleRegNo = '"
+        + nearestAutoID
+        + "' AND status = 'YES'"
+    )
     cursor.execute(query)
 
     records = cursor.fetchall()
@@ -1200,34 +1518,58 @@ def requetTuktukAndTuktukDriver(request):
     for row in records:
         userID = row[0]
 
-    query = "INSERT INTO tuktukRequest VALUES ('" + requestID + "', '" + userID + "', '" + destCoordinates + "' ,'" + requestDate + "', '" + requestTime + "', '" + nearestAutoID + "', '" + userLat + "', '" + userLon + "', '" + driverID + "', '" + distance + "')"
+    query = (
+        "INSERT INTO tuktukRequest VALUES ('"
+        + requestID
+        + "', '"
+        + userID
+        + "', '"
+        + destCoordinates
+        + "' ,'"
+        + requestDate
+        + "', '"
+        + requestTime
+        + "', '"
+        + nearestAutoID
+        + "', '"
+        + userLat
+        + "', '"
+        + userLon
+        + "', '"
+        + driverID
+        + "', '"
+        + distance
+        + "')"
+    )
     cursor.execute(query)
 
     databaseCon.commit()
 
-    return redirect('rideDetails')
+    return redirect("rideDetails")
+
 
 def loading(request):
-    return render(request, 'loading.html')
+    return render(request, "loading.html")
+
 
 def checkDriverResponse(request):
     databaseCon = connectdb()
     cursor = databaseCon.cursor()
 
     # Fetching requestID from session or POST data
-    requestID = request.session.get('requestID')
+    requestID = request.session.get("requestID")
 
     # Implement logic to check if the driver has responded
     query = f"SELECT response FROM tuktukResponse WHERE requestID = '{requestID}' ORDER BY responseDate DESC, responseTime DESC LIMIT 1"
     cursor.execute(query)
     response = cursor.fetchone()
 
-    if response and response[0] == 'YES':
+    if response and response[0] == "YES":
         # Driver has responded
-        return JsonResponse({'response': True})
+        return JsonResponse({"response": True})
     else:
         # Driver has not responded yet
-        return JsonResponse({'response': False})
+        return JsonResponse({"response": False})
 
 
 def responseForTuktuk(request):
@@ -1243,18 +1585,20 @@ def responseForTuktuk(request):
     for row in records:
         driverID = row[0]
 
-    query = 'SELECT * FROM tuktukRequest WHERE driverID = "' + driverID + '" AND requestID NOT IN (SELECT requestID FROM tuktukResponse)'
+    query = (
+        'SELECT * FROM tuktukRequest WHERE driverID = "'
+        + driverID
+        + '" AND requestID NOT IN (SELECT requestID FROM tuktukResponse)'
+    )
     cursor.execute(query)
 
     records = cursor.fetchall()
 
     if cursor.rowcount == 0:
         msg = "No Requests"
-        return render(request, "noResponseForTuktuk.html", {
-            'msg': msg
-            })
+        return render(request, "noResponseForTuktuk.html", {"msg": msg})
 
-    else :
+    else:
 
         for row in records:
             requestID = row[0]
@@ -1280,14 +1624,19 @@ def responseForTuktuk(request):
         for row in records:
             userName = row[0]
 
+        return render(
+            request,
+            "responseForTuktuk.html",
+            {
+                "requestID": requestID,
+                "userName": userName,
+                "driverID": driverID,
+                "userLat": userLat,
+                "userLon": userLon,
+                "destination": destination,
+            },
+        )
 
-        return render(request, "responseForTuktuk.html", {
-            'requestID': requestID,
-            'userName': userName,
-            'driverID': driverID,
-            'userLat': userLat,
-            'userLon': userLon,
-            'destination': destination})
 
 def responseForTuktukRequests(request):
 
@@ -1297,7 +1646,7 @@ def responseForTuktukRequests(request):
     requestID = request.POST["requestID"]
     response = request.POST["response"]
 
-    responseTime = time.strftime('%H:%M:%S')
+    responseTime = time.strftime("%H:%M:%S")
     responseDate = currentDate()
 
     query = "SELECT * FROM loginSession WHERE userType = 'D' "
@@ -1308,7 +1657,11 @@ def responseForTuktukRequests(request):
     for row in records:
         driverID = row[0]
 
-    query = 'SELECT * FROM tuktukRequest WHERE driverID = "' + driverID + '" AND requestID NOT IN (SELECT requestID FROM tuktukResponse)'
+    query = (
+        'SELECT * FROM tuktukRequest WHERE driverID = "'
+        + driverID
+        + '" AND requestID NOT IN (SELECT requestID FROM tuktukResponse)'
+    )
     cursor.execute(query)
 
     records = cursor.fetchall()
@@ -1337,25 +1690,41 @@ def responseForTuktukRequests(request):
     for row in records:
         userName = row[0]
 
-    query = "INSERT INTO tuktukResponse VALUES ('" + requestID + "', '" + responseTime + "', '" + responseDate + "', '" + response + "')"
+    query = (
+        "INSERT INTO tuktukResponse VALUES ('"
+        + requestID
+        + "', '"
+        + responseTime
+        + "', '"
+        + responseDate
+        + "', '"
+        + response
+        + "')"
+    )
     cursor.execute(query)
 
     databaseCon.commit()
 
     message = "Response Submitted"
 
+    return render(
+        request,
+        "responseForTuktuk.html",
+        {
+            "requestID": requestID,
+            "userName": userName,
+            "driverID": driverID,
+            "userLat": userLat,
+            "userLon": userLon,
+            "destination": destination,
+            "message": message,
+        },
+    )
 
-    return render(request, "responseForTuktuk.html", {
-        'requestID': requestID,
-        'userName': userName,
-        'driverID': driverID,
-        'userLat': userLat,
-        'userLon': userLon,
-        'destination': destination,
-        "message": message})
 
 def fareEstimation(request):
     return render(request, "fareEstimation.html")
+
 
 def fareEstimationRequets(request):
 
@@ -1383,24 +1752,37 @@ def fareEstimationRequets(request):
 
     currentDateOfChange = currentDate()
 
-    query = "INSERT INTO fareEstimation VALUES ('" + str(fareNO) + "', '" + minFare + "', '" + farePerKm + "', '" + WaitingCharges + "', '" + currentDateOfChange + "', '" + MinimumKM + "')"
+    query = (
+        "INSERT INTO fareEstimation VALUES ('"
+        + str(fareNO)
+        + "', '"
+        + minFare
+        + "', '"
+        + farePerKm
+        + "', '"
+        + WaitingCharges
+        + "', '"
+        + currentDateOfChange
+        + "', '"
+        + MinimumKM
+        + "')"
+    )
     cursor.execute(query)
 
     databaseCon.commit()
 
     message = "New fare details submitted..."
 
-    return render(request, "fareEstimation.html", {
-        'message': message
-        })
+    return render(request, "fareEstimation.html", {"message": message})
+
 
 def rideDetails(request):
     databaseCon = connectdb()
     cursor = databaseCon.cursor()
 
-    if request.method == 'POST':
+    if request.method == "POST":
         # Fetch latest details from database
-        responseTime = time.strftime('%H:%M:%S')
+        responseTime = time.strftime("%H:%M:%S")
         responseDate = currentDate()
 
         # Get driverID from loginSession where userType is 'D'
@@ -1411,7 +1793,11 @@ def rideDetails(request):
             driverID = row[0]
 
         # Get driver details
-        query = "SELECT driverName, driverPhoto FROM tuktukDriverData WHERE driverID = '" + driverID + "'"
+        query = (
+            "SELECT driverName, driverPhoto FROM tuktukDriverData WHERE driverID = '"
+            + driverID
+            + "'"
+        )
         cursor.execute(query)
         records = cursor.fetchall()
         for row in records:
@@ -1443,7 +1829,11 @@ def rideDetails(request):
             userName = row[0]
 
         # Get response details
-        query = "SELECT response, responseTime, responseDate FROM tuktukResponse WHERE requestID = '" + requestID + "'"
+        query = (
+            "SELECT response, responseTime, responseDate FROM tuktukResponse WHERE requestID = '"
+            + requestID
+            + "'"
+        )
         cursor.execute(query)
         records = cursor.fetchall()
         if records:
@@ -1457,7 +1847,11 @@ def rideDetails(request):
             responseDate = ""
 
         # Get VehicleRegNo
-        query = "SELECT VehicleRegNo FROM tuktukDriverAllot WHERE driverID = '" + driverID + "' AND status = 'YES'"
+        query = (
+            "SELECT VehicleRegNo FROM tuktukDriverAllot WHERE driverID = '"
+            + driverID
+            + "' AND status = 'YES'"
+        )
         cursor.execute(query)
         records = cursor.fetchall()
         for row in records:
@@ -1465,25 +1859,29 @@ def rideDetails(request):
 
         message = "You can Identify your Tuktuk & Driver using this Details"
 
-        return render(request, "rideDetails.html", {
-            'requestID': requestID,
-            'userName': userName,
-            'userLat': userLat,
-            'userLon': userLon,
-            'destination': destination,
-            'response': response,
-            'responseTime': responseTime,
-            'responseDate': responseDate,
-            'driverID': driverID,
-            'driverPhoto': driverPhoto,
-            'driverName': driverName,
-            'VehicleRegNo': VehicleRegNo,
-            'message': message
-        })
+        return render(
+            request,
+            "rideDetails.html",
+            {
+                "requestID": requestID,
+                "userName": userName,
+                "userLat": userLat,
+                "userLon": userLon,
+                "destination": destination,
+                "response": response,
+                "responseTime": responseTime,
+                "responseDate": responseDate,
+                "driverID": driverID,
+                "driverPhoto": driverPhoto,
+                "driverName": driverName,
+                "VehicleRegNo": VehicleRegNo,
+                "message": message,
+            },
+        )
 
     else:  # GET request
         # Initially load the details
-        responseTime = time.strftime('%H:%M:%S')
+        responseTime = time.strftime("%H:%M:%S")
         responseDate = currentDate()
 
         # Get driverID from loginSession where userType is 'D'
@@ -1494,7 +1892,11 @@ def rideDetails(request):
             driverID = row[0]
 
         # Get driver details
-        query = "SELECT driverName, driverPhoto FROM tuktukDriverData WHERE driverID = '" + driverID + "'"
+        query = (
+            "SELECT driverName, driverPhoto FROM tuktukDriverData WHERE driverID = '"
+            + driverID
+            + "'"
+        )
         cursor.execute(query)
         records = cursor.fetchall()
         for row in records:
@@ -1526,7 +1928,11 @@ def rideDetails(request):
             userName = row[0]
 
         # Get response details
-        query = "SELECT response, responseTime, responseDate FROM tuktukResponse WHERE requestID = '" + requestID + "'"
+        query = (
+            "SELECT response, responseTime, responseDate FROM tuktukResponse WHERE requestID = '"
+            + requestID
+            + "'"
+        )
         cursor.execute(query)
         records = cursor.fetchall()
         if records:
@@ -1540,7 +1946,11 @@ def rideDetails(request):
             responseDate = ""
 
         # Get VehicleRegNo
-        query = "SELECT VehicleRegNo FROM tuktukDriverAllot WHERE driverID = '" + driverID + "' AND status = 'YES'"
+        query = (
+            "SELECT VehicleRegNo FROM tuktukDriverAllot WHERE driverID = '"
+            + driverID
+            + "' AND status = 'YES'"
+        )
         cursor.execute(query)
         records = cursor.fetchall()
         for row in records:
@@ -1548,49 +1958,57 @@ def rideDetails(request):
 
         message = "You can Identify your Tuktuk & Driver using this Details"
 
-        return render(request, "rideDetails.html", {
-            'requestID': requestID,
-            'userName': userName,
-            'userLat': userLat,
-            'userLon': userLon,
-            'destination': destination,
-            'response': response,
-            'responseTime': responseTime,
-            'responseDate': responseDate,
-            'driverID': driverID,
-            'driverPhoto': driverPhoto,
-            'driverName': driverName,
-            'VehicleRegNo': VehicleRegNo,
-            'message': message
-        })
+        return render(
+            request,
+            "rideDetails.html",
+            {
+                "requestID": requestID,
+                "userName": userName,
+                "userLat": userLat,
+                "userLon": userLon,
+                "destination": destination,
+                "response": response,
+                "responseTime": responseTime,
+                "responseDate": responseDate,
+                "driverID": driverID,
+                "driverPhoto": driverPhoto,
+                "driverName": driverName,
+                "VehicleRegNo": VehicleRegNo,
+                "message": message,
+            },
+        )
+
 
 def checkDriverResponse(request):
     databaseCon = connectdb()
     cursor = databaseCon.cursor()
 
     # Fetching requestID from session or POST data
-    requestID = request.session.get('requestID')
+    requestID = request.session.get("requestID")
 
     # Implement logic to check if the driver has responded
     if not requestID:
-        return JsonResponse({'response': False})
+        return JsonResponse({"response": False})
 
     query = f"SELECT response FROM tuktukResponse WHERE requestID = '{requestID}' ORDER BY responseDate DESC, responseTime DESC LIMIT 1"
     cursor.execute(query)
     response = cursor.fetchone()
 
-    if response and response[0] == 'YES':
+    if response and response[0] == "YES":
         # Driver has responded
-        return JsonResponse({'response': True})
+        return JsonResponse({"response": True})
     else:
         # Driver has not responded yet
-        return JsonResponse({'response': False})
+        return JsonResponse({"response": False})
+
 
 # def mapView(request):
 #     return render(request, "mapView.html")
 
+
 def onGoingRide(request):
     return render(request, "onGoingRide.html")
+
 
 def onGoingRideRequests(request):
 
@@ -1602,7 +2020,7 @@ def onGoingRideRequests(request):
     comment = request.POST["comment"]
 
     onGoingRideDate = currentDate()
-    onGoingRideTime = time.strftime('%H:%M:%S')
+    onGoingRideTime = time.strftime("%H:%M:%S")
 
     query = "SELECT * FROM loginSession WHERE userType = 'D' "
     cursor.execute(query)
@@ -1621,30 +2039,42 @@ def onGoingRideRequests(request):
     for row in records:
         requestID = row[0]
 
-    query = "INSERT INTO onGoingRide VALUES ('" + requestID + "', '" + minFare + "', '" + WaitingCharges + "', '" + onGoingRideDate + "', '" + onGoingRideTime + "', '" + comment + "') "
+    query = (
+        "INSERT INTO onGoingRide VALUES ('"
+        + requestID
+        + "', '"
+        + minFare
+        + "', '"
+        + WaitingCharges
+        + "', '"
+        + onGoingRideDate
+        + "', '"
+        + onGoingRideTime
+        + "', '"
+        + comment
+        + "') "
+    )
     cursor.execute(query)
 
     databaseCon.commit()
 
     message = "Ride Completed! Thank You!!"
 
-    return render(request, "onGoingRide.html", {
-        'message': message
-        })
+    return render(request, "onGoingRide.html", {"message": message})
+
 
 def userList(request):
 
     databaseCon = connectdb()
     cursor = databaseCon.cursor()
 
-    query = ("SELECT userID, userName, dateOfRegistration FROM tuktukUserData")
+    query = "SELECT userID, userName, dateOfRegistration FROM tuktukUserData"
     cursor.execute(query)
 
     records = cursor.fetchall()
 
-    return render(request, "userList.html", {
-        'records': records
-        })
+    return render(request, "userList.html", {"records": records})
+
 
 def tuktukForDriver(request):
 
@@ -1656,7 +2086,7 @@ def tuktukForDriver(request):
 
     records = cursor.fetchall()
 
-    query = ("SELECT VehicleRegNo FROM tuktukDriverAllot WHERE status = 'YES'")
+    query = "SELECT VehicleRegNo FROM tuktukDriverAllot WHERE status = 'YES'"
     cursor.execute(query)
     # print(query)
 
@@ -1667,7 +2097,8 @@ def tuktukForDriver(request):
     for row in records:
         vehicleList.append(row[0])
 
-    return render(request, "tuktukForDriver.html", {'vehicleList': vehicleList})
+    return render(request, "tuktukForDriver.html", {"vehicleList": vehicleList})
+
 
 def tuktukForDriverDetails(request):
 
@@ -1677,7 +2108,11 @@ def tuktukForDriverDetails(request):
     vehicleNumber = request.POST["vehicleNumber"]
     # print(vehicleNumber)
 
-    query = "SELECT * from tuktukDriverAllot where VehicleRegNo = '" + vehicleNumber + "' AND status = 'YES'"
+    query = (
+        "SELECT * from tuktukDriverAllot where VehicleRegNo = '"
+        + vehicleNumber
+        + "' AND status = 'YES'"
+    )
     cursor.execute(query)
     # print(query)
 
@@ -1707,7 +2142,11 @@ def tuktukForDriverDetails(request):
         license = row[9]
         driverPhoto = row[10]
 
-    query = "SELECT VehicleRegNo, vehicleType, vehicleFuelType, manufacturedCompany, Vcc, manufactureYear, RC, vPhoto, regDate FROM tuktukData WHERE VehicleRegNo = '" + vehicleNumber + "'"
+    query = (
+        "SELECT VehicleRegNo, vehicleType, vehicleFuelType, manufacturedCompany, Vcc, manufactureYear, RC, vPhoto, regDate FROM tuktukData WHERE VehicleRegNo = '"
+        + vehicleNumber
+        + "'"
+    )
     cursor.execute(query)
 
     vehicleRecords = cursor.fetchall()
@@ -1723,35 +2162,40 @@ def tuktukForDriverDetails(request):
         vPhoto = row[7]
         regDate = row[8]
 
-    return render(request, "tuktukForDriverDetails.html", {
-        'vehicleNumber': vehicleNumber,
-        'vehicleType': vehicleType,
-        'vehicleFuelType': vehicleFuelType,
-        'manufacturedCompany': manufacturedCompany,
-        'Vcc': Vcc,
-        'manufactureYear': manufactureYear,
-        'RC': RC,
-        'vPhoto': vPhoto,
-        'regDate': regDate,
-        'driverID': driverID,
-        'driverName': driverName,
-        'phoneNumber': phoneNumber,
-        'license': license,
-        'driverPhoto': driverPhoto})
+    return render(
+        request,
+        "tuktukForDriverDetails.html",
+        {
+            "vehicleNumber": vehicleNumber,
+            "vehicleType": vehicleType,
+            "vehicleFuelType": vehicleFuelType,
+            "manufacturedCompany": manufacturedCompany,
+            "Vcc": Vcc,
+            "manufactureYear": manufactureYear,
+            "RC": RC,
+            "vPhoto": vPhoto,
+            "regDate": regDate,
+            "driverID": driverID,
+            "driverName": driverName,
+            "phoneNumber": phoneNumber,
+            "license": license,
+            "driverPhoto": driverPhoto,
+        },
+    )
+
 
 def driverForTuktuk(request):
 
     databaseCon = connectdb()
     cursor = databaseCon.cursor()
 
-    query = ("SELECT driverID, driverName, phoneNumber, license, driverPhoto FROM tuktukDriverData")
+    query = "SELECT driverID, driverName, phoneNumber, license, driverPhoto FROM tuktukDriverData"
     cursor.execute(query)
 
     driverRecords = cursor.fetchall()
 
-    return render(request, "driverForTuktuk.html", {
-        'driverRecords': driverRecords
-        })
+    return render(request, "driverForTuktuk.html", {"driverRecords": driverRecords})
+
 
 def driverForTuktukDetails(request):
 
@@ -1760,14 +2204,18 @@ def driverForTuktukDetails(request):
 
     driverID = request.POST["driverID"]
 
-    query = "SELECT status, VehicleRegNo FROM tuktukDriverAllot WHERE driverID = '" + driverID + "' AND status = 'YES' AND VehicleRegNo IN (SELECT VehicleRegNo FROM tuktukDriverAllot WHERE status = 'YES')"
+    query = (
+        "SELECT status, VehicleRegNo FROM tuktukDriverAllot WHERE driverID = '"
+        + driverID
+        + "' AND status = 'YES' AND VehicleRegNo IN (SELECT VehicleRegNo FROM tuktukDriverAllot WHERE status = 'YES')"
+    )
     cursor.execute(query)
 
     records = cursor.fetchall()
 
     if not records:
         message = "This driver is not alloted any TukTuk"
-        return render(request, "driverForTuktukDetails.html", {'message': message})
+        return render(request, "driverForTuktukDetails.html", {"message": message})
 
     status, VehicleRegNo = records[0]
 
@@ -1783,7 +2231,11 @@ def driverForTuktukDetails(request):
         license = row[9]
         driverPhoto = row[10]
 
-    query = "SELECT VehicleRegNo, vehicleType, vehicleFuelType, manufacturedCompany, Vcc, manufactureYear, RC, vPhoto, regDate FROM tuktukData WHERE VehicleRegNo = '" + VehicleRegNo + "'"
+    query = (
+        "SELECT VehicleRegNo, vehicleType, vehicleFuelType, manufacturedCompany, Vcc, manufactureYear, RC, vPhoto, regDate FROM tuktukData WHERE VehicleRegNo = '"
+        + VehicleRegNo
+        + "'"
+    )
     cursor.execute(query)
 
     vehicleRecords = cursor.fetchall()
@@ -1799,29 +2251,36 @@ def driverForTuktukDetails(request):
         vPhoto = row[7]
         regDate = row[8]
 
-    return render(request, "driverForTuktukDetails.html", {
-        'status': status,
-        'VehicleRegNo': VehicleRegNo,
-        'vehicleType': vehicleType,
-        'vehicleFuelType': vehicleFuelType,
-        'manufacturedCompany': manufacturedCompany,
-        'Vcc': Vcc,
-        'manufactureYear': manufactureYear,
-        'RC': RC,
-        'vPhoto': vPhoto,
-        'regDate': regDate,
-        'driverID': driverID,
-        'driverName': driverName,
-        'phoneNumber': phoneNumber,
-        'license': license,
-        'driverPhoto': driverPhoto
-    })
+    return render(
+        request,
+        "driverForTuktukDetails.html",
+        {
+            "status": status,
+            "VehicleRegNo": VehicleRegNo,
+            "vehicleType": vehicleType,
+            "vehicleFuelType": vehicleFuelType,
+            "manufacturedCompany": manufacturedCompany,
+            "Vcc": Vcc,
+            "manufactureYear": manufactureYear,
+            "RC": RC,
+            "vPhoto": vPhoto,
+            "regDate": regDate,
+            "driverID": driverID,
+            "driverName": driverName,
+            "phoneNumber": phoneNumber,
+            "license": license,
+            "driverPhoto": driverPhoto,
+        },
+    )
+
 
 def starFeedback(request):
     return render(request, "starFeedback.html")
 
+
 def receipt(request):
     return render(request, "receipt.html")
+
 
 def receiptRequests(request):
 
@@ -1829,13 +2288,13 @@ def receiptRequests(request):
     cursor = databaseCon.cursor()
 
     totalDistance = request.POST["totalDistance"]
+    print(totalDistance)
     waitingCharge = request.POST["waitingCharge"]
 
     emotionFeedback = request.POST["emotionFeedback"]
 
     endOfRideDate = currentDate()
-    endOfRideTime = time.strftime('%H:%M:%S')
-
+    endOfRideTime = time.strftime("%H:%M:%S")
 
     query = "SELECT * FROM fareEstimation ORDER BY fareNO desc"
     cursor.execute(query)
@@ -1848,17 +2307,17 @@ def receiptRequests(request):
         waitingFare = row[3]
         minimumKM = row[5]
 
-    if int(totalDistance) <= minimumKM:
+    if float(totalDistance) <= minimumKM:
         fare = minimumFare
     else:
-        fareMinKM = int(totalDistance) - minimumKM
+        fareMinKM = float(totalDistance) - minimumKM
         fareMinKMperKm = fareMinKM * farePerKm
         fare = minimumFare + fareMinKMperKm
 
     wcmin = waitingFare / 60
 
     if int(waitingCharge) >= 10:
-       wcCharge =  wcmin * int(waitingCharge)
+        wcCharge = wcmin * int(waitingCharge)
     else:
         wcCharge = 0
 
@@ -1871,20 +2330,225 @@ def receiptRequests(request):
 
     for row in records:
         requestID = row[0]
+        break
 
-    query = "INSERT INTO endOfRide (requestID, totalRideRate, waitingCharges, endOfRideDate, endOfRideTime, totalDistance, emotionFeedback) VALUES('" + requestID + "', '" + str(totalRideRate) + "', '" + waitingCharge + "', '" + endOfRideDate + "', '" + endOfRideTime + "', '" + totalDistance + "', '" + emotionFeedback + "')"
+    query = (
+        "INSERT INTO endOfRide (requestID, totalRideRate, waitingCharges, endOfRideDate, endOfRideTime, totalDistance, emotionFeedback) VALUES('"
+        + requestID
+        + "', '"
+        + str(totalRideRate)
+        + "', '"
+        + waitingCharge
+        + "', '"
+        + endOfRideDate
+        + "', '"
+        + endOfRideTime
+        + "', '"
+        + totalDistance
+        + "', '"
+        + emotionFeedback
+        + "')"
+    )
     cursor.execute(query)
 
     databaseCon.commit()
 
+    return render(
+        request,
+        "receipt.html",
+        {
+            "requestID": requestID,
+            "totalRideRate": totalRideRate,
+            "totalDistance": totalDistance,
+            "waitingCharge": waitingCharge,
+            "endOfRideDate": endOfRideDate,
+            "endOfRideTime": endOfRideTime,
+            "emotionFeedback": emotionFeedback,
+        },
+    )
+
+
+def receiptRequestsConfirm(request):
+
+    databaseCon = connectdb()
+    cursor = databaseCon.cursor()
+
+    query = "SELECT requestID FROM endOfRide ORDER BY requestID DESC"
+    cursor.execute(query)
+
+    records = cursor.fetchall()
+
+    for row in records:
+        requestID = row[0]
+        break
+
+    query = "SELECT * FROM endOfRide ORDER BY requestID DESC"
+    cursor.execute(query)
+
+    records = cursor.fetchall()
+
+    for row in records:
+        totalDistance = row[6]
+        totalRideRate = row[1]
+        waitingCharges = row[2]
+        emotionFeedback = row[5]
+        endOfRideDate = row[3]
+        endOfRideTime = row[4]
+
     message = "Thank You! For The ride"
-    return render(request, "receipt.html", {
-        'requestID': requestID,
-        'totalRideRate': totalRideRate,
-        'waitingCharge': waitingCharge,
-        'endOfRideDate': endOfRideDate,
-        'endOfRideTime': endOfRideTime,
-        'totalDistance': totalDistance,
-        'emotionFeedback': emotionFeedback,
-        'message': message
-        })
+    return render(
+        request,
+        "receiptRequestsConfirm.html",
+        {
+            "requestID": requestID,
+            "totalDistance": totalDistance,
+            "totalRideRate": totalRideRate,
+            "waitingCharges": waitingCharges,
+            "emotionFeedback": emotionFeedback,
+            "endOfRideDate": endOfRideDate,
+            "endOfRideTime": endOfRideTime,
+            "message": message,
+        },
+    )
+
+
+def paymentHistory(request):
+
+    databaseCon = connectdb()
+    cursor = databaseCon.cursor()
+
+    query = "SELECT tr.requestID FROM tuktukRequest tr WHERE EXISTS (SELECT 1 FROM loginSession ls WHERE ls.userID = tr.userID AND ls.userType = 'U') AND EXISTS (SELECT 1 FROM endOfRide eor WHERE eor.requestID = tr.requestID)"
+    cursor.execute(query)
+
+    records = cursor.fetchall()
+
+    recentRidesList = []
+
+    for row in records:
+        recentRidesList.append(row[0])
+
+    query = "SELECT * FROM endOfRide"
+    cursor.execute(query)
+
+    records = cursor.fetchall()
+    print(records)
+
+    for row in records:
+        endOfRideDate = row[3]
+        totalRideRate = row[1]
+
+    return render(
+        request,
+        "paymentHistory.html",
+        {
+            "recentRidesList": recentRidesList,
+            "totalRideRate": totalRideRate,
+            "endOfRideDate": endOfRideDate,
+        },
+    )
+
+
+def feedbackView(request):
+
+    databaseCon = connectdb()
+    cursor = databaseCon.cursor()
+
+    query = "SELECT feedbackID, feedbackDate FROM feedback"
+    cursor.execute(query)
+
+    records = cursor.fetchall()
+
+    recentFeedbackList = []
+
+    for row in records:
+        recentFeedbackList.append((row[0], row[1]))
+    print(records)
+
+    return render(
+        request,
+        "feedbackView.html",
+        {
+            "recentFeedbackList": recentFeedbackList,
+        },
+    )
+
+
+def feedbackViewRequests(request):
+
+    databaseCon = connectdb()
+    cursor = databaseCon.cursor()
+
+    query = "SELECT f.userID from feedback f WHERE EXISTS (SELECT 1 FROM loginSession ls WHERE ls.userID = f.userID AND userType = 'U')"
+    cursor.execute(query)
+
+    records = cursor.fetchall()
+
+    for row in records:
+        userID = row[0]
+
+    query = "SELECT ls.userID, lc.EMail  FROM loginSession ls  JOIN loginCredentials lc ON ls.userID = lc.userID AND ls.userType = 'Admin';"
+    cursor.execute(query)
+
+    adminRecords = cursor.fetchall()
+
+    for row in adminRecords:
+        adminUserID = row[0]
+        adminEMail = row[1]
+        print(adminUserID)
+
+    query = "SELECT feedbackID, feedback, feedbackDate, userID, name, EMail, reply, replyDate FROM feedback "
+    cursor.execute(query)
+
+    records = cursor.fetchall()
+    print(records)
+
+    for row in records:
+        feedbackID = row[0]
+        feedback = row[1]
+        feedbackDate = row[2]
+        userID = row[3]
+        name = row[4]
+        EMail = row[5]
+        reply = row[6]
+        replyDate = row[7]
+
+    return render(
+        request,
+        "feedbackViewRequests.html",
+        {
+            "feedback": feedback,
+            "feedbackID": feedbackID,
+            "feedbackDate": feedbackDate,
+            "userID": userID,
+            "name": name,
+            "EMail": EMail,
+            "adminUserID": adminUserID,
+            "adminEMail": adminEMail,
+            "reply": reply,
+            "replyDate": replyDate,
+        },
+    )
+
+
+def driverFeedbackView(request):
+
+    databaseCon = connectdb()
+    cursor = databaseCon.cursor()
+
+    query = "SELECT feedbackID, feedbackDate FROM feedback"
+    cursor.execute(query)
+
+    records = cursor.fetchall()
+
+    recentDriverFeedbackList = []
+
+    for row in records:
+        recentDriverFeedbackList.append((row[0], row[1]))
+
+    return render(
+        request,
+        "driverFeedbackView.html",
+        {
+            "recentDriverFeedbackList": recentDriverFeedbackList,
+        },
+    )

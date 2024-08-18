@@ -58,18 +58,18 @@ form {
 button {
     padding: 10px 20px;
     font-size: 16px;
-    background-color: white;
-    color: #000;
-    border: none;
+    background-color: #000;
+    color: #ff9800;
+    border-color: 1px solid #ff9800;
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
 button:hover {
-    background-color: #000;
-    color: white;
-    border: 1px solid white;
+    background-color: #ff9800;
+    color: #000;
+    border: 1px solid #ff9800;
 }
 .status-message {
     text-align: center;

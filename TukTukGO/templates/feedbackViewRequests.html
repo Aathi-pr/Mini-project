@@ -1,0 +1,61 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title></title>
+    <link href="{% static 'css/feedbackViewRequests.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
+  </head>
+  <body>
+<div class="feedback-table-container">
+  <h1 class="feedback-heading">Feedback Views</h1>
+  <table class="feedback-details">
+    <caption>Feedback Details</caption>
+    <thead>
+      <tr>
+        <th>Feedback ID</th>
+        <td> {{ feedbackID }}</td>
+    </tr>
+    <tr>
+        <th>Feedback</th>
+            <td><textarea value="{{ feedback }}" readonly>{{ feedback }}</textarea></td>
+    </tr>
+    <tr>
+        <th>Date</th>
+        <td> {{ feedbackDate }} </td>
+    </tr>
+    <tr>
+        <th>Replied To</th>
+        <td> {{ userID }} </td>
+    </tr>
+          <tr>
+            <th> User Name </th>
+            <td> {{ name }} </td>
+          </tr>
+          <tr>
+            <th> user E-Mail </th>
+            <td> {{ EMail }} </td>
+          </tr>
+    <tr>
+        <th>Reply From</th>
+        <td> {{ adminUserID }} </td>
+    </tr>
+          <tr>
+            <th> Admin E-Mail </th>
+            <td> {{ adminEMail }} </td>
+          </tr>
+    <tr>
+        <th>Reply</th>
+            <td> <textarea value="{{ reply }}" readonly>{{ reply }}</textarea></td>
+      </tr>
+          <tr>
+            <th> Reply Date </th>
+            <td> {{ replyDate }} </td>
+          </tr>
+  </table>
+</div>
+
+  </body>
+</html>

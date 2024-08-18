@@ -4,68 +4,50 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Details</title>
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
-    <link rel="stylesheet" href="{% static 'css/nav.css' %}" />
+    <title>Feedback Details</title>
     <link rel="stylesheet" href="{% static 'css/userFeedbackDetails.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
   </head>
   <body>
-    <div class="feedTable">
-      <table class="details" border="2px">
-        <h1 class="feed-head">FeedBack Details</h1>
-        <tr>
-          <th>FeedBack ID</th>
-          <th>FeedBack</th>
-          <th>Date</th>
-          <th>userID</th>
+    <div class="feedback-table-container">
+      <h1 class="feedback-heading">Feedback Details</h1>
+      <table class="feedback-details">
+        <caption>Feedback Details</caption>
+        <thead>
+          <tr>
+            <th>Feedback ID</th>
+            <td> {{ feedbackID }}</td>
         </tr>
-{% comment %} {% for row in records %} {% endcomment %}
         <tr>
-          <td>{{ feedbackID }}</td>
-          <td>{{ feedback }}</td>
-          <td>{{ feedbackDate }}</td>
-          <td>{{ userID }}</td>
+            <th>Feedback</th>
+            <td> {{ feedback }} </td>
         </tr>
-        {% comment %} {% endfor%} {% endcomment %}
+        <tr>
+            <th>Date</th>
+            <td> {{ feedbackDate }} </td>
+        </tr>
+        <tr>
+            <th>User ID</th>
+            <td> {{ userID }} </td>
+        </tr>
+        <tr>
+            <th>User Name</th>
+            <td> {{ userName }} </td>
+        </tr>
+        <tr>
+            <th>Reply</th>
+            <td>
+              <form action="/userFeedbackDetailsPost/" method="post">
+                {% csrf_token %}
+                <textarea name="textarea" id="feedback-textarea" placeholder="Type your reply here"></textarea>
+                <input type="hidden" name="feedbackID" value="{{ feedbackID }}" />
+                <input type="hidden" name="userID" value="{{ userID }}" />
+                <button type="submit" class="btn-reply">Reply</button>
+              </form>
+            </td>
+          </tr>
       </table>
-    </div>
-    <div class="userTable">
-      <table class="userDetails">
-        <h1 class="user-head">User Details</h1>
-        <tr>
-          <th>User ID</th>
-          <th>User Name</th>
-          <th>Place</th>
-          <th>Phone Number</th>
-        </tr>
-      {% comment %} {% for row in userRecords %} {% endcomment %}
-        <tr>
-          <td>{{ userID }}</td>
-          <td>{{ userName }}</td>
-          <td>{{ place }}</td>
-          <td>{{ phoneNumber }}</td>
-        </tr>
-        {% comment %} {% endfor %} {% endcomment %}
-      </table>
-    </div>
-    <div class="replyTable">
-      <table class="replyDetails">
-        <h1 class="reply-head">Reply</h1>
-        <tr>
-          <form action="/userFeedbackDetailsPost/" method="post">
-            {% csrf_token %}
-            <textarea name="textarea" rows="5" cols="40"></textarea>
-            <input type="hidden" name="feedbackID" value="{{ feedbackID }}" />
-            <input type="hidden" name="userID" value="{{ userID }}" />
-            <input
-              class="allot-btn"
-              type="submit"
-              name="submit"
-              value="Reply"
-            />
-          </form>
-        </tr>
-      </table>
+      <p class="message">{{ message }}</p>
     </div>
   </body>
 </html>

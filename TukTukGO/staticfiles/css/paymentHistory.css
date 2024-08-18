@@ -17,32 +17,37 @@
   border-radius: 10px;
 }
 
-.allotHead {
+.recent-head {
   font-size: 24px;
   margin-bottom: 20px;
-  align-items: center;
-  justify-content: center;
 }
 
-.h3 {
+.head {
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
+  top: 40px;
 }
+.h3 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
 form {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-#feedbacks {
+#requestID {
   text-transform: uppercase;
   padding: 10px;
   margin-bottom: 15px;
   font-size: 16px;
 }
 
-.allot-btn {
+.allot-button {
   background-color: #000;
   color: #ff9800;
   padding: 10px 20px;
@@ -53,12 +58,12 @@ form {
   transition: background-color 0.2s ease-in;
 }
 
-.allot-btn:hover {
+.allot-button:hover {
   background-color: #ff9800;
   color: #000;
 }
 
-.msgarea {
+.no-recent-rides {
   font-size: 18px;
   color: #ff0000;
 }

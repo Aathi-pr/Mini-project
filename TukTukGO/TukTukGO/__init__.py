@@ -1,6 +1,6 @@
 def connectdb():
     import pymysql
-    con = pymysql.connect(host="adithyan01.mysql.pythonanywhere-services.com", user="adithyan01", passwd="qwerty@1234", database="adithyan01$tuktukbase")
+    con = pymysql.connect(host="localhost", user="root", passwd="qwerty@1234", database="tuktukbase")
     return con
 
 def currentDate():

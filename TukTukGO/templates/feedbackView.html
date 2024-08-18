@@ -1,0 +1,39 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Feedback Reply</title>
+    <link href="{% static 'css/feedbackView.css' %}" rel="stylesheet" />
+  </head>
+  <body>
+    <h1 class="head">FeedBack Reply</h1>
+    <div class="container">
+      {% if recentFeedbackList %}
+      <h3 class="h3">Select a Feedback</h3>
+      <div class="vertical-card-list">
+        {% for feedback in recentFeedbackList %}
+        <form action="/feedbackViewRequests/" method="post">
+          {% csrf_token %}
+          <div class="card">
+            <img
+              src="{% static 'img/icons8-feedback-50.png' %}"
+              alt="Feedback {{ feedback.0 }}"
+            />
+            <div class="card-content">
+              <h3>Feedback ID: {{ feedback.0 }}</h3>
+              <p>Date: {{ feedback.1 }}</p>
+              <input type="hidden" name="feedbackID" value="{{ feedback.0 }}" />
+              <input type="submit" class="allot-button" value="View" />
+            </div>
+          </div>
+        </form>
+        {% endfor %}
+      </div>
+      {% else %}
+      <p class="no-recent-rides">No Recent Feedback...</p>
+      {% endif %}
+    </div>
+  </body>
+</html>

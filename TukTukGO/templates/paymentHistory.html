@@ -1,0 +1,37 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Payment History</title>
+    <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/paymentHistory.css' %}" rel="stylesheet" />
+</head>
+<body>
+    <h1 class="head">Payment History</h1>
+    <div class="container">
+        {% if recentRidesList %}
+            <form action="/recentRidesRequests/" method="post">
+                {% csrf_token %}
+                <h3 class="h3">Select a Request:</h3>
+                <div class="vertical-card-list">
+                    {% for requestID in recentRidesList %}
+                        <label class="card">
+                            <input type="radio" name="requestID" value="{{ requestID }}" required hidden>
+                            <img src="{% static 'img/icons8-same-destination-64.png' %}" alt="Ride {{ requestID }}">
+                            <div class="card-content">
+                                <h3>Ride {{ requestID }}</h3>
+                                <p>Date: {{ requestID.endOfRideDate }}</p>
+                                <p>Amount: ${{ requestID.totalRideRate }}</p>
+                            </div>
+                        </label>
+                    {% endfor %}
+                </div>
+                <input type="submit" class="allot-button" value="View" />
+            </form>
+        {% else %}
+            <p class="no-recent-rides">No Recent Rides...</p>
+        {% endif %}
+    </div>
+</body>
+</html>

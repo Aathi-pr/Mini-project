@@ -62,8 +62,9 @@
                     <img src="{% static 'img/icons8-woozy-face-48.png' %}" alt="I'm poor" />
                 </label>
             </div>
-            <input type="text" name="totalDistance" value="{{ totalDistance }}">
-            <input type="text" name="waitingCharge" value="{{ waitingCharge }}">
+            <input type="hidden" name="requestID" value="{{ requestID }}">
+            <input type="hidden" name="totalDistance" value="{{ totalDistance }}">
+            <input type="hidden" name="waitingCharge" value="{{ waitingCharge }}">
             <input type="submit" value="Fare Details" class="rideButton">
             <div class="message">{{ message }}</div>
         </form>
