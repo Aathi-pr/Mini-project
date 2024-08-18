@@ -28,21 +28,22 @@ Ensure you have the following installed:
 ### Installation
 
 1. **Clone the Repository:**
-   ```bash
+   ```bash -or- zsh
    git clone https://github.com/Aathi-pr/Mini-project.git
-
+   ```
+   
 2. **Navigate to the Project Directory:**
- ```bash
+ ```bash -or -zsh
    cd Mini-project
 ```
 
 3. **Create virtual env:**
-```bash
+```bash -or- zsh
 pip3 install pipenv
 ```
 
 4. **Installing Django:**
-```bash
+```bash -or- zsh
 pipenv install django
 ```
 **Process updating soon...**
