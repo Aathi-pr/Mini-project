@@ -11,7 +11,6 @@ Welcome to the **Auto Booking Site**, a mini-project designed to revolutionize t
 - **🛠️ Admin Dashboard:** Manage vehicle listings, track bookings, and respond to user inquiries with ease.
 
 ![Screenshot](Screenshot 2024-08-18 at 2.31.46 PM.png)
-![Screenshot](Screenshot 2024-08-18 at 2.34.00 PM.png)
 
 ## 🚀 Getting Started
 
