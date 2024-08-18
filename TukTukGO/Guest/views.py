@@ -33,16 +33,8 @@ def validate_login(
     EMail = request.POST["EMail"]
     password = request.POST["password"]
 
-    query = (
-        "SELECT * FROM loginCredentials WHERE UserID = '"
-        + userID
-        + "' and EMail = '"
-        + EMail
-        + "' and password = '"
-        + password
-        + "'"
-    )
-    cursor.execute(query)
+    query = "SELECT * FROM loginCredentials WHERE UserID = %s AND EMail = %s AND password = %s"
+    cursor.execute(query, (userID, EMail, password))
 
     if cursor.rowcount == 0:
 
@@ -52,13 +44,13 @@ def validate_login(
 
     elif userID == "Admin":
 
-        query = "DELETE FROM loginSession WHERE userType = '" + "Admin" + "'"
-        cursor.execute(query)
+        query = "DELETE FROM loginSession WHERE userType = %s"
+        cursor.execute(query, ("Admin",))
 
         databaseCon.commit()
 
-        query = "INSERT INTO loginSession VALUES ('" + userID + "', '" + "Admin" + "')"
-        cursor.execute(query)
+        query = "INSERT INTO loginSession (userID, userType) VALUES (%s, %s)"
+        cursor.execute(query, (userID, "Admin"))
 
         databaseCon.commit()
 
@@ -70,13 +62,13 @@ def validate_login(
 
         if x == "D" or x == "d":
 
-            query = "DELETE FROM loginSession WHERE userType = '" + "D" + "'"
-            cursor.execute(query)
+            query = "DELETE FROM loginSession WHERE userType = %s"
+            cursor.execute(query, ("D",))
 
             databaseCon.commit()
 
-            query = "INSERT INTO loginSession VALUES ('" + userID + "', '" + "D" + "')"
-            cursor.execute(query)
+            query = "INSERT INTO loginSession (userID, userType) VALUES (%s, %s)"
+            cursor.execute(query, (userID, "D"))
 
             databaseCon.commit()
 
@@ -84,13 +76,13 @@ def validate_login(
 
         elif x == "U" or x == "u":
 
-            query = "DELETE FROM loginSession WHERE userType = '" + "U" + "'"
-            cursor.execute(query)
+            query = "DELETE FROM loginSession WHERE userType = %s"
+            cursor.execute(query, ("U",))
 
             databaseCon.commit()
 
-            query = "INSERT INTO loginSession VALUES ('" + userID + "', '" + "U" + "')"
-            cursor.execute(query)
+            query = "INSERT INTO loginSession (userID, userType) VALUES (%s, %s)"
+            cursor.execute(query, (userID, "U"))
 
             databaseCon.commit()
 
@@ -149,24 +141,16 @@ def change_pass_1(request):
     s1 = request.POST["t1"]
     s2 = request.POST["t2"]
 
-    query = (
-        "SELECT * FROM loginCredentials WHERE UserID = 'Admin' and password = '"
-        + s1
-        + "'"
-    )
-    cursor.execute(query)
+    query = "SELECT * FROM loginCredentials WHERE UserID = %s AND password = %s"
+    cursor.execute(query, ("Admin", s1))
 
     if cursor.rowcount == 0:
 
         msg = "Incorrect Existing Password"
     else:
 
-        query = (
-            "UPDATE loginCredentials SET password = '"
-            + s2
-            + "' where UserID = 'Admin' "
-        )
-        cursor.execute(query)
+        query = "UPDATE loginCredentials SET password = %s WHERE UserID = %s"
+        cursor.execute(query, (s2, "Admin"))
 
         databaseCon.commit()
 
@@ -205,8 +189,8 @@ def tuktuk_registration_1(request):
     )
     vehiclePhotoName = vehiclePhotoName[34:]
 
-    query = "SELECT * FROM tuktukData WHERE VehicleRegNo = '" + VehicleNumber + "'"
-    cursor.execute(query)
+    query = "SELECT * FROM tuktukData WHERE VehicleRegNo = %s"
+    cursor.execute(query, (VehicleNumber,))
 
     if cursor.rowcount > 0:
 
@@ -214,29 +198,22 @@ def tuktuk_registration_1(request):
 
     else:
 
-        query = (
-            "INSERT INTO tuktukData VALUES ('"
-            + VehicleNumber
-            + "', '"
-            + vehicleType
-            + "', '"
-            + fuelType
-            + "', '"
-            + manufacturedCompany
-            + "', '"
-            + vehicleCc
-            + "', '"
-            + year
-            + "', '"
-            + RCUploadName
-            + "', '"
-            + vehiclePhotoName
-            + "', '"
-            + DateOfRegistration
-            + "')"
-        )
+        query = "INSERT INTO tuktukData (VehicleNumber, vehicleType, fuelType, manufacturedCompany, vehicleCc, year, RCUploadName, vehiclePhotoName, DateOfRegistration VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
 
-        cursor.execute(query)
+        cursor.execute(
+            query,
+            (
+                VehicleNumber,
+                vehicleType,
+                fuelType,
+                manufacturedCompany,
+                vehicleCc,
+                year,
+                RCUploadName,
+                vehiclePhotoName,
+                DateOfRegistration,
+            ),
+        )
         databaseCon.commit()
 
         msg = "Tuktuk Registration Successful"
