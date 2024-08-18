@@ -34,15 +34,17 @@ Ensure you have the following installed:
 2. **Navigate to the Project Directory:**
  ```bash
    cd Mini-project
+```
 
 3. **Create virtual env:**
 ```bash
 pip3 install pipenv
+```
 
 4. **Installing Django:**
 ```bash
 pipenv install django
-
+```
 **Process updating soon...**
 
 
