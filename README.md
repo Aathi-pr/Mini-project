@@ -21,7 +21,7 @@ Follow these instructions to set up the project on your local machine.
 
 Ensure you have the following installed:
 
-- [Django]((https://www.djangoproject.com) 
+- [Django](https://www.djangoproject.com) 
 - [MySQL](https://www.mysql.com)
 - [Git](https://git-scm.com/)
 
