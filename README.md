@@ -10,7 +10,7 @@ Welcome to the **Auto Booking Site**, a mini-project designed to revolutionize t
 - **👤 User Profiles:** Manage your bookings, view history, and update your personal details effortlessly.
 - **🛠️ Admin Dashboard:** Manage vehicle listings, track bookings, and respond to user inquiries with ease.
 
-![Screenshot](screenshot.png)
+![Screenshot](Screenshot_2024-08-14-13-25-55-716_com.android.chrome.png)
 
 ## 🚀 Getting Started
 
