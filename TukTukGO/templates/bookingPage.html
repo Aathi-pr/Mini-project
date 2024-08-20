@@ -27,7 +27,7 @@
         <div class="mt-3" id="destinationCoordinates"></div>
         <div class="mt-3" id="nearestAutoDetails"></div>
     
-        <form action="/request_tuktuk_and_tuktuk_driver/" method="post">
+        <form action="{% url 'request_tuktuk_and_tuktuk_driver' %}" method="post">
             {% csrf_token %}
             <input type="hidden" id="userLat" name="userLat">
             <input type="hidden" id="userLon" name="userLon">
@@ -159,7 +159,7 @@
                             map.fitBounds(bounds);
         
                             var xhr = new XMLHttpRequest();
-                            xhr.open("POST", "/calculate_distance_and_allot_auto/", true);
+                          xhr.open("POST", "{% url 'calculate_distance_and_allot_auto' %}", true);
                             xhr.setRequestHeader("Content-Type", "application/json");
                             xhr.setRequestHeader("X-CSRFToken", csrftoken);
                             xhr.onreadystatechange = function() {

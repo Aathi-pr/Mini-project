@@ -33,7 +33,7 @@
                     <td>{{ license }}</td>
                     <td><img src="/static/data/tuktukProof/dataProof/{{driverPhoto}}/" width="50px" height="50px"></td>
                     <td>
-                        <form action="/driver_for_tuktuk_details/" method="post">{% csrf_token %}
+                      <form action="{% url 'driver_for_tuktuk_details' %}" method="post">{% csrf_token %}
                             <input type="hidden" name="driverID" value="{{ driverID }}">
                             <input class="allot-btn" type="submit" name="submit" value="Details">
                         </form>

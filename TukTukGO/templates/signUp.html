@@ -27,7 +27,7 @@
         <div class="image-container">
             <img src="{% static 'img/Designer (2).jpeg' %}" alt="Login Image">
         </div>
-        <form class="login-form" action="/validate_login/" method="post">{% csrf_token %}
+        <form class="login-form" action="{% url 'validate_login' %}" method="post">{% csrf_token %}
             <h2>Login</h2>
             <div class="input-group">
                 <input type="text" id="userID" name="userID" required>

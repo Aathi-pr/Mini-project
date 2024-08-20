@@ -81,7 +81,7 @@
             </table>
         </div>
 
-        <form action="/ride_details/" method="post">
+        <form action="{% url 'ride_details' %}" method="post">
             {% csrf_token %}
             <button type="submit">Refresh</button>
         </form>
@@ -105,12 +105,12 @@
 
             // Function to check if response is received
             function checkResponse() {
-                fetch('/check_response/')  // Replace with your endpoint to check response
+              fetch('{% url 'check_driver_response' %}')  // Replace with your endpoint to check response
                     .then(response => response.json())
                     .then(data => {
                         if (data.response) {
                             // Response received, redirect to ride details
-                            window.location.href = '/ride_details/';
+                          window.location.href = '{% url 'ride_details' %}';
                         } else {
                             // Response not received yet, continue to refresh
                             setTimeout(refreshPage, 2000);  // Refresh every 2 seconds

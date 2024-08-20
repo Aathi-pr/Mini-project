@@ -30,7 +30,7 @@
     <h1 class="user-head">User Registration</h1>
     <img class="userRegBack" src="{% static 'img/Designer (4).jpeg' %}" alt="reg-back" height="800px" width="600px">
     <div class="form-driverContainer">
-    <form id="UserRegistration" class="user-reg" action="/tuktuk_user_login_requests/" method="post" enctype="multipart/form-data">{% csrf_token %}
+      <form id="UserRegistration" class="user-reg" action="{% url 'tuktuk_user_login_requests' %}" method="post" enctype="multipart/form-data">{% csrf_token %}
         <h3 class="d1">User Name</h3><input class="userName" name="userName" type="text" placeholder="Name">
         
         <h3 class="d12">E-mail</h3><input class="email" name="email" type="email" placeholder="example@gmail.com">

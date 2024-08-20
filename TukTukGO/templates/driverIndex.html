@@ -21,8 +21,8 @@
         </a>
         <div class="nvLinks">
             <ul>
-                <li><a href="/driver_process/">DashBoard</a></li>
-                <li><a href="/feedback/">FeedBack</a></li>
+              <li><a href="{% url 'driver_process' %}">DashBoard</a></li>
+              <li><a href="{% url 'feedback' %}">FeedBack</a></li>
             </ul>
         </div>
     </nav>
@@ -38,7 +38,7 @@
                 <div id="destination-wrapper">
                     <input type="text" id="destination" class="input-field" placeholder="Destination" oninput="autocomplete('destination')">
                 </div>
-                <button class="btn ok"><a class="btn-signup" href="/signUpPage/">Ride</a></button>
+                <button class="btn ok"><a class="btn-signup" href="{% url 'sign_up_page' %}">Ride</a></button>
             </form>
         </div>
     </div>

@@ -17,19 +17,19 @@
             <span class="bar"></span>
         </a>
         <div class="nvLinks">
-            <ul>
+          <ul>{% comment %}
                 <li><a href="#Ride">Ride</a></li>
                 <li><a href="/tuktuk_driver_registration/">Driver</a></li>
                 <li><a href="/tuktuk_registration/">Tuktuk's</a></li>
                 <li><a href="#About">About</a></li>
-
+                {% endcomment%}
             </ul>
             </div>
     </nav>
     <h1 class="vehicle-head">TukTuk Registration</h1>
     <img class="regBack" src="{% static 'img/Designer (3).jpeg' %}" alt="reg-back" height="800px" width="600px">
     <div class="form-container">
-    <form id="vehicleRegistration" class="vehicle-reg" action="/tuktuk_registration_1/" method="post" enctype="multipart/form-data">{% csrf_token %}
+      <form id="vehicleRegistration" class="vehicle-reg" action="{% url 'tuktuk_registration_1' %}" method="post" enctype="multipart/form-data">{% csrf_token %}
         Vehicle Number : <input class="vehicleNumber" name="VehicleNumber" id="VehicleNumber" type="text" placeholder="vehicle Number">
 
         <h3 class="2">Vehicle Type : </h3> 

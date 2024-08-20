@@ -31,7 +31,7 @@
 
 <body>
     <div class="con-pass">
-        <form id="form-1" class="passchange" action="/user_change_pass_1/" method="post" onsubmit="return passValidate()"> {% csrf_token %}
+      <form id="form-1" class="passchange" action="{% url 'user_change_pass_1' %}" method="post" onsubmit="return passValidate()"> {% csrf_token %}
             <div class="box1">
                 Existing Password
                 <input class="pass-btn1" type="password" placeholder="old Password" name="t1" id="t1">

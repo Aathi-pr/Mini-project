@@ -24,10 +24,10 @@
             </a>
             <div class="nvLinks">
                 <ul>
-                    <li><a href="#Ride">Ride</a></li>
+                  {% comment %}<li><a href="#Ride">Ride</a></li>
                     <li><a href="/tuktuk_driver_registration/">Driver</a></li>
                     <li><a href="/tuktuk_registration/">Tuktuk's</a></li>
-                    <li><a href="#About">About</a></li>
+                    <li><a href="#About">About</a></li> {% endcomment %}
     
                 </ul>
                 </div>
@@ -35,7 +35,7 @@
 
     <div class="container">
     <div id="map"></div>
-    <form class="form-group" action="/driver_ride_details/" method="post"> {% csrf_token %}
+    <form class="form-group" action="{% url 'driver_ride_details' %}" method="post"> {% csrf_token %}
         <input type="hidden" name="requestID" value="{{ requestID }}">
         <input class="charges" type="text" name="totalDistance" placeholder="Total Distance" />
         <input class="charges" type="text" name="waitingCharge" placeholder="Waiting Time in min" />

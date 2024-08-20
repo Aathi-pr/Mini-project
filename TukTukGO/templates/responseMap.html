@@ -12,7 +12,7 @@
 </head>
 <body>
     <div class="driverResponse">
-        <form class="responseForm" action="/response_for_tuktuk_requests/" method="post"> {% csrf_token %}
+      <form class="responseForm" action="{% url 'response_for_tuktuk_requests' %}" method="post"> {% csrf_token %}
             <table class="responseTable" border="2px">
                 <h1 class="response-head">TukTuk Requests</h1>
                 <tr> 

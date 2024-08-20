@@ -37,7 +37,7 @@
         <tr>
             <th>Reply</th>
             <td>
-              <form action="/user_feedback_details_post/" method="post">
+              <form action="{% url 'user_feedback_details_post' %}" method="post">
                 {% csrf_token %}
                 <textarea name="textarea" id="feedback-textarea" placeholder="Type your reply here"></textarea>
                 <input type="hidden" name="feedbackID" value="{{ feedbackID }}" />

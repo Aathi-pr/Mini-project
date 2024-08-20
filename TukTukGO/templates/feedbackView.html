@@ -14,7 +14,7 @@
       <h3 class="h3">Select a Feedback</h3>
       <div class="vertical-card-list">
         {% for feedback in recentFeedbackList %}
-        <form action="/feedback_view_requests/" method="post">
+        <form action="{% url 'feedback_view_requests' %}" method="post">
           {% csrf_token %}
           <div class="card">
             <img

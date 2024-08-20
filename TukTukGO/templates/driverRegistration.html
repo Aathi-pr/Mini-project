@@ -30,7 +30,7 @@
     <h1 class="driver-head">Driver Registration</h1>
     <img class="driverRegBack" src="{% static 'img/Designer (4).jpeg' %}" alt="reg-back" height="800px" width="600px">
     <div class="form-driverContainer">
-    <form id="DriverRegistration" class="driver-reg" action="/tuktuk_driver_registration_1/" method="post" enctype="multipart/form-data">{% csrf_token %}
+      <form id="DriverRegistration" class="driver-reg" action="{% url 'tuktuk_driver_registration_1' %}" method="post" enctype="multipart/form-data">{% csrf_token %}
         <h3 class="d1">Driver Name</h3><input class="driverName" name="driverName" type="text" placeholder="Name in License">
 
         <h3 class="d2">House Name</h3><input class="houseName" name="houseName" type="text" placeholder="House Name">

@@ -78,7 +78,7 @@
                 </tr>
                 <tr>
                     <td colspan="2">
-                        <form action="/tuktuk_allot_3/" method="post" enctype="multipart/form-data">
+                      <form action="{% url 'tuktuk_allot_3' %}" method="post" enctype="multipart/form-data">
                             {% csrf_token %}
                             <input type="hidden" name="VehicleNumber" value="{{ VehicleNumber }}">
                             <input type="hidden" name="driverID" value="{{ driverID }}">
