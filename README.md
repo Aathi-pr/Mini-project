@@ -1,6 +1,6 @@
 # 🚗 TukTukGo - Mini Project
 
-![Build Status](https://img.shields.io/badge/build-passing-brightgreen) ![License](https://img.shields.io/badge/license-MIT-blue) ![Version](https://img.shields.io/badge/version-1.0.0-blue)
+![Build Status](https://img.shields.io/badge/build-passing-brightgreen) ![License](https://img.shields.io/badge/license-Apache-blue) ![Version](https://img.shields.io/badge/version-1.0.0-blue)
 
 Welcome to the **Auto Booking Site**, a mini-project designed to revolutionize the way you book vehicles online. Whether you're planning a road trip or need a vehicle for daily commuting, our platform offers a seamless experience to find and reserve the perfect vehicle.
 
