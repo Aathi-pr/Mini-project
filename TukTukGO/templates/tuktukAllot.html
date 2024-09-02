@@ -30,15 +30,15 @@
         <div class="container">
             <h1 class="allotHead">Allot TukTuk's To Drivers</h1>
             <div class="allotForm">
-                {% if vehicleList %}
+                {% if vehicle_list %}
                 <form action="{% url 'tuktuk_allot_1' %}" method="post">
                     {% csrf_token %}
                     <label for="VehicleNumber">
                         <h3 class="h3">Select TukTuk Number:</h3>
                     </label>
-                    <select id="VehicleNumber" name="VehicleNumber">
-                        {% for vehicleNumber in vehicleList %}
-                        <option value="{{ vehicleNumber }}">{{ vehicleNumber }}</option>
+                    <select id="VehicleNumber" name="vehicle_number">
+                        {% for vehicle_number in vehicle_list %}
+                        <option value="{{ vehicle_number }}">{{ vehicle_number }}</option>
                         {% endfor %}
                     </select>
                     <input class="allot-btn" type="submit" value="view">

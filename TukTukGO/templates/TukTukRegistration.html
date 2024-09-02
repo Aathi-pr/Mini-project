@@ -30,30 +30,30 @@
     <img class="regBack" src="{% static 'img/Designer (3).jpeg' %}" alt="reg-back" height="800px" width="600px">
     <div class="form-container">
       <form id="vehicleRegistration" class="vehicle-reg" action="{% url 'tuktuk_registration_1' %}" method="post" enctype="multipart/form-data">{% csrf_token %}
-        Vehicle Number : <input class="vehicleNumber" name="VehicleNumber" id="VehicleNumber" type="text" placeholder="vehicle Number">
+        Vehicle Number : <input class="vehicleNumber" name="vehicle_number" id="VehicleNumber" type="text" placeholder="vehicle Number">
 
         <h3 class="2">Vehicle Type : </h3> 
         <div class="three">
-        <input class="VehicleType" name="vehicleType" checked="checked" type="radio" id="3wheel" value="3wheel">
+        <input class="VehicleType" name="vehicle_type" checked="checked" type="radio" id="3wheel" value="3wheel">
         <label class="rad1" for="3wheel">3 Wheeler</label><br>
         </div>
 
         <div class="four">
-        <input name="vehicleType" type="radio" id="4wheel" value="4wheel">
+        <input name="vehicle_type" type="radio" id="4wheel" value="4wheel">
         <label class="rad2" for="4wheel">4 Wheeler</label><br>
         </div>
 
         <label for="Vehicle Fuel Type">Vehicle Fuel Type : </label>
-        <select id="fuelType" name="fuelType">
+        <select id="fuelType" name="fuel_type">
           <option value="Petrol">Petrol</option>
           <option value="diesel">diesel</option>
           <option value="CNG">CNG</option>
           <option value="Electric">Electric</option>
         </select>
 
-        Manufactured Company : <input class="ManufacturedCompany" type="text" name="manufacturedCompany" placeholder="Bajaj, etc..">
+        Manufactured Company : <input class="ManufacturedCompany" type="text" name="manufactured_company" placeholder="Bajaj, etc..">
 
-        Vehicle CC : <input type="text" name="vehicleCc" class="vehicleCc" placeholder="90cc">
+        Vehicle CC : <input type="text" name="vehicle_cc" class="vehicleCc" placeholder="90cc">
 
         <label for="Year Of Manufacture">Year Of Manufacture : </label>
         <select id="year" name="year">
@@ -64,11 +64,11 @@
         </select>
 
 
-          Upload RC : <input class="rcUpload" type="file" id="rcUpload" name="RCUpload">
+          Upload RC : <input class="rcUpload" type="file" id="rcUpload" name="rc_upload">
 
-          Upload Vehicle Photo : <input class="vehiclePhoto" type="file" id="vehiclePhoto" name="vehiclePhoto">
+          Upload Vehicle Photo : <input class="vehiclePhoto" type="file" id="vehiclePhoto" name="vehicle_photo">
 
-          Date Of Registration : <input type="date" class="DateOfRegistration" name="DateOfRegistration">
+          Date Of Registration : <input type="date" class="DateOfRegistration" name="date_of_registration">
 
           <input class="tukReg-btn" type="submit" value="submit"> {{ msg }}
 

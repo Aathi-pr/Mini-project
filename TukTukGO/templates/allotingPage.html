@@ -16,7 +16,7 @@
             <table class="details" border="2">
                 <tr>
                     <th>Vehicle Number</th>
-                    <td>{{ VehicleNumber }}</td>
+                    <td>{{ vehicle_number }}</td>
                 </tr>
                 <tr>
                     <th>Vehicle Type</th>
@@ -80,7 +80,7 @@
                     <td colspan="2">
                       <form action="{% url 'tuktuk_allot_3' %}" method="post" enctype="multipart/form-data">
                             {% csrf_token %}
-                            <input type="hidden" name="VehicleNumber" value="{{ VehicleNumber }}">
+                            <input type="hidden" name="vehicle_number" value="{{ vehicle_number }}">
                             <input type="hidden" name="driverID" value="{{ driverID }}">
                             <input class="allot-btn" type="submit" name="status" value="Allot">
                         </form>

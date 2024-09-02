@@ -1,7 +1,16 @@
+import pymysql
+
+pymysql.install_as_MySQLdb()
+
+
 def connectdb():
     import pymysql
-    con = pymysql.connect(host="localhost", user="root", passwd="qwerty@1234", database="tuktukbase")
+
+    con = pymysql.connect(
+        host="localhost", user="root", passwd="qwerty@1234", database="tuktukbase"
+    )
     return con
+
 
 def currentDate():
     import datetime
@@ -16,9 +25,9 @@ def currentDate():
 
     return CurrentData
 
+
 # def currentTime():
 #     from django.utils import timezone
 
 #     current_time = timezone.now().time()
 #     return current_time
-

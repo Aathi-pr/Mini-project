@@ -26,17 +26,17 @@
                     <th>Vehicle Photo</th>
                     <th>Reg Date</th>
                 </tr>
-                {% for VehicleRegNo, vehicleType, vehicleFuelType, manufacturedCompany, Vcc, manufactureYear, RC, vPhoto, regDate in records %}
+                {% for record in records %}
                 <tr>
-                    <td>{{ VehicleRegNo }}</td>
-                    <td>{{ vehicleType }}</td>
-                    <td>{{ vehicleFuelType }}</td>
-                    <td>{{ manufacturedCompany }}</td>
-                    <td>{{ Vcc }}</td>
-                    <td>{{ manufactureYear }}</td>
-                    <td><img src="/home/adithyan01/TukTukGO/static/data/tuktukProof/dataProof/{{ RC }}/" width="50px" height="50px"></td>
-                    <td><img src="/static/data/tuktukProof/dataProof/{{ vPhoto }}/" width="50px" height="50px"></td>
-                    <td>{{ regDate }}</td>
+                    <td>{{ record.VehicleRegNo }}</td>
+                    <td>{{ record.vehicleType }}</td>
+                    <td>{{ record.vehicleFuelType }}</td>
+                    <td>{{ record.manufacturedCompany }}</td>
+                    <td>{{ record.Vcc }}</td>
+                    <td>{{ record.manufactureYear }}</td>
+                    <td><img src="/home/adithyan01/TukTukGO/static/data/tuktukProof/dataProof/{{ record.RC }}/" width="50px" height="50px"></td>
+                    <td><img src="/static/data/tuktukProof/dataProof/{{ record.vPhoto }}/" width="50px" height="50px"></td>
+                    <td>{{ record.regDate }}</td>
                 </tr>
                 {% endfor %}
             </table>
@@ -53,18 +53,18 @@
                     <th>Photo</th>
                     <th>Allot</th>
                 </tr>
-                {% for driverID, driverName, phoneNumber, license, driverPhoto in driverRecords %}
+                {% for driver in driver_records %}
                 <tr>
-                    <td>{{ driverID }}</td>
-                    <td>{{ driverName }}</td>
-                    <td>{{ phoneNumber }}</td>
-                    <td>{{ license }}</td>
-                    <td><img src="/static/data/tuktukProof/dataProof/{{ driverPhoto }}/" width="50px" height="50px"></td>
+                    <td>{{ driver.driverID }}</td>
+                    <td>{{ driver.driverName }}</td>
+                    <td>{{ driver.phoneNumber }}</td>
+                    <td>{{ driver.license }}</td>
+                    <td><img src="/static/data/tuktukProof/dataProof/{{ driver.driverPhoto }}/" width="50px" height="50px"></td>
                     <td>
                       <form action="{% url 'tuktuk_allot_2' %}" method="post">
                             {% csrf_token %}
-                            <input type="hidden" name="VehicleNumber" value="{{ VehicleNumber }}">
-                            <input type="hidden" name="driverID" value="{{ driverID }}">
+                            <input type="hidden" name="vehicle_number" value="{{ vehicle_number }}">
+                            <input type="hidden" name="driverID" value="{{ driver.driverID }}">
                             <input class="allot-btn" type="submit" name="submit" value="Details">
                         </form>
                     </td>

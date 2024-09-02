@@ -13,18 +13,18 @@
 <body>
     <h1 class="fareHead"> Fare Estimation </h1>
     <div class="fare">
-      <form id="form1" class="minRate" action="{% url 'fare_estimation_requets' %}" method="post"> {% csrf_token %}
+      <form id="form1" class="minRate" action="{% url 'fare_estimation_requests' %}" method="post"> {% csrf_token %}
             <div class="box1">
-                Minimum Fare <input class="minFare" type="number" placeholder="Minimum Fare" name="minFare" id="t1">
+                Minimum Fare <input class="minFare" type="number" placeholder="Minimum Fare" name="min_fare" id="t1">
             </div>
             <div class="box2">
-                Fare per KM <input class="farePerKm" type="number" placeholder="Per KM" name="farePerKm" id="t2">
+                Fare per KM <input class="farePerKm" type="number" placeholder="Per KM" name="fare_per_km" id="t2">
             </div>
             <div class="box3">
-                Waiting Fare <input class="WaitingCharges" type="number" placeholder="Extra Charges" name="WaitingCharges" id="t3">
+                Waiting Fare <input class="WaitingCharges" type="number" placeholder="Extra Charges" name="waiting_charges" id="t3">
             </div>
             <div class="box4">
-                Minimum KM <input class="MinimumKM" type="number" placeholder="Minimum KM" name="MinimumKM" id="t3">
+                Minimum KM <input class="MinimumKM" type="number" placeholder="Minimum KM" name="minimum_km" id="t3">
             </div>
             <div class="fareSub">
                 <input class="fare-btn" type="submit" value="submit">

@@ -19,11 +19,11 @@
           <th> User Name </th>
           <th> Date of Registration </th>
         </tr>
-        {% for userID, userName, dateOfRegistration in records %}
+        {% for data in records %}
         <tr>
-          <td> {{ userID }} </td>
-          <td> {{ userName }} </td>
-          <td> {{ dateOfRegistration }} </td>
+          <td> {{ data.userID }} </td>
+          <td> {{ data.userName }} </td>
+          <td> {{ data.dateOfRegistration }} </td>
         </tr>
         {% endfor %}
       </table>

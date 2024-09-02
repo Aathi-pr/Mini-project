@@ -1,7 +1,20 @@
 from django.core.files.storage import FileSystemStorage
-from django.shortcuts import render
+from django.db.models import Sum
+from django.shortcuts import get_object_or_404, render
+from django.utils import timezone
 
+from Driver.models import endOfRide
+from Guest.models import tuktukUserData
 from TukTukGO import connectdb, currentDate
+from User.models import loginCredentials
+
+from .models import (
+    fareEstimation,
+    feedback,
+    tuktukData,
+    tuktukDriverAllot,
+    tuktukDriverData,
+)
 
 # Create your views here.
 
@@ -13,23 +26,16 @@ def sign_up_page(request):
 def admin_process(request):
 
     databaseCon = connectdb()
-    cursor = databaseCon.cursor()
 
     try:
 
-        query_bookings = "SELECT COUNT(requestID) FROM endOfRide"
-        cursor.execute(query_bookings)
-        total_bookings = cursor.fetchone()[0]
-
-        query_money = "SELECT SUM(totalrideRate) FROM endOfRide"
-        cursor.execute(query_money)
-        total_money = cursor.fetchone()[0] or 0
-
+        total_bookings = endOfRide.objects.count()
+        total_money = (
+            endOfRide.objects.aggregate(total=Sum("totalRideRate"))["total"] or 0
+        )
     finally:
-        # Close database connection
         databaseCon.close()
 
-    # Render the HTML template with data and pie chart image
     return render(
         request,
         "adminProcess.html",
@@ -46,25 +52,18 @@ def change_pass(request):
 
 def change_pass_1(request):
 
-    databaseCon = connectdb()
-    cursor = databaseCon.cursor()
-
     s1 = request.POST["t1"]
     s2 = request.POST["t2"]
 
-    query = "SELECT * FROM loginCredentials WHERE UserID = %s AND password = %s"
-    cursor.execute(query, ("Admin", s1))
-
-    if cursor.rowcount == 0:
-
+    try:
+        user = loginCredentials.objects.get(userID="Admin", password=s1)
+    except loginCredentials.DoesNotExist:
         msg = "Incorrect Existing Password"
+
     else:
 
-        query = "UPDATE loginCredentials SET password = %s WHERE UserID = %s"
-        cursor.execute(query, (s2, "Admin"))
-
-        databaseCon.commit()
-
+        user.password = s2
+        user.save()
         msg = "Password Updated Successfully"
 
     return render(request, "changePass.html", {"msg": msg})
@@ -76,60 +75,45 @@ def tuktuk_registration(request):
 
 def tuktuk_registration_1(request):
 
-    databaseCon = connectdb()
-    cursor = databaseCon.cursor()
-
-    VehicleNumber = request.POST["VehicleNumber"]
-    vehicleType = request.POST["vehicleType"]
-    fuelType = request.POST["fuelType"]
-    manufacturedCompany = request.POST["manufacturedCompany"]
-    vehicleCc = request.POST["vehicleCc"]
+    vehicle_number = request.POST["vehicle_number"]
+    vehicle_type = request.POST["vehicle_type"]
+    fuel_type = request.POST["fuel_type"]
+    manufactured_company = request.POST["manufactured_company"]
+    vehicle_cc = request.POST["vehicle_cc"]
     year = request.POST["year"]
-    RCUpload = request.FILES["RCUpload"]
-    vehiclePhoto = request.FILES["vehiclePhoto"]
-    DateOfRegistration = request.POST["DateOfRegistration"]
-    # print(request.FILES)
+    rc_upload = request.FILES["rc_upload"]
+    vehicle_photo = request.FILES["vehicle_photo"]
+    date_of_registration = request.POST["date_of_registration"]
 
     fs = FileSystemStorage()
-    RCUploadName = fs.save(
-        "static/data/tuktukProof/dataProof/" + RCUpload.name, RCUpload
+    rc_upload_name = fs.save(
+        "static/data/tuktukProof/dataProof/" + rc_upload.name, rc_upload
     )
-    RCUploadName = RCUploadName[34:]
-    vehiclePhotoName = fs.save(
-        "static/data/tuktukProof/dataProof/" + vehiclePhoto.name, vehiclePhoto
+    rc_upload_name = rc_upload_name[34:]
+    vehicle_photo_name = fs.save(
+        "static/data/tuktukProof/dataProof/" + vehicle_photo.name, vehicle_photo
     )
-    vehiclePhotoName = vehiclePhotoName[34:]
+    vehicle_photo_name = vehicle_photo_name[34:]
 
-    query = "SELECT * FROM tuktukData WHERE VehicleRegNo = %s"
-    cursor.execute(query, (VehicleNumber,))
-
-    if cursor.rowcount > 0:
-
+    if tuktukData.objects.filter(VehicleRegNo=vehicle_number).exists():
         msg = "Tuktuk Registration Already Exists"
 
     else:
-
-        query = "INSERT INTO tuktukData (VehicleNumber, vehicleType, fuelType, manufacturedCompany, vehicleCc, year, RCUploadName, vehiclePhotoName, DateOfRegistration VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
-
-        cursor.execute(
-            query,
-            (
-                VehicleNumber,
-                vehicleType,
-                fuelType,
-                manufacturedCompany,
-                vehicleCc,
-                year,
-                RCUploadName,
-                vehiclePhotoName,
-                DateOfRegistration,
-            ),
+        new_tuktuk = tuktukData(
+            VehicleRegNo=vehicle_number,
+            vehicleType=vehicle_type,
+            vehicleFuelType=fuel_type,
+            manufacturedCompany=manufactured_company,
+            Vcc=vehicle_cc,
+            manufactureYear=year,
+            RC=rc_upload_name[34:],
+            vPhoto=vehicle_photo_name[34:],
+            regDate=date_of_registration,
         )
-        databaseCon.commit()
-
+        new_tuktuk.save()
         msg = "Tuktuk Registration Successful"
 
-    return render(request, "tuktukRegistration.html", {"msg": msg})
+    return render(request, "TukTukRegistration.html", {"msg": msg})
 
 
 def tuktuk_driver_registration(request):
@@ -138,342 +122,192 @@ def tuktuk_driver_registration(request):
 
 def tuktuk_driver_registration_1(request):
 
-    databaseCon = connectdb()
-    cursor = databaseCon.cursor()
-
-    driverName = request.POST["driverName"]
-    houseName = request.POST["houseName"]
-    placeName = request.POST["placeName"]
+    driver_name = request.POST["driver_name"]
+    house_name = request.POST["house_name"]
+    place_name = request.POST["place_name"]
     pincode = request.POST["pincode"]
     email = request.POST["email"]
-    phoneNumber = request.POST["phoneNumber"]
-    driverGender = request.POST["driverGender"]
-    driverGender = request.POST["driverGender"]
+    phone_number = request.POST["phone_number"]
+    driver_gender = request.POST["driver_gender"]
+    driver_gender = request.POST["driver_gender"]
     dob = request.POST["dob"]
     aadhar = request.POST["aadhar"]
     license = request.POST["license"]
-    driverPhoto = request.FILES["driverPhoto"]
-    DateOfRegistration = request.POST["DateOfRegistration"]
+    driver_photo = request.FILES["driver_photo"]
+    date_of_registration = request.POST["date_of_registration"]
 
     fs = FileSystemStorage()
-    driverPhotoProof = fs.save(
-        "static/data/tuktukProof/dataProof/" + driverPhoto.name, driverPhoto
+    driver_photo_proof = fs.save(
+        "static/data/tuktukProof/dataProof/" + driver_photo.name, driver_photo
     )
-    driverPhotoProof = driverPhotoProof[34:]
+    driver_photo_proof = driver_photo_proof[34:]
 
-    driverID = "D1000"
+    last_driver = tuktukDriverData.objects.order_by("-driverID").first()
 
-    query = "SELECT * FROM tuktukDriverData ORDER BY driverID DESC"
+    if last_driver:
 
-    cursor.execute(query)
+        last_id = int(last_driver.driverID[1:])
+        new_driverID = f"D{last_id + 1}"
 
-    records = cursor.fetchall()
+    else:
 
-    for row in records:
-        driverID = row[0]
-        break
-    x = driverID[1:]
-    y = int(x)
-    y = y + 1
-    driverID = "D" + str(y)
+        new_driverID = "D1000"
 
-    query = "SELECT * FROM tuktukDriverData WHERE driverId = '" + driverID + "'"
-    cursor.execute(query)
-
-    msg = ""
-
-    query = (
-        "INSERT INTO tuktukDriverData VALUES ('"
-        + driverID
-        + "', '"
-        + driverName
-        + "', '"
-        + houseName
-        + "', '"
-        + placeName
-        + "', '"
-        + pincode
-        + "', '"
-        + phoneNumber
-        + "', '"
-        + driverGender
-        + "', '"
-        + dob
-        + "', '"
-        + aadhar
-        + "', '"
-        + license
-        + "', '"
-        + driverPhotoProof
-        + "', '"
-        + DateOfRegistration
-        + "')"
+    new_driver = tuktukDriverData(
+        driverID=new_driverID,
+        driverName=driver_name,
+        houseName=house_name,
+        placeName=place_name,
+        pincode=pincode,
+        phoneNumber=phone_number,
+        gender=driver_gender,
+        dateOfBirth=dob,
+        aadhar=aadhar,
+        license=license,
+        driverPhoto=driver_photo,
+        dateOfRegistration=date_of_registration,
     )
-    cursor.execute(query)
 
-    databaseCon.commit()
+    new_driver.save()
 
-    query = (
-        "INSERT INTO loginCredentials values ('"
-        + driverID
-        + "', '"
-        + email
-        + "' ,'"
-        + driverID
-        + "')"
+    new_driver_login_credentials = loginCredentials(
+        userID=new_driverID,
+        EMail=email,
+        password=new_driverID,
     )
-    cursor.execute(query)
 
-    databaseCon.commit()
+    new_driver_login_credentials.save()
 
-    msg = (
-        "Driver Registration Successfully Finished\n Default Password is your DriverID is "
-        + driverID
-    )
+    msg = f"Driver Registration Successfully Finished\n Default Password is your DriverID is {new_driverID}"
 
     return render(request, "driverRegistration.html", {"msg": msg})
 
 
 def tuktuk_allot(request):
 
-    databaseCon = connectdb()
-    cursor = databaseCon.cursor()
+    vehicle_list = tuktukData.objects.values_list("VehicleRegNo", flat=True)
 
-    query = "SELECT VehicleRegNo FROM tuktukData"
-    cursor.execute(query)
-
-    records = cursor.fetchall()
-
-    vehicleList = []
-
-    for row in records:
-        vehicleList.append(row[0])
-
-    return render(request, "tuktukAllot.html", {"vehicleList": vehicleList})
+    return render(
+        request,
+        "tuktukAllot.html",
+        {"vehicle_list": vehicle_list},
+    )
 
 
 def tuktuk_allot_1(request):
 
-    databaseCon = connectdb()
-    cursor = databaseCon.cursor()
+    vehicle_number = request.POST["vehicle_number"]
 
-    VehicleNumber = request.POST["VehicleNumber"]
-
-    query = (
-        "SELECT VehicleRegNo, vehicleType, vehicleFuelType, manufacturedCompany, Vcc, manufactureYear, RC, vPhoto, regDate FROM tuktukData WHERE VehicleRegNo = '"
-        + VehicleNumber
-        + "'"
+    records = tuktukData.objects.filter(VehicleRegNo=vehicle_number).values(
+        "VehicleRegNo",
+        "vehicleType",
+        "vehicleFuelType",
+        "manufacturedCompany",
+        "Vcc",
+        "manufactureYear",
+        "RC",
+        "vPhoto",
+        "regDate",
     )
-    cursor.execute(query)
-
-    records = cursor.fetchall()
-
-    query = "SELECT driverID, driverName, phoneNumber, license, driverPhoto FROM tuktukDriverData"
-    cursor.execute(query)
-
-    driverRecords = cursor.fetchall()
+    driver_records = tuktukDriverData.objects.all()
 
     return render(
         request,
         "allotDetails.html",
         {
-            "VehicleNumber": VehicleNumber,
+            "vehicle_number": vehicle_number,
             "records": records,
-            "driverRecords": driverRecords,
+            "driver_records": driver_records,
         },
     )
 
 
 def tuktuk_allot_2(request):
 
-    databaseCon = connectdb()
-    cursor = databaseCon.cursor()
-
-    VehicleNumber = request.POST["VehicleNumber"]
+    vehicle_number = request.POST["vehicle_number"]
     driverID = request.POST["driverID"]
 
-    query = "SELECT * FROM tuktukData WHERE VehicleRegNo = '" + VehicleNumber + "'"
-    cursor.execute(query)
+    tuktuk = get_object_or_404(tuktukData, VehicleRegNo=vehicle_number)
 
-    records = cursor.fetchall()
-
-    for row in records:
-        vehicleType = row[1]
-        vehicleFuelType = row[2]
-        manufacturedCompany = row[3]
-        Vcc = row[4]
-        year = row[5]
-        RC = row[6]
-        vPhoto = row[7]
-        regDate = row[8]
-
-    query = (
-        "SELECT driverID, driverName, phoneNumber, license, driverPhoto FROM tuktukDriverData WHERE driverID = '"
-        + driverID
-        + "'"
-    )
-    cursor.execute(query)
-
-    driverRecords = cursor.fetchall()
-
-    for row in driverRecords:
-        driverName = row[1]
-        phoneNumber = row[2]
-        license = row[3]
-        driverPhoto = row[4]
-
+    driver = get_object_or_404(tuktukDriverData, driverID=driverID)
     return render(
         request,
         "allotingPage.html",
         {
-            "VehicleNumber": VehicleNumber,
-            "vehicleType": vehicleType,
-            "vehicleFuelType": vehicleFuelType,
-            "manufacturedCompany": manufacturedCompany,
-            "Vcc": Vcc,
-            "year": year,
-            " RC": RC,
-            "vPhoto": vPhoto,
-            "regDate": regDate,
-            "driverID": driverID,
-            "driverName": driverName,
-            "phoneNumber": phoneNumber,
-            "license": license,
-            "driverPhoto": driverPhoto,
+            "vehicle_number": tuktuk.VehicleRegNo,
+            "vehicleType": tuktuk.vehicleType,
+            "vehicleFuelType": tuktuk.vehicleFuelType,
+            "manufacturedCompany": tuktuk.manufacturedCompany,
+            "Vcc": tuktuk.Vcc,
+            "year": tuktuk.manufactureYear,
+            " RC": tuktuk.RC,
+            "vPhoto": tuktuk.vPhoto,
+            "regDate": tuktuk.regDate,
+            "driverID": driver.driverID,
+            "driverName": driver.driverName,
+            "phoneNumber": driver.phoneNumber,
+            "license": driver.license,
+            "driverPhoto": driver.driverPhoto,
         },
     )
 
 
 def tuktuk_allot_3(request):
 
-    databaseCon = connectdb()
-    cursor = databaseCon.cursor()
-
-    VehicleNumber = request.POST["VehicleNumber"]
+    vehicle_number = request.POST["vehicle_number"]
     driverID = request.POST["driverID"]
     status = request.POST["status"]
-    allotDate = currentDate()
+    allot_date = currentDate()
 
-    query = "SELECT * FROM tuktukData WHERE VehicleRegNo = '" + VehicleNumber + "'"
-    cursor.execute(query)
+    tuktuk = get_object_or_404(tuktukData, VehicleRegNo=vehicle_number)
 
-    records = cursor.fetchall()
+    driver = get_object_or_404(tuktukDriverData, driverID=driverID)
 
-    for row in records:
-        vehicleType = row[1]
-        vehicleFuelType = row[2]
-        manufacturedCompany = row[3]
-        Vcc = row[4]
-        year = row[5]
-        RC = row[6]
-        vPhoto = row[7]
-        regDate = row[8]
+    tuktukDriverAllot.objects.filter(VehicleRegNo=vehicle_number).update(status="NO")
+    tuktukDriverAllot.objects.filter(driverID=driverID).update(status="NO")
 
-    query = (
-        "SELECT driverID, driverName, phoneNumber, license, driverPhoto FROM tuktukDriverData WHERE driverID = '"
-        + driverID
-        + "'"
-    )
-    cursor.execute(query)
+    existing_allotment_check = tuktukDriverAllot.objects.filter(
+        VehicleRegNo=vehicle_number, driverID=driverID
+    ).first()
 
-    driverRecords = cursor.fetchall()
-
-    for row in driverRecords:
-        driverName = row[1]
-        phoneNumber = row[2]
-        license = row[3]
-        driverPhoto = row[4]
-
-    query = (
-        "UPDATE tuktukDriverAllot SET status = 'NO' WHERE VehicleRegNo = '"
-        + VehicleNumber
-        + "'"
-    )
-    cursor.execute(query)
-
-    databaseCon.commit()
-
-    query = (
-        "UPDATE tuktukDriverAllot SET status = 'NO' WHERE driverID = '" + driverID + "'"
-    )
-    cursor.execute(query)
-
-    databaseCon.commit()
-
-    query = (
-        "SELECT * FROM tuktukDriverAllot WHERE VehicleRegNo = '"
-        + VehicleNumber
-        + "' AND driverID = '"
-        + driverID
-        + "'"
-    )
-    cursor.execute(query)
-
-    existing_record = cursor.fetchone()
-
-    if existing_record:
-        msg = (
-            "Allotment for " + driverID + " with " + VehicleNumber + " is set to 'NO'."
-        )
-
+    if existing_allotment_check:
+        msg = f"Allotment for {driverID} with {vehicle_number} is set to 'NO'."
     else:
-        AllotID = "AID1000"
+        new_allotment = tuktukDriverAllot.objects.order_by("-allotID").first()
+        if new_allotment:
+            new_ID = int(new_allotment.allotID[3:]) + 1
+            allotID = f"A{new_ID}"
+        else:
+            allotID = "A1000"
 
-        query = "SELECT * FROM tuktukDriverAllot ORDER BY allotID DESC"
-        cursor.execute(query)
-
-        records = cursor.fetchall()
-
-        for row in records:
-            AllotID = row[0]
-            break
-        x = AllotID[3:]
-        y = int(x)
-        y = y + 1
-        AllotID = "AID" + str(y)
-
-        status = "YES"
-
-        query = (
-            "INSERT INTO tuktukDriverAllot VALUES ('"
-            + AllotID
-            + "', '"
-            + VehicleNumber
-            + "', '"
-            + driverID
-            + "', '"
-            + allotDate
-            + "', '"
-            + status
-            + "')"
+        new_allocation = tuktukDriverAllot.objects.create(
+            allotID=allotID,
+            VehicleRegNo=vehicle_number,
+            driverID=driverID,
+            allotDate=allot_date,
+            status="YES",
         )
-        cursor.execute(query)
-
-        databaseCon.commit()
-
-        msg = driverID + " Alloted To " + VehicleNumber + " Tuktuk"
+        msg = f"{driverID} is alloted to {vehicle_number} Tuktuk."
 
     return render(
         request,
         "allotingPage.html",
         {
-            "VehicleNumber": VehicleNumber,
-            "vehicleType": vehicleType,
-            "vehicleFuelType": vehicleFuelType,
-            "manufacturedCompany": manufacturedCompany,
-            "Vcc": Vcc,
-            "year": year,
-            " RC": RC,
-            "vPhoto": vPhoto,
-            "regDate": regDate,
-            "driverID": driverID,
-            "driverName": driverName,
-            "phoneNumber": phoneNumber,
-            "license": license,
-            "driverPhoto": driverPhoto,
-            "VehicleNumber": VehicleNumber,
-            "driverID": driverID,
-            "allotDate": allotDate,
+            "vehicle_number": vehicle_number,
+            "vehicleType": tuktuk.vehicleType,
+            "vehicleFuelType": tuktuk.vehicleFuelType,
+            "manufacturedCompany": tuktuk.manufacturedCompany,
+            "Vcc": tuktuk.Vcc,
+            "year": tuktuk.manufactureYear,
+            " RC": tuktuk.RC,
+            "vPhoto": tuktuk.vPhoto,
+            "regDate": tuktuk.regDate,
+            "driverID": driver.driverID,
+            "driverName": driver.driverName,
+            "phoneNumber": driver.phoneNumber,
+            "license": driver.license,
+            "driverPhoto": driver.driverPhoto,
+            "allotDate": allot_date,
             "status": status,
             "msg": msg,
         },
@@ -482,84 +316,45 @@ def tuktuk_allot_3(request):
 
 def feed_reply(request):
 
-    databaseCon = connectdb()
-    cursor = databaseCon.cursor()
+    feedback_list = feedback.objects.filter(
+        driverID__isnull=False, reply__isnull=True
+    ).values_list("feedbackID", flat=True)
 
-    query = (
-        "SELECT feedbackID FROM feedback WHERE driverID IS NOT NULL AND reply IS NULL"
-    )
-    cursor.execute(query)
-
-    records = cursor.fetchall()
-
-    feedbacks = []
-    for row in records:
-        feedbacks.append(row[0])
-
-    return render(request, "feedReply.html", {"feedbacks": feedbacks})
+    return render(request, "feedReply.html", {"feedback_list": feedback_list})
 
 
 def user_feedback_reply(request):
 
-    databaseCon = connectdb()
-    cursor = databaseCon.cursor()
+    user_feedback_list = feedback.objects.filter(
+        userID__isnull=False, reply__isnull=True
+    ).values_list("feedbackID", flat=True)
 
-    query = "SELECT feedbackID FROM feedback WHERE userID IS NOT NULL AND reply IS NULL"
-    cursor.execute(query)
-
-    records = cursor.fetchall()
-
-    userFeedbacks = []
-
-    for row in records:
-        userFeedbacks.append(row[0])
-
-    return render(request, "userFeedbackReply.html", {"userFeedbacks": userFeedbacks})
+    return render(
+        request, "userFeedbackReply.html", {"user_feedback_list": user_feedback_list}
+    )
 
 
 def feed_reply_requests(request):
 
-    databaseCon = connectdb()
-    cursor = databaseCon.cursor()
-
     feedbackID = request.POST["feedbackID"]
 
-    query = "SELECT * FROM feedback WHERE  feedbackID = '" + feedbackID + "'"
-    # print(query̦
-    cursor.execute(query)
+    feedback_records = get_object_or_404(feedback, feedbackID=feedback)
 
-    records = cursor.fetchall()
-
-    for row in records:
-        feedback = row[1]
-        feedbackDate = row[2]
-        driverID = row[4]
-
-    query = "SELECT * FROM tuktukDriverData WHERE driverID = '" + driverID + "'"
-    # print(query)
-    cursor.execute(query)
-
-    driverRecords = cursor.fetchall()
-
-    for row in driverRecords:
-        driverID = row[0]
-        driverName = row[1]
-        phoneNumber = row[5]
-        license = row[9]
-        driverPhoto = row[10]
-
+    driver_records = get_object_or_404(
+        tuktukDriverData, driverID=feedback_records.driverID
+    )
     return render(
         request,
         "feedbackDetails.html",
         {
             "feedbackID": feedbackID,
-            "feedback": feedback,
-            "feedbackDate": feedbackDate,
-            "driverID": driverID,
-            "driverName": driverName,
-            "phoneNumber": phoneNumber,
-            "license": license,
-            "driverPhoto": driverPhoto,
+            "feedback": feedback_records.feedback,
+            "feedbackDate": feedback_records.feedbackDate,
+            "driverID": driver_records.driverID,
+            "driverName": driver_records.driverName,
+            "phoneNumber": driver_records.phoneNumber,
+            "license": driver_records.license,
+            "driverPhoto": driver_records.driverPhoto,
         },
     )
 
@@ -670,285 +465,142 @@ def feedback_details_post(request):
 
 def tuktuk_for_driver(request):
 
-    databaseCon = connectdb()
-    cursor = databaseCon.cursor()
+    tuktuks = tuktukDriverAllot.objects.filter(status="YES").values_list(
+        "VehicleRegNo", flat=True
+    )
 
-    query = "SELECT VehicleRegNo FROM tuktukDriverAllot"
-    cursor.execute(query)
+    tuktuk_list = list(tuktuks)
 
-    records = cursor.fetchall()
-
-    query = "SELECT VehicleRegNo FROM tuktukDriverAllot WHERE status = 'YES'"
-    cursor.execute(query)
-    # print(query)
-
-    records = cursor.fetchall()
-
-    vehicleList = []
-
-    for row in records:
-        vehicleList.append(row[0])
-
-    return render(request, "tuktukForDriver.html", {"vehicleList": vehicleList})
+    return render(request, "tuktukForDriver.html", {"tuktuk_list": tuktuk_list})
 
 
 def tuktuk_for_driver_details(request):
 
-    databaseCon = connectdb()
-    cursor = databaseCon.cursor()
+    vehicle_number = request.POST["vehicle_number"]
 
-    vehicleNumber = request.POST["vehicleNumber"]
-    # print(vehicleNumber)
-
-    query = (
-        "SELECT * from tuktukDriverAllot where VehicleRegNo = '"
-        + vehicleNumber
-        + "' AND status = 'YES'"
+    alloted_tuktuk = get_object_or_404(
+        tuktukDriverAllot, VehicleRegNo=vehicle_number, status="YES"
     )
-    cursor.execute(query)
-    # print(query)
 
-    records = cursor.fetchall()
-
-    for row in records:
-        VehicleRegNo = row[1]
-        driverID = row[2]
-
-    query = "SELECT driverID FROM tuktukDriverAllot WHERE driverID = '" + driverID + "'"
-    cursor.execute(query)
-
-    records = cursor.fetchall()
-
-    for row in records:
-        driverID = row[0]
-
-    query = "SELECT * FROM tuktukDriverData WHERE driverID = '" + driverID + "'"
-    cursor.execute(query)
-
-    driverRecords = cursor.fetchall()
-
-    for row in driverRecords:
-        driverID = row[0]
-        driverName = row[1]
-        phoneNumber = row[5]
-        license = row[9]
-        driverPhoto = row[10]
-
-    query = (
-        "SELECT VehicleRegNo, vehicleType, vehicleFuelType, manufacturedCompany, Vcc, manufactureYear, RC, vPhoto, regDate FROM tuktukData WHERE VehicleRegNo = '"
-        + vehicleNumber
-        + "'"
+    driver_details = get_object_or_404(
+        tuktukDriverData, driverID=alloted_tuktuk.driverID
     )
-    cursor.execute(query)
 
-    vehicleRecords = cursor.fetchall()
-
-    for row in vehicleRecords:
-        VehicleRegNo = row[0]
-        vehicleType = row[1]
-        vehicleFuelType = row[2]
-        manufacturedCompany = row[3]
-        Vcc = row[4]
-        manufactureYear = row[5]
-        RC = row[6]
-        vPhoto = row[7]
-        regDate = row[8]
+    tuktuk = get_object_or_404(tuktukData, VehicleRegNo=vehicle_number)
 
     return render(
         request,
         "tuktukForDriverDetails.html",
         {
-            "vehicleNumber": vehicleNumber,
-            "vehicleType": vehicleType,
-            "vehicleFuelType": vehicleFuelType,
-            "manufacturedCompany": manufacturedCompany,
-            "Vcc": Vcc,
-            "manufactureYear": manufactureYear,
-            "RC": RC,
-            "vPhoto": vPhoto,
-            "regDate": regDate,
-            "driverID": driverID,
-            "driverName": driverName,
-            "phoneNumber": phoneNumber,
-            "license": license,
-            "driverPhoto": driverPhoto,
+            "vehicle_number": vehicle_number,
+            "vehicleType": tuktuk.vehicleType,
+            "vehicleFuelType": tuktuk.vehicleFuelType,
+            "manufacturedCompany": tuktuk.manufacturedCompany,
+            "Vcc": tuktuk.Vcc,
+            "manufactureYear": tuktuk.manufactureYear,
+            "RC": tuktuk.RC,
+            "vPhoto": tuktuk.vPhoto,
+            "regDate": tuktuk.regDate,
+            "driverID": driver_details.driverID,
+            "driverName": driver_details.driverName,
+            "phoneNumber": driver_details.phoneNumber,
+            "license": driver_details.license,
+            "driverPhoto": driver_details.driverPhoto,
         },
     )
 
 
 def driver_for_tuktuk(request):
 
-    databaseCon = connectdb()
-    cursor = databaseCon.cursor()
+    driver_details = tuktukDriverData.objects.all()
 
-    query = "SELECT driverID, driverName, phoneNumber, license, driverPhoto FROM tuktukDriverData"
-    cursor.execute(query)
-
-    driverRecords = cursor.fetchall()
-
-    return render(request, "driverForTuktuk.html", {"driverRecords": driverRecords})
+    return render(request, "driverForTuktuk.html", {"driver_details": driver_details})
 
 
 def driver_for_tuktuk_details(request):
 
-    databaseCon = connectdb()
-    cursor = databaseCon.cursor()
-
     driverID = request.POST["driverID"]
 
-    query = (
-        "SELECT status, VehicleRegNo FROM tuktukDriverAllot WHERE driverID = '"
-        + driverID
-        + "' AND status = 'YES' AND VehicleRegNo IN (SELECT VehicleRegNo FROM tuktukDriverAllot WHERE status = 'YES')"
-    )
-    cursor.execute(query)
+    try:
+        alloted_tuktuk = tuktukDriverAllot.objects.get(driverID=driverID, status="YES")
 
-    records = cursor.fetchall()
+        driver_details = get_object_or_404(tuktukDriverData, driverID=driverID)
 
-    if not records:
-        message = "This driver is not alloted any TukTuk"
+        tuktuk_details_else = get_object_or_404(
+            tuktukData, VehicleRegNo=alloted_tuktuk.VehicleRegNo
+        )
+
+        return render(
+            request,
+            "driverForTuktukDetails.html",
+            {
+                "status": alloted_tuktuk.status,
+                "VehicleRegNo": tuktuk_details_else.VehicleRegNo,
+                "vehicleType": tuktuk_details_else.vehicleType,
+                "vehicleFuelType": tuktuk_details_else.vehicleFuelType,
+                "manufacturedCompany": tuktuk_details_else.manufacturedCompany,
+                "Vcc": tuktuk_details_else.Vcc,
+                "manufactureYear": tuktuk_details_else.manufactureYear,
+                "RC": tuktuk_details_else.RC,
+                "vPhoto": tuktuk_details_else.vPhoto,
+                "regDate": tuktuk_details_else.regDate,
+                "driverID": driver_details.driverID,
+                "driverName": driver_details.driverName,
+                "phoneNumber": driver_details.phoneNumber,
+                "license": driver_details.license,
+                "driverPhoto": driver_details.driverPhoto,
+            },
+        )
+
+    except tuktukDriverAllot.DoesNotExist:
+        message = "This driver is not alloted to any Tuktuk."
         return render(request, "driverForTuktukDetails.html", {"message": message})
-
-    status, VehicleRegNo = records[0]
-
-    query = "SELECT * FROM tuktukDriverData WHERE driverID = '" + driverID + "'"
-    cursor.execute(query)
-
-    driverRecords = cursor.fetchall()
-
-    for row in driverRecords:
-        driverID = row[0]
-        driverName = row[1]
-        phoneNumber = row[5]
-        license = row[9]
-        driverPhoto = row[10]
-
-    query = (
-        "SELECT VehicleRegNo, vehicleType, vehicleFuelType, manufacturedCompany, Vcc, manufactureYear, RC, vPhoto, regDate FROM tuktukData WHERE VehicleRegNo = '"
-        + VehicleRegNo
-        + "'"
-    )
-    cursor.execute(query)
-
-    vehicleRecords = cursor.fetchall()
-
-    for row in vehicleRecords:
-        VehicleRegNo = row[0]
-        vehicleType = row[1]
-        vehicleFuelType = row[2]
-        manufacturedCompany = row[3]
-        Vcc = row[4]
-        manufactureYear = row[5]
-        RC = row[6]
-        vPhoto = row[7]
-        regDate = row[8]
-
-    return render(
-        request,
-        "driverForTuktukDetails.html",
-        {
-            "status": status,
-            "VehicleRegNo": VehicleRegNo,
-            "vehicleType": vehicleType,
-            "vehicleFuelType": vehicleFuelType,
-            "manufacturedCompany": manufacturedCompany,
-            "Vcc": Vcc,
-            "manufactureYear": manufactureYear,
-            "RC": RC,
-            "vPhoto": vPhoto,
-            "regDate": regDate,
-            "driverID": driverID,
-            "driverName": driverName,
-            "phoneNumber": phoneNumber,
-            "license": license,
-            "driverPhoto": driverPhoto,
-        },
-    )
 
 
 def user_list(request):
 
-    databaseCon = connectdb()
-    cursor = databaseCon.cursor()
-
-    query = "SELECT userID, userName, dateOfRegistration FROM tuktukUserData"
-    cursor.execute(query)
-
-    records = cursor.fetchall()
+    records = tuktukUserData.objects.values("userID", "userName", "dateOfRegistration")
 
     return render(request, "userList.html", {"records": records})
 
 
 def tuktuk_details(request):
 
-    databaseCon = connectdb()
-    cursor = databaseCon.cursor()
+    tuktuk_details = tuktukData.objects.all()
 
-    query = "SELECT VehicleRegNo, vehicleType, vehicleFuelType, manufacturedCompany, Vcc, manufactureYear, RC, vPhoto, regDate FROM tuktukData"
-    cursor.execute(query)
-
-    records = cursor.fetchall()
-
-    query = "SELECT driverID, driverName, phoneNumber, license, driverPhoto FROM tuktukDriverData"
-    cursor.execute(query)
-
-    driverRecords = cursor.fetchall()
+    driver_details = tuktukDriverData.objects.all()
 
     return render(
         request,
         "tuktukDetails.html",
-        {"records": records, "driverRecords": driverRecords},
+        {"tuktuk_details": tuktuk_details, "driver_details": driver_details},
     )
 
 
 def fare_estimation(request):
+
     return render(request, "fareEstimation.html")
 
 
 def fare_estimation_requests(request):
 
-    databaseCon = connectdb()
-    cursor = databaseCon.cursor()
+    new_fare = fareEstimation.objects.order_by("-fareNO").first()
+    fareNO = (new_fare.fareNO + 1) if new_fare else 1
 
-    fareNO = 1
+    min_fare = request.POST.get("min_fare")
+    fare_per_km = request.POST.get("fare_per_km")
+    waiting_charges = request.POST.get("waiting_charges")
+    minimum_km = request.POST.get("minimum_km")
 
-    query = "SELECT * FROM fareEstimation ORDER BY fareNO DESC"
-    cursor.execute(query)
-
-    records = cursor.fetchall()
-
-    for row in records:
-        fareNO = row[0]
-        break
-    x = fareNO
-    x = x + 1
-    fareNO = x
-
-    minFare = request.POST["minFare"]
-    farePerKm = request.POST["farePerKm"]
-    WaitingCharges = request.POST["WaitingCharges"]
-    MinimumKM = request.POST["MinimumKM"]
-
-    currentDateOfChange = currentDate()
-
-    query = (
-        "INSERT INTO fareEstimation VALUES ('"
-        + str(fareNO)
-        + "', '"
-        + minFare
-        + "', '"
-        + farePerKm
-        + "', '"
-        + WaitingCharges
-        + "', '"
-        + currentDateOfChange
-        + "', '"
-        + MinimumKM
-        + "')"
+    new_fare_estimation = fareEstimation(
+        fareNO=fareNO,
+        minimumFare=min_fare,
+        farePerKm=fare_per_km,
+        waitingFare=waiting_charges,
+        currentDateOfChange=timezone.now(),
+        minimumKM=minimum_km,
     )
-    cursor.execute(query)
-
-    databaseCon.commit()
+    new_fare_estimation.save()
 
     message = "New fare details submitted..."
 

@@ -56,4 +56,10 @@ urlpatterns = [
         views.feedback_details_post,
         name="feedback_details_post",
     ),
+    path("fare_estimation/", views.fare_estimation, name="fare_estimation"),
+    path(
+        "fare_estimation_requests/",
+        views.fare_estimation_requests,
+        name="fare_estimation_requests",
+    ),
 ]

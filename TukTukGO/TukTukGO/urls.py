@@ -22,14 +22,21 @@ from django.urls import include, path
 
 from Guest import views
 
+# from Guest import views
+
 urlpatterns = [
     # path("Admin/", admin.site.urls),
-    path("", views.home_page),  # 1
+    path("", views.home_page),
     path("sign_up_page/", views.sign_up_page, name="sign_up_page"),  # 2
     path("validate_login/", views.validate_login, name="validate_login"),
+    path("log_out/", views.log_out, name="log_out"),
+    path("tuktuk_user_login/", views.tuktuk_user_login, name="tuktuk_user_login"),  # 14
+    path(
+        "tuktuk_user_login_requests/",
+        views.tuktuk_user_login_requests,
+        name="tuktuk_user_login_requests",
+    ),  # 15
     path("Admin/", include("Admin.urls")),  # 3
     path("Driver/", include("Driver.urls")),
     path("User/", include("User.urls")),
-    path("tuktuk_user_login/", views.tuktuk_user_login),  # 14
-    path("tuktuk_user_login_requests/", views.tuktuk_user_login_requests),  # 15
 ]

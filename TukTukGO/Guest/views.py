@@ -1,7 +1,11 @@
+from os import path
+
+from django.db.models import Q
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 
 from TukTukGO import connectdb, currentDate
+from User.models import loginCredentials, loginSession
 
 
 # Create your views here.
@@ -13,79 +17,76 @@ def sign_up_page(request):  # Common SignUp page for Admin, Drivers, and Users
     return render(request, "signUp.html")
 
 
-def validate_login(
-    request,
-):  # This function validates the login credentials and redirects to their page
-
-    databaseCon = connectdb()
-    cursor = databaseCon.cursor()
-
+def validate_login(request):
+    # Retrieve the userID, EMail, and password from the POST request
     userID = request.POST["userID"]
     EMail = request.POST["EMail"]
     password = request.POST["password"]
 
-    query = "SELECT * FROM loginCredentials WHERE UserID = %s AND EMail = %s AND password = %s"
-    cursor.execute(query, (userID, EMail, password))
+    # Query the database to find the user with matching credentials
+    user = loginCredentials.objects.filter(
+        Q(userID=userID) & Q(EMail=EMail) & Q(password=password)
+    ).first()
 
-    if cursor.rowcount == 0:
-
+    # If no matching user is found, return an error message
+    if user is None:
         msg = "Invalid E-Mail or Password \n Please Try Again"
-
         return render(request, "signUp1.html", {"msg": msg})
 
+    # Handle login for Admin user
     elif userID == "Admin":
+        # Delete any existing login session for the Admin
+        loginSession.objects.filter(userType="Admin").delete()
 
-        query = "DELETE FROM loginSession WHERE userType = %s"
-        cursor.execute(query, ("Admin",))
+        # Create a new session for the Admin
+        loginSession.objects.create(userID=userID, userType="Admin")
 
-        databaseCon.commit()
-
-        query = "INSERT INTO loginSession (userID, userType) VALUES (%s, %s)"
-        cursor.execute(query, (userID, "Admin"))
-
-        databaseCon.commit()
-
+        # Set session cookies and redirect to the admin index page
+        request.session["userID"] = userID
+        request.session["userType"] = "Admin"
         response = render(request, "adminIndex.html")
-        response.set_cookie("userID", userID, httponly=True)
+        response.set_cookie("userID", userID, max_age=31536000, httponly=True)
         return response
 
     else:
+        # Determine if the user is a Driver or a regular User based on userID
+        user_type = None
+        if userID[0].lower() == "d":
+            user_type = "D"
+        elif userID[0].lower() == "u":
+            user_type = "U"
 
-        x = userID[0]
+        if user_type:
+            # Delete any existing login session for the determined user type
+            loginSession.objects.filter(userType=user_type).delete()
 
-        if x == "D" or x == "d":
+            # Create a new login session for the user
+            loginSession.objects.create(userID=userID, userType=user_type)
 
-            query = "DELETE FROM loginSession WHERE userType = %s"
-            cursor.execute(query, ("D",))
-
-            databaseCon.commit()
-
-            query = "INSERT INTO loginSession (userID, userType) VALUES (%s, %s)"
-            cursor.execute(query, (userID, "D"))
-
-            databaseCon.commit()
-
-            response = render(request, "driverIndex.html")
-            response.set_cookie("userID", userID, httponly=True)
-            return response
-
-        elif x == "U" or x == "u":
-
-            query = "DELETE FROM loginSession WHERE userType = %s"
-            cursor.execute(query, ("U",))
-
-            databaseCon.commit()
-
-            query = "INSERT INTO loginSession (userID, userType) VALUES (%s, %s)"
-            cursor.execute(query, (userID, "U"))
-
-            databaseCon.commit()
-
-            response = render(request, "userIndex.html")
-            response.set_cookie("userID", userID, httponly=True)
+            # Set session cookies and redirect to the appropriate index page
+            request.session["userID"] = userID
+            request.session["userType"] = user_type
+            if user_type == "D":
+                response = render(request, "driverIndex.html")
+            else:
+                response = render(request, "userIndex.html")
+            response.set_cookie(
+                "userID",
+                userID,
+                max_age=31536000,
+                httponly=True,
+                path="/",
+                samesite="Lax",
+            )
             return response
 
         return HttpResponse("User Not Found!")
+
+
+def log_out(request):
+    request.session.flush()
+
+    return redirect("sign_up_page")
 
 
 def tuktuk_user_login(request):
