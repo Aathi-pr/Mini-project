@@ -1,5 +1,5 @@
 {% load static %}
-<!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -13,20 +13,20 @@
     <!-- Map container -->
     <div class="container">
         <div id="map" class="mapcon"></div>
-        
+
         <div class="form-group mt-4">
             <label for="destName" class="destini">Enter Destination</label>
             <input type="text" class="form-control destination" id="destName" placeholder="Enter destination name">
         </div>
-        
+
         <button class="btn btn-primary mt-3 button" onclick="calculateDistance()">Ride Details</button>
-        
+
         <div class="mt-3" id="currentLocation"></div>
         <div class="mt-3" id="distance"></div>
         <div class="mt-3" id="totalFare"></div>
         <div class="mt-3" id="destinationCoordinates"></div>
         <div class="mt-3" id="nearestAutoDetails"></div>
-    
+
         <form action="{% url 'request_tuktuk_and_tuktuk_driver' %}" method="post">
             {% csrf_token %}
             <input type="hidden" id="userLat" name="userLat">
@@ -35,9 +35,9 @@
             <input type="hidden" id="nearestAutoId" name="nearestAutoID">
             <input type="hidden" id="distanceToDestination" name="distance">
             <input class="btn btn-success btn-block ok mt-3" type="submit" name="submit" value="Find TukTuk"  id="findTukTukButton">
-        </form> 
+        </form>
     </div>
-    
+
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script>
         function getCookie(name) {
@@ -55,22 +55,22 @@
             return cookieValue;
         }
         var csrftoken = getCookie('csrftoken');
-        
+
         var map = L.map('map').setView([0, 0], 13);
         var polyline, userMarker, destMarker, autoMarker;
         var userLat, userLon;
-        
+
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
-        
+
         function setUserLocation(position) {
             userLat = position.coords.latitude;
             userLon = position.coords.longitude;
             document.getElementById('userLat').value = userLat;
             document.getElementById('userLon').value = userLon;
-        
+
             var latlng = [userLat, userLon];
             if (userMarker) {
                 userMarker.setLatLng(latlng);
@@ -83,13 +83,13 @@
                     shadowSize: [40, 40],
                     shadowAnchor: [13, 40]
                 });
-        
+
                 userMarker = L.marker(latlng, {icon: pickupIcon}).addTo(map).bindPopup("Your Current Location").openPopup();
             }
             map.setView(latlng, 13);
-        
+
             var reverseGeocodeUrl = 'https://nominatim.openstreetmap.org/reverse?lat=' + latlng[0] + '&lon=' + latlng[1] + '&format=json&zoom=18&addressdetails=1';
-        
+
             fetch(reverseGeocodeUrl)
                 .then(response => response.json())
                 .then(data => {
@@ -98,16 +98,32 @@
                 })
                 .catch(error => console.error('Error:', error));
         }
-        
-        navigator.geolocation.getCurrentPosition(setUserLocation);
-        
+
+        navigator.geolocation.getCurrentPosition(setUserLocation, showError);
+
+        function showError(error) {
+            switch (error.code) {
+                case error.PERMISSION_DENIED:
+                    alert("Location access denied by the user.");
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    alert("Location information is unavailable.");
+                    break;
+                case error.TIMEOUT:
+                    alert("The request to get user location timed out.");
+                    break;
+                case error.UNKNOWN_ERROR:
+                    alert("An unknown error occurred while fetching location.");
+                    break;
+            }
+        }
         function calculateDistance() {
             var destName = document.getElementById('destName').value;
             var distanceDisplay = document.getElementById('distance');
             var fareDisplay = document.getElementById('totalFare');
-        
+
             var geocodeUrl = 'https://nominatim.openstreetmap.org/search?q=' + encodeURIComponent(destName) + '&format=json&limit=1';
-        
+
             fetch(geocodeUrl)
                 .then(response => response.json())
                 .then(data => {
@@ -115,13 +131,13 @@
                         console.error('No geocoding results found for destination');
                         return;
                     }
-        
+
                     var destLat = parseFloat(data[0].lat);
                     var destLon = parseFloat(data[0].lon);
                     document.getElementById('destCoordinates').value = destLat + ',' + destLon;
-        
+
                     var destination = [destLat, destLon];
-        
+
                     if (destMarker) {
                         destMarker.setLatLng(destination);
                     } else {
@@ -133,12 +149,12 @@
                             shadowSize: [40, 40],
                             shadowAnchor: [13, 40]
                         });
-        
+
                         destMarker = L.marker(destination, {icon: destinationIcon}).addTo(map).bindPopup("Destination");
                     }
-        
+
                     var routeUrl = 'https://api.openrouteservice.org/v2/directions/driving-car?api_key=5b3ce3597851110001cf6248d0882d4d8035451eb97f11ef667f07b1&start=' + userLon + ',' + userLat + '&end=' + destLon + ',' + destLat;
-        
+
                     fetch(routeUrl)
                         .then(response => response.json())
                         .then(data => {
@@ -146,18 +162,18 @@
                             var distanceInKm = (distance / 1000).toFixed(2);
                             distanceDisplay.textContent = "Distance to destination: " + distanceInKm + " km";
                             document.getElementById('distanceToDestination').value = distanceInKm;
-        
+
                             if (polyline) {
                                 map.removeLayer(polyline);
                             }
-        
+
                             var routeCoordinates = data.features[0].geometry.coordinates;
                             var polylinePoints = routeCoordinates.map(coord => [coord[1], coord[0]]);
                             polyline = L.polyline(polylinePoints, {color: 'black'}).addTo(map);
-        
+
                             var bounds = polyline.getBounds();
                             map.fitBounds(bounds);
-        
+
                             var xhr = new XMLHttpRequest();
                           xhr.open("POST", "{% url 'calculate_distance_and_allot_auto' %}", true);
                             xhr.setRequestHeader("Content-Type", "application/json");
@@ -169,9 +185,9 @@
                                         var autoLat = jsonResponse.nearest_auto.lat;
                                         var autoLon = jsonResponse.nearest_auto.lon;
                                         var autoLocation = jsonResponse.nearest_auto.location;
-        
+
                                         document.getElementById('nearestAutoId').value = jsonResponse.nearest_auto.id;
-        
+
                                         var autoIcon = L.icon({
                                             iconUrl: '/static/img/icons8-auto-ricksaw-64.png',
                                             iconSize: [30, 30],
@@ -186,12 +202,12 @@
                                         } else {
                                             autoMarker = L.marker([autoLat, autoLon], {icon: autoIcon}).addTo(map).bindPopup("Nearest Auto").openPopup();
                                         }
-        
+
                                         document.getElementById('nearestAutoDetails').innerHTML =
                                             "<p>Nearest Auto ID: " + jsonResponse.nearest_auto.id +
                                             "</p><p>Distance: " + jsonResponse.distance.toFixed(2) + " km" +
                                             "</p><p>Location: " + autoLocation + "</p>";
-        
+
                                         fareDisplay.textContent = "Estimated Fare: ₹" + jsonResponse.fare_estimation.toFixed(2);
                                     } else {
                                         alert(jsonResponse.error);
@@ -211,8 +227,239 @@
             document.getElementById('findTukTukButton').style.display = 'block';
         }
     </script>
-    
+
     <script src="{% static 'js/app.js' %}"> </script>
-    
+
 </body>
 </html>
+{% comment %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book a TUkTUk</title>
+    <link rel="stylesheet" href="{% static 'css/nav.css' %}">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bookingPage.css' %}">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
+</head>
+<body>
+    <!-- Map container -->
+    <div class="container">
+        <div id="map" class="mapcon"></div>
+
+        <div class="form-group mt-4">
+            <label for="destName" class="destini">Enter Destination</label>
+            <input type="text" class="form-control destination" id="destName" placeholder="Enter destination name">
+        </div>
+
+        <button class="btn btn-primary mt-3 button" onclick="calculateDistance()">Ride Details</button>
+
+        <div class="mt-3" id="currentLocation"></div>
+        <div class="mt-3" id="distance"></div>
+        <div class="mt-3" id="totalFare"></div>
+        <div class="mt-3" id="destinationCoordinates"></div>
+        <div class="mt-3" id="nearestAutoDetails"></div>
+
+        <form action="{% url 'request_tuktuk_and_tuktuk_driver' %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" id="userLat" name="userLat">
+            <input type="hidden" id="userLon" name="userLon">
+            <input type="hidden" id="destCoordinates" name="destCoordinates">
+            <input type="hidden" id="nearestAutoId" name="nearestAutoID">
+            <input type="hidden" id="distanceToDestination" name="distance">
+            <input class="btn btn-success btn-block ok mt-3" type="submit" name="submit" value="Find TukTuk" id="findTukTukButton">
+        </form>
+    </div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        // Service Worker registration for offline support
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.register("{% static 'pwa/service-worker.js' %}")
+            .then(registration => {
+                console.log('Service Worker registered with scope:', registration.scope);
+            })
+            .catch(error => {
+                console.error('Service Worker registration failed:', error);
+            });
+        }
+
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        var csrftoken = getCookie('csrftoken');
+
+        var map = L.map('map').setView([0, 0], 13);
+        var polyline, userMarker, destMarker, autoMarker;
+        var userLat, userLon;
+
+        // Load offline tiles first, then fall back to online tiles
+        var offlineTilesUrl = '/static/tiles/{z}/{x}/{y}.png'; // Local path to offline tiles
+        var onlineTilesUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+
+        L.tileLayer(offlineTilesUrl, {
+            maxZoom: 19,
+            errorTileUrl: 'fallback_tile.png', // Fallback tile image if offline tiles are unavailable
+        }).addTo(map);
+
+        L.tileLayer(onlineTilesUrl, {
+            maxZoom: 19,
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        function setUserLocation(position) {
+            userLat = position.coords.latitude;
+            userLon = position.coords.longitude;
+
+            localStorage.setItem('userLat', userLat);
+            localStorage.setItem('userLon', userLon);
+
+            document.getElementById('userLat').value = userLat;
+            document.getElementById('userLon').value = userLon;
+
+            var latlng = [userLat, userLon];
+            if (userMarker) {
+                userMarker.setLatLng(latlng);
+            } else {
+                var pickupIcon = L.icon({
+                    iconUrl: '/static/img/icons8-location-marker-24.png',
+                    iconSize: [30, 30],
+                    iconAnchor: [15, 30],
+                    popupAnchor: [0, -30],
+                    shadowSize: [40, 40],
+                    shadowAnchor: [13, 40]
+                });
+
+                userMarker = L.marker(latlng, {icon: pickupIcon}).addTo(map).bindPopup("Your Current Location").openPopup();
+            }
+            map.setView(latlng, 13);
+
+            var reverseGeocodeUrl = 'https://nominatim.openstreetmap.org/reverse?lat=' + latlng[0] + '&lon=' + latlng[1] + '&format=json&zoom=18&addressdetails=1';
+
+            fetch(reverseGeocodeUrl)
+                .then(response => response.json())
+                .then(data => {
+                    var locationName = data.display_name;
+                    document.getElementById('currentLocation').value = locationName;
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        // Load cached location if geolocation fails or offline
+        function loadCachedLocation() {
+            userLat = localStorage.getItem('userLat');
+            userLon = localStorage.getItem('userLon');
+
+            if (userLat && userLon) {
+                setUserLocation({ coords: { latitude: userLat, longitude: userLon } });
+            } else {
+                console.error('No cached location available.');
+            }
+        }
+
+        navigator.geolocation.getCurrentPosition(setUserLocation, loadCachedLocation);
+
+        function calculateDistance() {
+            var destName = document.getElementById('destName').value;
+            var distanceDisplay = document.getElementById('distance');
+            var fareDisplay = document.getElementById('totalFare');
+
+            var geocodeUrl = 'https://nominatim.openstreetmap.org/search?q=' + encodeURIComponent(destName) + '&format=json&limit=1';
+
+            fetch(geocodeUrl)
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.length) {
+                        console.error('No geocoding results found for destination');
+                        return;
+                    }
+
+                    var destLat = parseFloat(data[0].lat);
+                    var destLon = parseFloat(data[0].lon);
+                    document.getElementById('destCoordinates').value = destLat + ',' + destLon;
+
+                    var destination = [destLat, destLon];
+
+                    if (destMarker) {
+                        destMarker.setLatLng(destination);
+                    } else {
+                        var destinationIcon = L.icon({
+                            iconUrl: '/static/img/icons8-destination-48.png',
+                            iconSize: [30, 30],
+                            iconAnchor: [15, 30],
+                            popupAnchor: [0, -30],
+                            shadowSize: [40, 40],
+                            shadowAnchor: [13, 40]
+                        });
+
+                        destMarker = L.marker(destination, {icon: destinationIcon}).addTo(map).bindPopup("Destination");
+                    }
+
+                    var routeUrl = 'https://api.openrouteservice.org/v2/directions/driving-car?api_key=5b3ce3597851110001cf6248d0882d4d8035451eb97f11ef667f07b1&start=' + userLon + ',' + userLat + '&end=' + destLon + ',' + destLat;
+
+                    fetch(routeUrl)
+                        .then(response => response.json())
+                        .then(data => {
+                            var distance = data.features[0].properties.segments[0].distance;
+                            var distanceInKm = (distance / 1000).toFixed(2);
+                            distanceDisplay.textContent = "Distance to destination: " + distanceInKm + " km";
+                            document.getElementById('distanceToDestination').value = distanceInKm;
+
+                            if (polyline) {
+                                map.removeLayer(polyline);
+                            }
+
+                            var routeCoordinates = data.features[0].geometry.coordinates;
+                            var polylinePoints = routeCoordinates.map(coord => [coord[1], coord[0]]);
+                            polyline = L.polyline(polylinePoints, {color: 'black'}).addTo(map);
+
+                            var bounds = polyline.getBounds();
+                            map.fitBounds(bounds);
+
+                            var xhr = new XMLHttpRequest();
+                            xhr.open("POST", "{% url 'calculate_distance_and_allot_auto' %}", true);
+                            xhr.setRequestHeader("Content-Type", "application/json");
+                            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                            xhr.onreadystatechange = function() {
+                                if (xhr.readyState == 4 && xhr.status == 200) {
+                                    var response = JSON.parse(xhr.responseText);
+                                    var fare = response.fare;
+                                    var autoDetails = response.auto_details;
+                                    fareDisplay.textContent = "Total Fare: ₹" + fare;
+                                    document.getElementById('nearestAutoId').value = response.auto_id;
+                                    document.getElementById('nearestAutoDetails').textContent = autoDetails;
+                                }
+                            };
+                            xhr.send(JSON.stringify({
+                                pickup_latitude: userLat,
+                                pickup_longitude: userLon,
+                                destination_latitude: destLat,
+                                destination_longitude: destLon,
+                                distance: distanceInKm
+                            }));
+                        })
+                        .catch(error => console.error('Error:', error));
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    distanceDisplay.textContent = "Offline mode: Unable to calculate distance.";
+                });
+        }
+    </script>
+</body>
+</html>
+{% endcomment %}

@@ -614,6 +614,9 @@ def ride_details(request):
             responseTime = ""
             responseDate = ""
 
+        # Initialize VehicleRegNo
+        VehicleRegNo = "Not Assigned"
+
         # Get VehicleRegNo
         query = (
             "SELECT VehicleRegNo FROM tuktukDriverAllot WHERE driverID = '"
@@ -622,8 +625,9 @@ def ride_details(request):
         )
         cursor.execute(query)
         records = cursor.fetchall()
-        for row in records:
-            VehicleRegNo = row[0]
+        if records:
+            for row in records:
+                VehicleRegNo = row[0]
 
         message = "You can Identify your Tuktuk & Driver using this Details"
 
@@ -713,6 +717,9 @@ def ride_details(request):
             responseTime = ""
             responseDate = ""
 
+        # Initialize VehicleRegNo
+        VehicleRegNo = "Not Assigned"
+
         # Get VehicleRegNo
         query = (
             "SELECT VehicleRegNo FROM tuktukDriverAllot WHERE driverID = '"
@@ -721,8 +728,9 @@ def ride_details(request):
         )
         cursor.execute(query)
         records = cursor.fetchall()
-        for row in records:
-            VehicleRegNo = row[0]
+        if records:
+            for row in records:
+                VehicleRegNo = row[0]
 
         message = "You can Identify your Tuktuk & Driver using this Details"
 
@@ -793,17 +801,17 @@ def feedback_view(request):
 
     records = cursor.fetchall()
 
-    recentFeedbackList = []
+    recent_feedback_list = []
 
     for row in records:
-        recentFeedbackList.append((row[0], row[1]))
+        recent_feedback_list.append((row[0], row[1]))
     print(records)
 
     return render(
         request,
         "feedbackView.html",
         {
-            "recentFeedbackList": recentFeedbackList,
+            "recent_feedback_list": recent_feedback_list,
         },
     )
 
@@ -813,25 +821,26 @@ def feedback_view_requests(request):
     databaseCon = connectdb()
     cursor = databaseCon.cursor()
 
-    query = "SELECT f.userID from feedback f WHERE EXISTS (SELECT 1 FROM loginSession ls WHERE ls.userID = f.userID AND userType = 'U')"
+    query = "SELECT f.userID from feedback f WHERE EXISTS (SELECT userID FROM loginSession ls WHERE ls.userID = f.userID AND userType = 'U')"
     cursor.execute(query)
 
     records = cursor.fetchall()
 
     for row in records:
         userID = row[0]
+        break
 
-    query = "SELECT ls.userID, lc.EMail  FROM loginSession ls  JOIN loginCredentials lc ON ls.userID = lc.userID AND ls.userType = 'Admin';"
-    cursor.execute(query)
+    # query = "SELECT ls.userID, lc.EMail  FROM loginSession ls  JOIN loginCredentials lc ON ls.userID = lc.userID AND ls.userType = 'Admin';"
+    # cursor.execute(query)
 
-    adminRecords = cursor.fetchall()
+    # adminRecords = cursor.fetchall()
 
-    for row in adminRecords:
-        adminUserID = row[0]
-        adminEMail = row[1]
-        print(adminUserID)
+    # for row in adminRecords:
+    #    adminUserID = row[0]
+    #    adminEMail = row[1]
+    #    break
 
-    query = "SELECT feedbackID, feedback, feedbackDate, userID, name, EMail, reply, replyDate FROM feedback "
+    query = "SELECT feedbackID, feedback, feedbackDate, userID, name, EMail, reply, replyDate FROM feedback ORDER BY feedbackID DESC"
     cursor.execute(query)
 
     records = cursor.fetchall()
@@ -846,6 +855,8 @@ def feedback_view_requests(request):
         EMail = row[5]
         reply = row[6]
         replyDate = row[7]
+        break
+    print(records)
 
     return render(
         request,
@@ -857,91 +868,63 @@ def feedback_view_requests(request):
             "userID": userID,
             "name": name,
             "EMail": EMail,
-            "adminUserID": adminUserID,
-            "adminEMail": adminEMail,
             "reply": reply,
             "replyDate": replyDate,
         },
     )
 
-
-def feedback_view(request):
+    # def feedback_view_requests(request):
 
     databaseCon = connectdb()
     cursor = databaseCon.cursor()
 
-    query = "SELECT feedbackID, feedbackDate FROM feedback"
-    cursor.execute(query)
-
-    records = cursor.fetchall()
-
-    recentFeedbackList = []
-
-    for row in records:
-        recentFeedbackList.append((row[0], row[1]))
-    print(records)
-
-    return render(
-        request,
-        "feedbackView.html",
-        {
-            "recentFeedbackList": recentFeedbackList,
-        },
+    # Fetch user feedback records
+    query = """
+    SELECT feedbackID, feedback, feedbackDate, f.userID, name, lc.EMail, reply, replyDate
+    FROM feedback f
+    JOIN loginCredentials lc ON f.userID = lc.userID
+    WHERE EXISTS (
+        SELECT 1 FROM loginSession ls WHERE ls.userID = f.userID AND ls.userType = 'U'
     )
-
-
-def feedback_view_requests(request):
-
-    databaseCon = connectdb()
-    cursor = databaseCon.cursor()
-
-    query = "SELECT f.userID from feedback f WHERE EXISTS (SELECT 1 FROM loginSession ls WHERE ls.userID = f.userID AND userType = 'U')"
+    """
     cursor.execute(query)
+    feedback_records = cursor.fetchall()
 
-    records = cursor.fetchall()
+    records = []
+    for row in feedback_records:
+        records.append(
+            {
+                "feedbackID": row[0],
+                "feedback": row[1],
+                "feedbackDate": row[2],
+                "userID": row[3],
+                "name": row[4],
+                "EMail": row[5],
+                "reply": row[6],
+                "replyDate": row[7],
+            }
+        )
 
-    for row in records:
-        userID = row[0]
-
-    query = "SELECT ls.userID, lc.EMail  FROM loginSession ls  JOIN loginCredentials lc ON ls.userID = lc.userID AND ls.userType = 'Admin';"
+    # Fetch admin records
+    query = """
+    SELECT ls.userID, lc.EMail 
+    FROM loginSession ls  
+    JOIN loginCredentials lc ON ls.userID = lc.userID 
+    WHERE ls.userType = 'Admin'
+    """
     cursor.execute(query)
+    admin_records = cursor.fetchall()
 
-    adminRecords = cursor.fetchall()
+    admin_records_list = []
+    for row in admin_records:
+        admin_records_list.append({"adminUserID": row[0], "adminEMail": row[1]})
 
-    for row in adminRecords:
-        adminUserID = row[0]
-        adminEMail = row[1]
-        print(adminUserID)
-
-    query = "SELECT feedbackID, feedback, feedbackDate, userID, name, EMail, reply, replyDate FROM feedback "
-    cursor.execute(query)
-
-    records = cursor.fetchall()
-    print(records)
-
-    for row in records:
-        feedbackID = row[0]
-        feedback = row[1]
-        feedbackDate = row[2]
-        userID = row[3]
-        name = row[4]
-        EMail = row[5]
-        reply = row[6]
-        replyDate = row[7]
+    # Close the database connection
+    cursor.close()
+    databaseCon.close()
 
     return render(
         request,
         "feedbackViewRequests.html",
-        {
-            "feedback": feedback,
-            "feedbackID": feedbackID,
-            "feedbackDate": feedbackDate,
-            "userID": userID,
-            "name": name,
-            "EMail": EMail,
-            "adminUserID": adminUserID,
-            "adminEMail": adminEMail,
-            "reply": reply,
-            "replyDate": replyDate,
-        },
+        {"records": records, "adminRecords": admin_records_list},
     )

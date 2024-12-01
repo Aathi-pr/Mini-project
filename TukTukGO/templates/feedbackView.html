@@ -8,32 +8,27 @@
     <link href="{% static 'css/feedbackView.css' %}" rel="stylesheet" />
   </head>
   <body>
-    <h1 class="head">FeedBack Reply</h1>
-    <div class="container">
-      {% if recentFeedbackList %}
-      <h3 class="h3">Select a Feedback</h3>
-      <div class="vertical-card-list">
-        {% for feedback in recentFeedbackList %}
-        <form action="{% url 'feedback_view_requests' %}" method="post">
-          {% csrf_token %}
-          <div class="card">
-            <img
-              src="{% static 'img/icons8-feedback-50.png' %}"
-              alt="Feedback {{ feedback.0 }}"
-            />
-            <div class="card-content">
-              <h3>Feedback ID: {{ feedback.0 }}</h3>
-              <p>Date: {{ feedback.1 }}</p>
-              <input type="hidden" name="feedbackID" value="{{ feedback.0 }}" />
-              <input type="submit" class="allot-button" value="View" />
+
+        <div class="container">
+            <h1 class="head">FeedBack Reply</h1>
+            <div class="vertical-card-list">
+                {% if recent_feedback_list %}
+                <form action="{% url 'feedback_view_requests' %}" method="post">
+                    {% csrf_token %}
+                    <label for="VehicleNumber">
+                        <h3 class="h3">Select FeedBack Number:</h3>
+                    </label>
+                    <select id="feedbackID" name="feedbackID">
+                        {% for feedbackID in recent_feedback_list %}
+                        <option value="{{ feedbackID }}">{{ feedbackID }}</option>
+                        {% endfor %}
+                    </select>
+                    <input class="allot-btn" type="submit" value="view">
+                </form>
+                {% else %}
+                <p class="no-vehicles">No Recent Feedbacks..</p>
+                {% endif %}
             </div>
-          </div>
-        </form>
-        {% endfor %}
-      </div>
-      {% else %}
-      <p class="no-recent-rides">No Recent Feedback...</p>
-      {% endif %}
-    </div>
+        </div>
   </body>
 </html>

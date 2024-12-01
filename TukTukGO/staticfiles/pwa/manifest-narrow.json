@@ -1,0 +1,33 @@
+
+{
+  "name": "TukTukGo",
+  "short_name": "TukTukGo",
+  "start_url": "/",
+  "description": "Welcome To TukTukGo!.. Book Your tuktuk within minutes...",
+  "display_override": ["fullscreen", "standalone"],
+  "display": "fullscreen",
+  "form_factor": "narrow",
+  "background_color": "#000",
+  "theme_color": "#ff9800",
+  "icons": [
+    {
+      "src": "/static/img/pwapitch-modified.png",
+      "sizes": "1024x1024",
+      "type": "image/png"
+    }
+  ],
+
+  "screenshots": [
+    {
+      "src": "/static/img/home.png",
+      "sizes": "1372x2174",
+      "type": "image/png",
+      "label": "home Page"
+    },
+    {
+      "src": "/static/img/map-page.png",
+      "sizes": "1372x2174",
+      "type": "image/png",
+      "label": "map page"
+    }
+  ]

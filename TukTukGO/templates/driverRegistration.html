@@ -27,21 +27,22 @@
             </ul>
             </div>
     </nav> {% endcomment %}
+    {% include 'validation.html'%}
     <h1 class="driver-head">Driver Registration</h1>
     <img class="driverRegBack" src="{% static 'img/Designer (4).jpeg' %}" alt="reg-back" height="800px" width="600px">
     <div class="form-driverContainer">
       <form id="DriverRegistration" class="driver-reg" action="{% url 'tuktuk_driver_registration_1' %}" method="post" enctype="multipart/form-data">{% csrf_token %}
-        <h3 class="d1">Driver Name</h3><input class="driverName" name="driverName" type="text" placeholder="Name in License">
+        <h3 class="d1">Driver Name</h3><input class="driverName" name="driverName" type="text" placeholder="Name in License" onKeyPress="return alphabets(event)">
 
-        <h3 class="d2">House Name</h3><input class="houseName" name="houseName" type="text" placeholder="House Name">
+        <h3 class="d2">House Name</h3><input class="houseName" name="houseName" type="text" placeholder="House Name" onKeyPress="return alphabets(event)">
 
-        <h3 class="d3">Place</h3><input class="placeName" name="placeName" type="text" placeholder="Kochi..">
+        <h3 class="d3">Place</h3><input class="placeName" name="placeName" type="text" placeholder="Kochi.." onKeyPress="return alphabets(event)">
 
-        <h3 class="d4">PIN Code</h3><input class="pincode" type="text" id="pincode" name="pincode" maxlength="6" pattern="[0-9]{6}"  placeholder="691523..">
+        <h3 class="d4">PIN Code</h3><input class="pincode" type="text" id="pincode" name="pincode" maxlength="6" pattern="[0-9]{6}"  placeholder="691523.." onKeyPress="return numbers(event)">
         
-        <h3 class="d12">E-mail</h3><input class="email" name="email" type="email" placeholder="example@gmail.com">
+        <h3 class="d12">E-mail</h3><input class="email" name="email" type="email" placeholder="example@gmail.com" onKeyPress="return email_validation(event)">
         
-        <h3 class="d5">Phone Number</h3><input class="phoneNumber" name="phoneNumber" type="text" maxlength="10" pattern="[0-9]{10}" placeholder="Phone Number">
+        <h3 class="d5">Phone Number</h3><input class="phoneNumber" name="phoneNumber" type="text" maxlength="10" pattern="[0-9]{10}" placeholder="Phone Number" onKeyPress="return numbers(event)">
 
             <h3 class="d6">Gender : </h3>
             <div class="m">
@@ -62,9 +63,9 @@
 
         <h3 class="d7">Date Of Birth</h3><input class="dob" type="date" name="dob" placeholder="">
 
-        <h3 class="d8">Aadhar Number</h3><input class="aadhar" name="aadhar" type="text" maxlength="12" pattern="[0-9]{12}" placeholder="**** **** **** ">
+        <h3 class="d8">Aadhar Number</h3><input class="aadhar" name="aadhar" type="text" maxlength="12" pattern="[0-9]{12}" placeholder="**** **** **** " onKeyPress="return numbers(event)">
 
-        <h3 class="d9">License Number</h3><input class="license" name="license" type="text" maxlength="13" pattern="[0-9]{13}" placeholder="**** **** **** ">
+        <h3 class="d9">License Number</h3><input class="license" name="license" type="text" maxlength="13" pattern="[0-9]{13}" placeholder="**** **** **** " onKeyPress="return numbers(event)">
 
         <h3 class="d10">Upload Driver Photo : </h3> <input class="driverPhoto" type="file" id="driverPhoto" name="driverPhoto">
 

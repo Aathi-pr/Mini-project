@@ -1,18 +1,19 @@
 {% load static %}
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Driver Process</title>
-    <link rel="stylesheet" href="{% static 'css/nav.css' %}">
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-    <link rel="stylesheet" href="{% static 'css/driverProcess.css' %}">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
-
-</head>
-<body>
-
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Driver Process</title>
+        <link rel="stylesheet" href="{% static 'css/nav.css' %}" />
+        <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+        <link rel="stylesheet" href="{% static 'css/driverProcess.css' %}" />
+        <link
+            rel="stylesheet"
+            href="https://unpkg.com/leaflet/dist/leaflet.css"
+        />
+    </head>
+    <body>
         <!-- Map container -->
         <div class="mapContainer">
             <div id="map"></div>
@@ -24,9 +25,15 @@
                     <li><a href="#">Profile</a></li>
                     <li><a href="#">My Trips</a></li>
                     <li><a href="#">Earnings</a></li>
-                    <li><a href="{% url 'response_for_tuktuk' %}">Requests</a></li>
+                    <li>
+                        <a href="{% url 'response_for_tuktuk' %}">Requests</a>
+                    </li>
                     <li><a href="{% url 'feedback' %}">Feedback</a></li>
-                    <li><a href="{% url 'driver_change_pass' %}">Change Password</a></li>
+                    <li>
+                        <a href="{% url 'driver_change_pass' %}"
+                            >Change Password</a
+                        >
+                    </li>
                 </ul>
             </nav>
         </div>
@@ -38,7 +45,7 @@
             <div class="summary-cards">
                 <div class="card">
                     <h2>Total Trips</h2>
-                    <p>123</p>
+                    <p>{{ bookings }}</p>
                 </div>
                 <div class="card">
                     <h2>Total Earnings</h2>
@@ -61,23 +68,26 @@
                 </ul>
             </div>
         </div>
-        <script> 
-            document.addEventListener('DOMContentLoaded', function() {
-                const toggleButton = document.getElementById('toggle-button');
-                const sidebar = document.getElementById('sidebar');
-            
-                toggleButton.addEventListener('click', function() {
-                    sidebar.classList.toggle('show');
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const toggleButton = document.getElementById("toggle-button");
+                const sidebar = document.getElementById("sidebar");
+
+                toggleButton.addEventListener("click", function () {
+                    sidebar.classList.toggle("show");
                 });
-            
+
                 // Close the sidebar if the user clicks outside of it
-                document.addEventListener('click', function(event) {
-                    if (!sidebar.contains(event.target) && !toggleButton.contains(event.target)) {
-                        sidebar.classList.remove('show');
+                document.addEventListener("click", function (event) {
+                    if (
+                        !sidebar.contains(event.target) &&
+                        !toggleButton.contains(event.target)
+                    ) {
+                        sidebar.classList.remove("show");
                     }
                 });
             });
         </script>
-            <script src="{% static 'js/app.js' %}"></script>
-        </body>
-        </html>
+        <script src="{% static 'js/app.js' %}"></script>
+    </body>
+</html>

@@ -1,5 +1,7 @@
 from django.core.files.storage import FileSystemStorage
 from django.shortcuts import render
+from pymysql.cursors import Cursor
+import requests
 
 from TukTukGO import connectdb, currentDate
 
@@ -9,6 +11,28 @@ from TukTukGO import connectdb, currentDate
 def sign_up_page(request):
     return render(request, "signUp.html")
 
+ORS_API_KEY = '5b3ce3597851110001cf6248d0882d4d8035451eb97f11ef667f07b1'
+
+def reverse_geocode(lat, lon):
+    url = f"https://nominatim.openstreetmap.org/reverse?lat={lat}&lon={lon}&format=json"
+    headers = {
+        "User-Agent": "mapping (adithyanprdev@gmail.com)"
+    }
+
+    response = requests.get(url, headers=headers)
+
+    # Debugging: Print the status code and response
+    print(f"API Response Status Code: {response.status_code}")
+    print(f"API Response: {response.json()}")
+
+    response.raise_for_status()  # Raise an error for HTTP error codes
+
+    # Check for the display_name key
+    data = response.json()
+    if 'display_name' in data:
+        return data['display_name']
+    else:
+        return "Unknown Location"  # Handle unknown location
 
 def admin_process(request):
 
@@ -25,17 +49,56 @@ def admin_process(request):
         cursor.execute(query_money)
         total_money = cursor.fetchone()[0] or 0
 
+        number_of_tuktuk = "SELECT COUNT(VehicleRegNo) FROM tuktukData"
+        cursor.execute(number_of_tuktuk)
+        tuktuks = cursor.fetchone()[0] or 0
+
+        number_of_user = "SELECT COUNT(userID) FROM tuktukUserData"
+        cursor.execute(number_of_user)
+        users = cursor.fetchone()[0] or 0
+
+        #recent activity
+
+        recent_activity = "SELECT requestID, destination, driverID, userID FROM tuktukRequest ORDER BY requestID DESC LIMIT 10"
+        cursor.execute(recent_activity)
+        recent_records = cursor.fetchall()
+
+        recent = []
+        for record in recent_records:
+            requestID, destination, driverID, userID = record
+
+            lat, lon = map(float, destination.split(","))
+            print(lat, lon)
+
+            try:
+                place_name = reverse_geocode(lat, lon)
+                print(place_name)
+            except Exception as e:
+                #place_name = "Unknown Location"
+                place_name = "place_name"
+            # Append activity with place name
+            recent.append({
+                'requestID': requestID,
+                'destination': place_name,
+                'driverID': driverID,
+                'userID': userID
+            })
+
+
+
     finally:
         # Close database connection
         databaseCon.close()
 
-    # Render the HTML template with data and pie chart image
     return render(
         request,
         "adminProcess.html",
         {
             "total_bookings": total_bookings,
             "total_money": total_money,
+            "users": users,
+            "tuktuks": tuktuks,
+            "recent": recent,
         },
     )
 

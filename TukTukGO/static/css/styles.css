@@ -241,14 +241,145 @@ nav {
   border-radius: 1rem;
 }
 
-footer {
+/* footer {
   text-align: center;
   padding: 1rem 0;
   background-color: var(--primary-color);
   color: var(--bg-color);
   font-size: 0.875rem;
+} */
+/* Footer Styles */
+footer {
+  background-color: #111;
+  padding: 30px;
+  text-align: center;
 }
 
+.footer-container {
+  display: flex;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.footer-left,
+.footer-center,
+.footer-right {
+  flex: 1;
+  padding: 10px;
+}
+
+footer h3 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+ul li {
+  margin: 10px 0;
+}
+
+ul li a {
+  text-decoration: none;
+  color: #333;
+  transition: color 0.3s;
+}
+
+ul li a:hover {
+  color: var(--primary-color);
+}
+
+.social-icons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.social-icon {
+  text-decoration: none;
+  padding: 10px;
+  background-color: #333;
+  color: #fff;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s;
+}
+
+.social-icon:hover {
+  transform: scale(1.1);
+  background-color: var(--primary-color);
+  color: #000;
+}
+
+.portfolio-link {
+  text-decoration: none;
+  color: #007bff;
+  font-weight: bold;
+  transition: color 0.3s;
+}
+
+.portfolio-link:hover {
+  color: var(--primary-color);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .footer-container {
+    flex-direction: column; /* Stack the footer items vertically */
+    text-align: left;
+  }
+
+  .footer-left,
+  .footer-center,
+  .footer-right {
+    flex: none; /* Make each section take full width */
+    width: 100%;
+    margin-bottom: 20px; /* Add spacing between sections */
+  }
+
+  footer h3 {
+    font-size: 16px;
+  }
+
+  .social-icons {
+    justify-content: flex-start; /* Align social icons to the left on smaller screens */
+  }
+}
+
+@media (max-width: 480px) {
+  footer {
+    padding: 20px;
+  }
+
+  .footer-container {
+    padding: 10px;
+  }
+
+  .footer-left,
+  .footer-center,
+  .footer-right {
+    padding: 5px;
+  }
+
+  footer h3 {
+    font-size: 14px;
+  }
+
+  .social-icon {
+    width: 35px;
+    height: 35px;
+    font-size: 14px; /* Adjust icon size */
+  }
+}
 .three,
 .four {
   display: flex;

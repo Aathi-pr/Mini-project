@@ -21,7 +21,8 @@
     color: white;
 }
 
-.rideDetails, .driverDetails {
+.rideDetails,
+.driverDetails {
     margin-bottom: 20px;
 }
 
@@ -31,7 +32,8 @@ table {
     margin-bottom: 20px;
 }
 
-th, td {
+th,
+td {
     border: 1px solid white;
     padding: 8px;
     text-align: left;
@@ -92,6 +94,33 @@ button:hover {
     display: none;
 }
 
+.rating {
+    display: flex;
+}
+
+.rating input {
+    position: absolute;
+    left: -50vw;
+}
+
+.rating label {
+    width: 48px;
+    height: 48px;
+    overflow: hidden;
+    padding: 48px 0 0;
+    background: url("{% static '/img/stars.svg' %}") no-repeat top left;
+}
+
+.rating:not(:hover) input:indeterminate + label,
+.rating:not(:hover) input:checked ~ input + label,
+.rating input:hover ~ input + label {
+    background-position: -48px 0;
+}
+
+.rating:not(:hover) input:focus-visible + label {
+    background-position: -96px 0;
+}
+
 @media (max-width: 768px) {
     .container {
         padding: 10px;
@@ -101,7 +130,8 @@ button:hover {
         font-size: 20px;
     }
 
-    th, td {
+    th,
+    td {
         padding: 6px;
     }
 }

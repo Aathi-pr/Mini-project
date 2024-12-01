@@ -1,24 +1,32 @@
 {% load static %}
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Process</title>
-    <link rel="stylesheet" href="{% static 'css/nav.css' %}">
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-    <link rel="stylesheet" href="{% static 'css/userProcess.css' %}">
-
-</head>
-<body>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>User Process</title>
+        <link rel="stylesheet" href="{% static 'css/nav.css' %}" />
+        <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+        <link rel="stylesheet" href="{% static 'css/userProcess.css' %}" />
+    </head>
+    <body>
         <div class="sidebar" id="sidebar">
             <div class="logo">TukTukGo</div>
             <nav>
                 <ul>
-                    <li><a href="#">Profile</a></li>
-                    <li><a href="#">My Bookings</a></li>
-                    <li><a href="{% url 'payment_history' %}">Payment History</a></li>
-                    <li><a href="{% url 'user_change_pass' %}">Change Password</a></li>
+                    <!-- <li><a href="#">Profile</a></li> -->
+                    <!-- <li><a href="#">My Bookings</a></li> -->
+                    <!-- <li>
+                        <a href="{% url 'payment_history' %}"
+                            >Payment History</a
+                        >
+                    </li> -->
+                    <!-- <li><a href="{% url 'feedback_view' %}">Feedbacks Reply</a></li> -->
+                    <li>
+                        <a href="{% url 'user_change_pass' %}"
+                            >Change Password</a
+                        >
+                    </li>
                 </ul>
             </nav>
         </div>
@@ -27,10 +35,10 @@
                 <button id="toggle-button">&#9776; Menu</button>
                 <h1>User Dashboard</h1>
             </header>
-            <div class="summary-cards">
+            <!-- <div class="summary-cards">
                 <div class="card">
                     <h2>Total Bookings</h2>
-                    <p>3</p>
+                    <p></p>
                 </div>
                 <div class="card">
                     <h2>Total Spent</h2>
@@ -40,7 +48,7 @@
             <div class="charts">
                 <div class="chart">
                     <h2>Booking Overview</h2>
-                    <!-- Placeholder for chart -->
+                    Placeholder for chart
                     <div class="chart-placeholder">Chart goes here</div>
                 </div>
             </div>
@@ -51,26 +59,29 @@
                     <li>Payment method updated</li>
                     <li>Feedback received from driver</li>
                 </ul>
-            </div>
+            </div> -->
         </div>
-        <script> 
-            document.addEventListener('DOMContentLoaded', function() {
-                const toggleButton = document.getElementById('toggle-button');
-                const sidebar = document.getElementById('sidebar');
-            
-                toggleButton.addEventListener('click', function() {
-                    sidebar.classList.toggle('show');
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const toggleButton = document.getElementById("toggle-button");
+                const sidebar = document.getElementById("sidebar");
+
+                toggleButton.addEventListener("click", function () {
+                    sidebar.classList.toggle("show");
                 });
-            
+
                 // Close the sidebar if the user clicks outside of it
-                document.addEventListener('click', function(event) {
-                    if (!sidebar.contains(event.target) && !toggleButton.contains(event.target)) {
-                        sidebar.classList.remove('show');
+                document.addEventListener("click", function (event) {
+                    if (
+                        !sidebar.contains(event.target) &&
+                        !toggleButton.contains(event.target)
+                    ) {
+                        sidebar.classList.remove("show");
                     }
                 });
             });
         </script>
-            
-    <script src="{% static 'js/app.js' %}"></script>
-</body>
+
+        <script src="{% static 'js/app.js' %}"></script>
+    </body>
 </html>

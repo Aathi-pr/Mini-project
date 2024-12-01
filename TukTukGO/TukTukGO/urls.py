@@ -30,6 +30,13 @@ urlpatterns = [
     path("Admin/", include("Admin.urls")),  # 3
     path("Driver/", include("Driver.urls")),
     path("User/", include("User.urls")),
-    path("tuktuk_user_login/", views.tuktuk_user_login),  # 14
-    path("tuktuk_user_login_requests/", views.tuktuk_user_login_requests),  # 15
+    path("tuktuk_user_login/", views.tuktuk_user_login, name="tuktuk_user_login"),  # 14
+    path(
+        "tuktuk_user_login_requests/",
+        views.tuktuk_user_login_requests,
+        name="tuktuk_user_login_requests",
+    ),  # 15
+    path("fare_data/", views.fare_data, name="fare_data"),
+
+    path("privacy_conditions/", views.privacy_conditions,name="privacy_conditions"),
 ]

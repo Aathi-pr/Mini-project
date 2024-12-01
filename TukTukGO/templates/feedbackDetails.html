@@ -1,70 +1,237 @@
 {% load static %}
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Details</title>
+        <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+        <link rel="stylesheet" href="{% static 'css/nav.css' %}" />
+        <!-- <link rel="stylesheet" href="{% static 'css/feedbackDetails.css' %}" /> -->
+        <style>
+            /* Resets */
+            * {
+                padding: 0;
+                margin: 0;
+                box-sizing: border-box;
+            }
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Details</title>
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-    <link rel="stylesheet" href="{% static 'css/nav.css' %}">
-    <link rel="stylesheet" href="{% static 'css/feedbackDetails.css' %}">
-</head>
-<body>
-    <div class="feedTable">
-    <table class="details" border="2px">
-        <h1 class="feed-head">FeedBack Details</h1>
-        <tr>
-          <th> FeedBack ID </th>
-          <th> FeedBack </th>
-          <th> Date </th> 
-          <th> driverID </th> 
-          
-        </tr>
-        {% comment %} {% for row in records %} {% endcomment %}
-        <tr>
-          <td> {{ feedbackID }} </td>
-          <td> {{ feedback }} </td>
-          <td> {{ feedbackDate }} </td>
-          <td> {{ driverID }} </td>
-        </tr>
-        {% comment %} {% endfor %} {% endcomment %}
-      </table>
-    </div>
-<div class="driverTable">
-    <table class="driverDetails">
-        <h1 class="drive-head">Driver Details</h1>
-            <tr>
-                <th>Driver ID</th>
-                <th>Driver Name</th>
-                <th>Phone No</th>
-                <th>License</th>
-                <th>Photo</th>
-            </tr>
-    {% comment %} {% for row in driverRecords %} {% endcomment %}
-        <tr>
-          <td> {{ driverID }} </td>
-          <td> {{ driverName }} </td>
-          <td> {{ phoneNumber }} </td>
-          <td> {{ license }} </td>
-          <td> <img src="/static/data/tuktukProof/dataProof/{{driverPhoto}}/" width="50px" height="50px"> </td>
-        </tr>
-    {% comment %} {% endfor %} {% endcomment %}
-    </table>
-</div>
-<div class="replyTable">
-    <table class="replyDetails">
-        <h1 class="reply-head">Reply</h1>
-            <tr>
-              <form action="{% url 'feedback_details_post' %}" method="post"> {% csrf_token %}
-                <textarea name="textarea" rows="5" cols="40"></textarea>
-                <input type="hidden" name="feedbackID" value="{{ feedbackID }}">
-                <input type="hidden" name="driverID" value="{{ driverID }}">
-                <input class="allot-btn" type="submit" name="submit" value="Reply">
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #000;
+                color: #fff;
+            }
+
+            /* Main container */
+            .container {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                margin: 40px auto;
+                width: 90%; /* Better responsiveness */
+                max-width: 1000px;
+                padding: 20px;
+                background-color: #111;
+                border-radius: 10px;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+                color: #fff;
+            }
+
+            h1 {
+                text-align: center;
+                font-size: 2.5em;
+                margin-bottom: 20px;
+                color: #ff8900;
+            }
+
+            /* Table styles */
+            .table-wrapper {
+                width: 100%;
+                margin-bottom: 30px;
+            }
+
+            table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+
+            th,
+            td {
+                border: 1px solid #444;
+                padding: 12px;
+                text-align: left;
+            }
+
+            th {
+                background-color: #222;
+                color: #ff8900;
+                font-weight: bold;
+            }
+
+            tbody tr:nth-child(even) {
+                background-color: #000;
+            }
+
+            tbody tr td {
+                background-color: #111;
+                color: #fff;
+            }
+
+            /* Flex alignment for tables */
+            .table-section {
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+                gap: 20px;
+            }
+
+            .table-section .table-wrapper {
+                width: 100%;
+            }
+
+            img {
+                display: block;
+                margin: 0 auto;
+                border-radius: 50%;
+            }
+
+            /* Form styles */
+            textarea {
+                width: 100%;
+                height: 100px;
+                padding: 12px;
+                border-radius: 6px;
+                border: 1px solid #ccc;
+                resize: vertical;
+                margin-bottom: 15px;
+                font-size: 16px;
+            }
+
+            .allot-btn {
+                padding: 12px 25px;
+                background-color: #ff8900;
+                border: none;
+                color: #000;
+                font-size: 16px;
+                border-radius: 6px;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+                font-weight: bold;
+            }
+
+            .allot-btn:hover {
+                background-color: #fff;
+                color: #111;
+            }
+
+            .message {
+                font-size: 18px;
+                color: #00ff00;
+                align-items: center;
+                justify-content: center;
+                display: flex;
+            }
+
+            /* Media queries */
+            @media (max-width: 768px) {
+                h1 {
+                    font-size: 2em;
+                }
+
+                th,
+                td {
+                    font-size: 14px;
+                    padding: 10px;
+                }
+
+                textarea {
+                    height: 80px;
+                    font-size: 14px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <!-- Feedback Details -->
+            <div class="table-section">
+                <div class="table-wrapper feedTable">
+                    <h1>Feedback Details</h1>
+                    <table class="details">
+                        <tr>
+                            <th>Feedback ID</th>
+                            <th>Feedback</th>
+                            <th>Date</th>
+                            <th>Driver ID</th>
+                        </tr>
+                        <tr>
+                            <td>{{ feedbackID }}</td>
+                            <td>{{ feedback }}</td>
+                            <td>{{ feedbackDate }}</td>
+                            <td>{{ driverID }}</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <!-- Driver Details -->
+                <div class="table-wrapper driverTable">
+                    <h1>Driver Details</h1>
+                    <table class="driverDetails">
+                        <tr>
+                            <th>Driver ID</th>
+                            <th>Driver Name</th>
+                            <th>Phone No</th>
+                            <th>License</th>
+                            <th>Photo</th>
+                        </tr>
+                        <tr>
+                            <td>{{ driverID }}</td>
+                            <td>{{ driverName }}</td>
+                            <td>{{ phoneNumber }}</td>
+                            <td>{{ license }}</td>
+                            <td>
+                                <img
+                                    src="/static/data/tuktukProof/dataProof/{{driverPhoto}}/"
+                                    width="50px"
+                                    height="50px"
+                                    alt="Driver Photo"
+                                />
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Reply Form -->
+            <div class="table-wrapper replyTable">
+                <h1>Reply</h1>
+                <form action="{% url 'feedback_details_post' %}" method="post">
+                    {% csrf_token %}
+                    <textarea
+                        name="textarea"
+                        rows="5"
+                        cols="40"
+                        placeholder="Write your reply..."
+                    ></textarea>
+                    <input
+                        type="hidden"
+                        name="feedbackID"
+                        value="{{ feedbackID }}"
+                    />
+                    <input
+                        type="hidden"
+                        name="driverID"
+                        value="{{ driverID }}"
+                    />
+                    <input
+                        class="allot-btn"
+                        type="submit"
+                        name="submit"
+                        value="Reply"
+                    />
                 </form>
-            </tr>
-    </table>
-</div>
-</body>
-
+                <p class="message">{{ message }}</p>
+            </div>
+        </div>
+    </body>
 </html>

@@ -1,134 +1,216 @@
 {% load static %}
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ride Details</title>
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-    <link rel="stylesheet" href="{% static 'css/nav.css' %}">
-    <link rel="stylesheet" href="{% static 'css/rideDetails.css' %}">
-</head>
-<body>
-    <div class="container">
-        <h1 class="pageHead">Ride Details</h1>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Ride Details</title>
+        <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+        <link rel="stylesheet" href="{% static 'css/nav.css' %}" />
+        <link rel="stylesheet" href="{% static 'css/rideDetails.css' %}" />
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+        />
+    </head>
+    <body>
+        <div class="container">
+            <h1 class="pageHead">Ride Details</h1>
 
-        <div class="rideDetails">
-            <table>
-                <tr>
-                    <th>Request ID</th>
-                    <th>{{ requestID }}</th>
-                </tr>
+            <div class="rideDetails">
+                <table>
+                    <tr>
+                        <th>Request ID</th>
+                        <th>{{ requestID }}</th>
+                    </tr>
 
-                <tr>
-                    <th>User Name</th>
-                    <th>{{ userName }}</th>
-                </tr>
+                    <tr>
+                        <th>User Name</th>
+                        <th>{{ userName }}</th>
+                    </tr>
 
-                <tr>
-                    <th>User Latitude</th>
-                    <th>{{ userLat }}</th>
-                </tr>
+                    <tr>
+                        <th>User Latitude</th>
+                        <th>{{ userLat }}</th>
+                    </tr>
 
-                <tr>
-                    <th>User Longitude</th>
-                    <th>{{ userLon }}</th>
-                </tr>
+                    <tr>
+                        <th>User Longitude</th>
+                        <th>{{ userLon }}</th>
+                    </tr>
 
-                <tr>
-                    <th>Destination</th>
-                    <th>{{ destination }}</th>
-                </tr>
+                    <tr>
+                        <th>Destination</th>
+                        <th>{{ destination }}</th>
+                    </tr>
 
-                <tr>
-                    <th>Response</th>
-                    <th>{{ response }}</th>
-                </tr>
+                    <tr>
+                        <th>Response</th>
+                        <th>{{ response }}</th>
+                    </tr>
 
-                <tr> 
-                    <th>Response Time</th>
-                    <th>{{ responseTime }}</th>
-                </tr>
+                    <tr>
+                        <th>Response Time</th>
+                        <th>{{ responseTime }}</th>
+                    </tr>
 
-                <tr> 
-                    <th>Response Date</th>
-                    <th>{{ responseDate }}</th>
-                </tr>
-            </table>
+                    <tr>
+                        <th>Response Date</th>
+                        <th>{{ responseDate }}</th>
+                    </tr>
+                    <!-- <tr>
+                        <th>Feedback</th>
+                        <th>
+                            <form>
+                                <div class="rating">
+                                    <input
+                                        type="radio"
+                                        id="star5"
+                                        name="rating"
+                                        value="5"
+                                    />
+                                    <label
+                                        class="star"
+                                        for="star5"
+                                        title="Awesome"
+                                        aria-hidden="true"
+                                    ></label>
+                                    <input
+                                        type="radio"
+                                        id="star4"
+                                        name="rating"
+                                        value="4"
+                                    />
+                                    <label
+                                        class="star"
+                                        for="star4"
+                                        title="Great"
+                                        aria-hidden="true"
+                                    ></label>
+                                    <input
+                                        type="radio"
+                                        id="star3"
+                                        name="rating"
+                                        value="3"
+                                    />
+                                    <label
+                                        class="star"
+                                        for="star3"
+                                        title="Very good"
+                                        aria-hidden="true"
+                                    ></label>
+                                    <input
+                                        type="radio"
+                                        id="star2"
+                                        name="rating"
+                                        value="2"
+                                    />
+                                    <label
+                                        class="star"
+                                        for="star2"
+                                        title="Good"
+                                        aria-hidden="true"
+                                    ></label>
+                                    <input
+                                        type="radio"
+                                        id="star1"
+                                        name="rating"
+                                        value="1"
+                                    />
+                                    <label
+                                        class="star"
+                                        for="star1"
+                                        title="Bad"
+                                        aria-hidden="true"
+                                    ></label>
+                                </div>
+                            </form>
+                        </th>
+                    </tr> -->
+                </table>
+            </div>
+
+            <div class="driverDetails">
+                <table>
+                    <tr>
+                        <th>Driver ID</th>
+                        <th>{{ driverID }}</th>
+                    </tr>
+
+                    <tr>
+                        <th>Driver Photo</th>
+                        <th>
+                            <img
+                                src="/static/data/tuktukProof/dataProof/{{ driverPhoto }}/"
+                                width="50px"
+                                height="50px"
+                            />
+                        </th>
+                    </tr>
+
+                    <tr>
+                        <th>Driver Name</th>
+                        <th>{{ driverName }}</th>
+                    </tr>
+
+                    <tr>
+                        <th>Tuktuk Number</th>
+                        <th class="no">{{ VehicleRegNo }}</th>
+                    </tr>
+                </table>
+            </div>
+
+            <form action="{% url 'ride_details' %}" method="post">
+                {% csrf_token %}
+                <button type="submit">Refresh</button>
+            </form>
+        </div>
+        <div id="loadingContainer" class="loading-container">
+            <h2>Loading...</h2>
+            <img
+                src="/static/loading.gif"
+                alt="Loading..."
+                width="50px"
+                height="50px"
+                class="loading-spinner"
+            />
         </div>
 
-        <div class="driverDetails">
-            <table>
-                <tr>
-                    <th>Driver ID</th>
-                    <th>{{ driverID }}</th>
-                </tr>
+        <script>
+            // JavaScript to handle refreshing and redirecting
+            document.addEventListener('DOMContentLoaded', function () {
+                // Function to refresh the page automatically
+                function refreshPage() {
+                    document.getElementById('refreshButton').click();
+                }
 
-                <tr> 
-                    <th>Driver Photo</th>
-                    <th><img src="/static/data/tuktukProof/dataProof/{{ driverPhoto }}/" width="50px" height="50px"></th>
-                </tr>
+                // Initially show the loading screen
+                document.getElementById('rideDetailsContainer').classList.add('hidden');
+                document.getElementById('loadingContainer').classList.remove('hidden');
 
-                <tr>
-                    <th>Driver Name</th>
-                    <th>{{ driverName }}</th>
-                </tr>
+                // Function to check if response is received
+                function checkResponse() {
+                  fetch('{% url 'check_driver_response' %}')  // Replace with your endpoint to check response
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.response) {
+                                // Response received, redirect to ride details
+                              window.location.href = '{% url 'ride_details' %}';
+                            } else {
+                                // Response not received yet, continue to refresh
+                                setTimeout(refreshPage, 2000);  // Refresh every 2 seconds
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error checking response:', error);
+                            setTimeout(refreshPage, 2000);  // Retry after 2 seconds in case of error
+                        });
+                }
 
-                <tr> 
-                    <th>Tuktuk Number</th>
-                    <th class="no">{{ VehicleRegNo }}</th>
-                </tr>
-            </table>
-        </div>
-
-        <form action="{% url 'ride_details' %}" method="post">
-            {% csrf_token %}
-            <button type="submit">Refresh</button>
-        </form>
-    </div>
-    <div id="loadingContainer" class="loading-container">
-        <h2>Loading...</h2>
-        <img src="/static/loading.gif" alt="Loading..." width="50px" height="50px" class="loading-spinner">
-    </div>
-
-    <script>
-        // JavaScript to handle refreshing and redirecting
-        document.addEventListener('DOMContentLoaded', function () {
-            // Function to refresh the page automatically
-            function refreshPage() {
-                document.getElementById('refreshButton').click();
-            }
-
-            // Initially show the loading screen
-            document.getElementById('rideDetailsContainer').classList.add('hidden');
-            document.getElementById('loadingContainer').classList.remove('hidden');
-
-            // Function to check if response is received
-            function checkResponse() {
-              fetch('{% url 'check_driver_response' %}')  // Replace with your endpoint to check response
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.response) {
-                            // Response received, redirect to ride details
-                          window.location.href = '{% url 'ride_details' %}';
-                        } else {
-                            // Response not received yet, continue to refresh
-                            setTimeout(refreshPage, 2000);  // Refresh every 2 seconds
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error checking response:', error);
-                        setTimeout(refreshPage, 2000);  // Retry after 2 seconds in case of error
-                    });
-            }
-
-            // Call the checkResponse function initially
-            checkResponse();
-        });
-
-  
-    </script>
+                // Call the checkResponse function initially
+                checkResponse();
+            });
+        </script>
         <script src="{% static 'js/app.js' %}"></script>
-
-</body>
+    </body>
 </html>

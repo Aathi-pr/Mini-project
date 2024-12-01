@@ -21,7 +21,8 @@
     color: white;
 }
 
-.rideDetails, .driverDetails {
+.rideDetails,
+.driverDetails {
     margin-bottom: 20px;
 }
 
@@ -31,7 +32,8 @@ table {
     margin-bottom: 20px;
 }
 
-th, td {
+th,
+td {
     border: 1px solid white;
     padding: 8px;
     text-align: left;
@@ -92,6 +94,40 @@ button:hover {
     display: none;
 }
 
+/* .rating {
+    border: none;
+    float: left;
+}
+
+.rating > label {
+    color: #90a0a3;
+    float: right;
+}
+
+.rating > label:before {
+    margin: 5px;
+    font-size: 2em;
+    font-family: FontAwesome;
+    content: "\f005";
+    display: inline-block;
+}
+
+.rating > input {
+    display: none;
+}
+
+.rating > input:checked ~ label,
+.rating:not(:checked) > label:hover,
+.rating:not(:checked) > label:hover ~ label {
+    color: #f79426;
+}
+
+.rating > input:checked + label:hover,
+.rating > input:checked ~ label:hover,
+.rating > label:hover ~ input:checked ~ label,
+.rating > input:checked ~ label:hover ~ label {
+    color: #fece31;
+} */
 @media (max-width: 768px) {
     .container {
         padding: 10px;
@@ -101,7 +137,8 @@ button:hover {
         font-size: 20px;
     }
 
-    th, td {
+    th,
+    td {
         padding: 6px;
     }
 }

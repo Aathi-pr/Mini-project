@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 
 from TukTukGO import connectdb, currentDate
@@ -146,3 +146,22 @@ def tuktuk_user_login_requests(request):
     msg = " User Login Successful \n your userID is " + userID
 
     return render(request, "tuktukUserLogin.html", {"msg": msg})
+
+
+def fare_data(request):
+
+    databaseCon = connectdb()
+    cursor = databaseCon.cursor()
+
+    query = "SELECT * FROM fareEstimation ORDER BY fareNO DESC "
+    cursor.execute(query)
+
+    rows = cursor.fetchall()
+
+    columns = [col[0] for col in cursor.description]  # Get column names
+    data = [dict(zip(columns, row)) for row in rows]
+
+    return JsonResponse(data, safe=False)
+
+def privacy_conditions(request):
+    return render (request, "privacy_conditions.html")

@@ -1,29 +1,44 @@
 {% load static %}
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Process</title>
-    <link rel="stylesheet" href="{% static 'css/nav.css' %}">
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-    <link rel="stylesheet" href="{% static 'css/adminProcess.css' %}">
-
-</head>
-<body>
-        
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Admin Process</title>
+        <link rel="stylesheet" href="{% static 'css/nav.css' %}" />
+        <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+        <link rel="stylesheet" href="{% static 'css/adminProcess.css' %}" />
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    </head>
+    <body>
         <div class="sidebar" id="sidebar">
             <div class="logo">TukTukGo</div>
             <nav>
                 <ul>
-                  <li><a href="{% url 'tuktuk_allot' %}">TukTuk Allot</a></li>
-                  <li><a href="{% url 'tuktuk_for_driver' %}">TukTuk - Driver </a></li>
-                  <li><a href="{% url 'driver_for_tuktuk' %}">Driver - TukTuk</a></li>
-                  <li><a href="{% url 'user_feedback_reply' %}">User FeedBacks</a></li>
-                  <li><a href="{% url 'feed_reply' %}">Driver FeedBacks</a></li>
-                  <li><a href="{% url 'tuktuk_details' %}">Services</a></li>
-                  <li><a href="{% url 'user_list' %}">About User's</a></li>
-                  <li><a href="{% url 'change_pass' %}">Change Password</a></li>
+                    <li><a href="{% url 'tuktuk_allot' %}">TukTuk Allot</a></li>
+                    <li>
+                        <a href="{% url 'tuktuk_for_driver' %}"
+                            >TukTuk - Driver
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'driver_for_tuktuk' %}"
+                            >Driver - TukTuk</a
+                        >
+                    </li>
+                    <li>
+                        <a href="{% url 'user_feedback_reply' %}"
+                            >User FeedBacks</a
+                        >
+                    </li>
+                    <li>
+                        <a href="{% url 'feed_reply' %}">Driver FeedBacks</a>
+                    </li>
+                    <li><a href="{% url 'tuktuk_details' %}">Services</a></li>
+                    <li><a href="{% url 'user_list' %}">About User's</a></li>
+                    <li>
+                        <a href="{% url 'change_pass' %}">Change Password</a>
+                    </li>
                 </ul>
             </nav>
         </div>
@@ -42,39 +57,97 @@
                     <p>₹{{ total_money }}</p>
                 </div>
             </div>
-            {% comment %} <div class="charts">
-                <div class="chart">
+
+            <div class="charts">
+                <div class="chart-container">
                     <h2>Trips Overview</h2>
                     <!-- Placeholder for chart -->
-                    <div class="chart-placeholder"><img height="240px" width="270px" src="data:image/png;base64,{{ chart }}" alt="Number of Drivers and TukTuks Chart"></div>
+                    <div
+                        id="data"
+                        data-users="{{ users }}"
+                        data-autos="{{ tuktuks }}"
+                        data-rides="{{ total_bookings }}"
+                    ></div>
+                    <canvas id="userAutoChart"></canvas>
                 </div>
-            </div> {% endcomment %}
+                    </div>
+                </div>
+            </div>
             <div class="activity-feed">
-                <h2>Recent Activity</h2>
-                <ul>
-                    <li>Trip to downtown completed</li>
-                    <li>New booking from John Doe</li>
-                    <li>Feedback received from Jane Smith</li>
-                </ul>
+                <div class="recent-activity-header">
+                    Recent Activity on TukTukGO
+                </div>
+                <div class="activity-list">
+                    {% for activity in recent %}
+                    <div class="activity-item">
+                        <p>A new ride stated to {{ activity.destination }} from {{activity.driverID}} for user {{activity.userID}}
+                            is started..</p>
+                    </div>
+                    {% endfor %}
+                </div>
             </div>
         </div>
-        <script> 
-            document.addEventListener('DOMContentLoaded', function() {
-                const toggleButton = document.getElementById('toggle-button');
-                const sidebar = document.getElementById('sidebar');
-            
-                toggleButton.addEventListener('click', function() {
-                    sidebar.classList.toggle('show');
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const toggleButton = document.getElementById("toggle-button");
+                const sidebar = document.getElementById("sidebar");
+
+                toggleButton.addEventListener("click", function () {
+                    sidebar.classList.toggle("show");
                 });
-            
+
                 // Close the sidebar if the user clicks outside of it
-                document.addEventListener('click', function(event) {
-                    if (!sidebar.contains(event.target) && !toggleButton.contains(event.target)) {
-                        sidebar.classList.remove('show');
+                document.addEventListener("click", function (event) {
+                    if (
+                        !sidebar.contains(event.target) &&
+                        !toggleButton.contains(event.target)
+                    ) {
+                        sidebar.classList.remove("show");
                     }
                 });
             });
+            // Fetching the data from the data-* attributes
+            const dataDiv = document.getElementById("data");
+            const numberOfUsers = parseInt(dataDiv.getAttribute("data-users"));
+            const numberOfAutos = parseInt(dataDiv.getAttribute("data-autos"));
+            const numberOfRides = parseInt(dataDiv.getAttribute("data-rides"));
+
+            // Chart configuration
+            const ctx = document
+                .getElementById("userAutoChart")
+                .getContext("2d");
+            const userAutoChart = new Chart(ctx, {
+                type: "doughnut", // Choose bar, line, pie, etc.
+                data: {
+                    labels: ["Users", "Autos", "rides"], // X-axis labels
+                    datasets: [
+                        {
+                            label: "TukTukGO Statistics",
+                            data: [numberOfUsers, numberOfAutos, numberOfRides], // Data values for the chart
+                            backgroundColor: ["#4caf50", "#ff5722", "#ff9800"], // Bar colors for users and autos
+                            // borderColor: ["#388e3c", "#d84315"], // Optional: Bar border colors
+                            borderWidth: 1,
+                        },
+                    ],
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true, // Ensures the Y-axis starts at 0
+                        },
+                    },
+                    plugins: {
+                        legend: {
+                            display: true,
+                            labels: {
+                                color: "#fff", // Legend text color
+                            },
+                        },
+                    },
+                },
+            });
         </script>
-    <script src="{% static 'js/app.js' %}"></script>
-</body>
+        <script src="{% static 'js/app.js' %}"></script>
+    </body>
 </html>

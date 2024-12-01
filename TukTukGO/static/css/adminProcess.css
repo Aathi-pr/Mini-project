@@ -6,9 +6,9 @@
 .dropdown {
     float: left;
     overflow: hidden;
-  }
-  
-  .dropdown .dropbtn {
+}
+
+.dropdown .dropbtn {
     font-size: 16px;
     border: none;
     outline: none;
@@ -17,46 +17,45 @@
     background-color: inherit;
     font-family: inherit;
     margin: 0;
-  }
-  
+}
+
 .dropdown:hover .dropbtn {
     background-color: none;
-  }
-  
-  .dropdown-content {
+}
+
+.dropdown-content {
     display: none;
     position: absolute;
     background-color: none;
     min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
     z-index: 1;
-  }
-  
-  .dropdown-content a {
+}
+
+.dropdown-content a {
     float: none;
     color: black;
     padding: 12px 16px;
     text-decoration: none;
     display: block;
     text-align: left;
-  }
-  
-  .dropdown-content a:hover {
-    background-color: #ddd;
-  }
-  
-  .dropdown:hover .dropdown-content {
-    display: block;
-  }
-  
+}
 
-  .gear {
+.dropdown-content a:hover {
+    background-color: #ddd;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.gear {
     filter: invert(100%);
-  }
+}
 
 .sidebar {
     width: 250px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
     background-color: rgba(0, 0, 0, 0.6);
     box-shadow: 0 3px 5px rgba(0, 0, 0, 0.15);
     backdrop-filter: blur(4px);
@@ -148,25 +147,12 @@ header {
 }
 
 .charts {
-    margin-bottom: 20px;
-}
-
-.chart {
     background-color: #000;
     border: 1px solid #ecf0f1;
     padding: 20px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
-
-.chart-placeholder {
-    height: 200px;
-    background-color: #000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #FAF9F6;
-}
-
+/*
 .activity-feed {
     background-color: #000;
     border: 1px solid #ecf0f1;
@@ -186,4 +172,47 @@ header {
 
 .activity-feed ul li:last-child {
     border-bottom: none;
+} */
+.chart-container {
+    width: auto;
+    max-width: 800px;
+    max-height: 600px;
+    margin: 20px auto;
+}
+
+.activity-feed {
+    max-width: 600px;
+    margin: 20px auto;
+    background-color: #000;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.recent-activity-header {
+    border: 1px solid #ff9800;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    color: #fff;
+    padding: 15px;
+    font-size: 1.5rem;
+    text-align: center;
+}
+
+.activity-list {
+    padding: 15px;
+}
+
+.activity-item {
+    background-color: #111;
+    border-radius: 6px;
+    padding: 10px;
+    margin-bottom: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.activity-item p {
+    margin: 0;
+    line-height: 1.5;
+    color: #fff;
 }

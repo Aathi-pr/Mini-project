@@ -17,7 +17,35 @@ def sign_up_page(request):
 
 
 def driver_process(request):
-    return render(request, "driverProcess.html")
+
+        # databaseCon = connectdb()
+        # cursor = databaseCon.cursor()
+
+        # try:
+        #     query = "select userID from loginSession where userType ='D'"
+        #     cursor.execute(query)
+
+        #     records = cursor.fetchall()
+
+        #     for row in records:
+        #         driverID = row[0]
+
+        #     query = "Select requestID from tuktukRequest where driverID = '" + driverID + "'"
+        #     cursor.execute(query)
+
+        #     records = cursor.fetchall()
+        #     for row in records:
+        #         requestID = row[0]
+
+        #     bookings = "SELECT COUNT(requestID) FROM endOfRide where requestID = '" + requestID + "'"
+        #     cursor.execute(bookings)
+
+
+
+        # finally:
+        #     databaseCon.close()
+
+        return render(request, "driverProcess.html")
 
 
 def driver_change_pass(request):
